@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
 using LetsDoStuff.Domain;
-using System.Linq;
 using LetsDoStuff.Domain.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
 {
@@ -24,11 +24,12 @@ namespace LetsDoStuff.WebApi.Controllers
             using (LdsContext db = new LdsContext())
             {
                 var user = db.Users.FirstOrDefault(itm => itm.Id == id);
-                
+
                 if (user == null)
                 {
                     return BadRequest();
                 }
+
                 return user;
             }
         }

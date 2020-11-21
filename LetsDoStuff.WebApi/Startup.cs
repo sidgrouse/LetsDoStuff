@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using LetsDoStuff.Domain;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LetsDoStuff.WebApi
 {
@@ -12,6 +11,8 @@ namespace LetsDoStuff.WebApi
         public Startup()
         {
         }
+
+        public IConfiguration Configuration { get; }
 
         public void Configure(IApplicationBuilder app)
         {
@@ -25,6 +26,9 @@ namespace LetsDoStuff.WebApi
 
         public virtual void ConfigureServices(IServiceCollection services)
         {
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<LdsContext>(options =>
+                options.UseSqlServer(connection));
             services.AddControllers();
         }
     }

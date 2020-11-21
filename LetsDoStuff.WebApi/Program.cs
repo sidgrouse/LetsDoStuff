@@ -1,17 +1,17 @@
-﻿using LetsDoStuff.Domain;
+﻿using System.IO;
+using System.Linq;
+using System.Reflection;
+using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using System.Linq;
-using System.IO;
-using System.Reflection;
 
 namespace LetsDoStuff.WebApi
 {
     public static class Program
     {
-        static void Main()
+        public static void Main()
         {
             var settingsFileName = "appsettings.json";
             var basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -31,7 +31,6 @@ namespace LetsDoStuff.WebApi
                 .Build();
 
             host.Run();
-
         }
 
         private static void SeedTestData()
