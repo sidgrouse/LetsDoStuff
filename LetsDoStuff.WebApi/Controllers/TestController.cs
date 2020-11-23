@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,30 +9,30 @@ namespace LetsDoStuff.WebApi.Controllers
     [Route("api/test")]
     public class TestController : ControllerBase
     {
-        public TestController()
+        private LdsContext db;
+
+        public TestController(LdsContext context)
         {
+            db = context;
         }
 
         [HttpGet]
-        public string GetTestOutput()
+        public IEnumerable<User> GetTestOutput()
         {
-            return "test output";
+            return db.Users.ToList();
         }
 
-        [HttpGet("user")]
+        [HttpGet("{id}")]
         public ActionResult<User> GetUser(int id)
         {
-            using (LdsContext db = new LdsContext())
+            var user = db.Users.FirstOrDefault(itm => itm.Id == id);
+
+            if (user == null)
             {
-                var user = db.Users.FirstOrDefault(itm => itm.Id == id);
-
-                if (user == null)
-                {
-                    return BadRequest();
-                }
-
-                return user;
+               return BadRequest();
             }
+
+            return user;
         }
     }
 }

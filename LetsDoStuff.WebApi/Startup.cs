@@ -1,20 +1,19 @@
-﻿using LetsDoStuff.Domain;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using LetsDoStuff.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-using System.IO;
 
 namespace LetsDoStuff.WebApi
 {
     public class Startup
     {
-        public Startup()
+        public Startup(IConfiguration configuration)
         {
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -47,7 +46,6 @@ namespace LetsDoStuff.WebApi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-
         }
     }
 }
