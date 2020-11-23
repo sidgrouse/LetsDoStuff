@@ -1,19 +1,22 @@
-﻿using Microsoft.AspNetCore.Builder;
+using System;
+using System.IO;
+using System.Reflection;
+using LetsDoStuff.Domain;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-using System.IO;
 
 namespace LetsDoStuff.WebApi
 {
     public class Startup
     {
-        public Startup()
+        public Startup(IConfiguration configuration)
         {
+            Configuration = configuration;
         }
+
+        public IConfiguration Configuration { get; }
 
         public void Configure(IApplicationBuilder app)
         {
@@ -33,6 +36,9 @@ namespace LetsDoStuff.WebApi
 
         public virtual void ConfigureServices(IServiceCollection services)
         {
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<LdsContext>(options =>
+                options.UseSqlServer(connection));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -40,7 +46,6 @@ namespace LetsDoStuff.WebApi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-
         }
     }
 }
