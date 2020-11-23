@@ -56,13 +56,33 @@ namespace LetsDoStuff.WebApi
 
         private static void SeedTestData(LdsContext context)
         {
-            context.Database.EnsureCreated();
-            if (!context.Users.Any())
+            using (LdsContext context = new LdsContext(options))
             {
-                context.Add(new User("user1", "Roman", "Onofreichuk", "test@gmail.com", "123456789test", "Admin") { });
-                context.Add(new User("user2", "Dee", "Snider", "snider@gmail.com", "1234test56789test", "Admin") { });
-                context.Add(new User("user3", "Alice", "Cooper", "acooper@gmail.com", "test12334556", "Admin") { });
-                context.SaveChanges();
+                context.Database.EnsureCreated();
+
+                if (!context.Users.Any())
+                {
+                    context.Users.Add(new User { Name = "Tom", Age = 33 });
+                    context.Users.Add(new User { Name = "Alice", Age = 26 });
+                    context.SaveChanges();
+                }
+
+                if (!context.Tags.Any())
+                {
+                    context.Tags.Add(new Tag { Name = "Music" });
+                    context.Tags.Add(new Tag { Name = "Open-air" });
+                    context.Tags.Add(new Tag { Name = "Indoor" });
+                    context.Tags.Add(new Tag { Name = "Sport" });
+                    context.Tags.Add(new Tag { Name = "Intellectual" });
+                    context.SaveChanges();
+                }
+
+                if (!context.Activities.Any())
+                {
+                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Id_Creator = 1 });
+                    context.Activities.Add(new Activity { Name = "Hicking", Description = "Altai Mountains", Capacity = 10, Id_Creator = 1 });
+                    context.SaveChanges();
+                }
             }
         }
     }
