@@ -57,6 +57,23 @@ namespace LetsDoStuff.WebApi
                     context.Users.Add(new User { Name = "Alice", Age = 26 });
                     context.SaveChanges();
                 }
+
+                if (!context.Tags.Any())
+                {
+                    context.Tags.Add(new Tag { Name = "Music" });
+                    context.Tags.Add(new Tag { Name = "Open-air" });
+                    context.Tags.Add(new Tag { Name = "Indoor" });
+                    context.Tags.Add(new Tag { Name = "Sport" });
+                    context.Tags.Add(new Tag { Name = "Intellectual" });
+                    context.SaveChanges();
+                }
+
+                if (!context.Activities.Any())
+                {
+                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Id_Creator = 1 });
+                    context.Activities.Add(new Activity { Name = "Hicking", Description = "Altai Mountains", Capacity = 10, Id_Creator = 1 });
+                    context.SaveChanges();
+                }
             }
         }
     }
