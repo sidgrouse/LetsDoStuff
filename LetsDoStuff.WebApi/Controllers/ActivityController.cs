@@ -24,7 +24,7 @@ namespace LetsDoStuff.WebApi.Controllers
         [HttpGet]
         public ActionResult<ICollection<Activity>> GetActivityOutput()
         {
-            var activities = db.Activities.Include(a => a.Tags).ToList();
+            var activities = db.Activities.Include(a => a.Tags).Include(a => a.Creator).ToList();
 
             return activities;
         }
@@ -37,7 +37,7 @@ namespace LetsDoStuff.WebApi.Controllers
         [HttpGet("activity")]
         public ActionResult<Activity> GetActivity(int id)
         {
-            var activity = db.Activities.Include(a => a.Tags).FirstOrDefault(itm => itm.Id == id);
+            var activity = db.Activities.Include(a => a.Tags).Include(a => a.Creator).FirstOrDefault(itm => itm.Id == id);
 
             if (activity == null)
             {
