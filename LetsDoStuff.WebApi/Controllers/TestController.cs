@@ -6,6 +6,7 @@ using System.Collections;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace LetsDoStuff.WebApi.Controllers
 {
@@ -23,9 +24,9 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
 
-        [HttpGet("user")]
+        [HttpGet("userinfo")]
         [Authorize]
-        public ActionResult<User> GetUser()
+        public ActionResult<User> GetUserInfo()
         {
             
             using (LdsContext db = new LdsContext())
@@ -60,5 +61,22 @@ namespace LetsDoStuff.WebApi.Controllers
             }
         }
 
+        [HttpGet("get_all_users")]
+        [Authorize(Roles = "admin")]
+        public ActionResult<IEnumerable<User>> GetAllUsers()
+        {
+            
+            using (LdsContext db = new LdsContext())
+            {
+
+                var users = db.Users.ToList();
+
+                if (users == null)
+                {
+                    return BadRequest();
+                }
+                return users;
+            }
+        }
     }
 }
