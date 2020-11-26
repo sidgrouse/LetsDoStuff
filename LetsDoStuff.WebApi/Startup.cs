@@ -45,7 +45,7 @@ namespace LetsDoStuff.WebApi
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<LdsContext>(options =>
                 options.UseSqlServer(connection));
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddSwaggerGen(c =>
             {
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
