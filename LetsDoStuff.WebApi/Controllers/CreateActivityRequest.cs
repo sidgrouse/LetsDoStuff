@@ -15,5 +15,10 @@ namespace LetsDoStuff.WebApi.Controllers
         public int IdCreator { get; set; }
 
         public ICollection<int> TagIds { get; set; }
+
+        public CreateActivityRequest()
+        {
+            TagIds = new List<int>();
+        }
     }
 }
