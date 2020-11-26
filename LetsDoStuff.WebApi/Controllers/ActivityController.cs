@@ -3,6 +3,7 @@ using System.Linq;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Controllers
 {
@@ -23,9 +24,9 @@ namespace LetsDoStuff.WebApi.Controllers
         [HttpGet]
         public ActionResult<ICollection<Activity>> GetActivityOutput()
         {
-            var activities = db.Activities;
+            var activities = db.Activities.Include(a => a.Tags).ToList();
 
-            return activities.ToList();
+            return activities;
         }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace LetsDoStuff.WebApi.Controllers
         [HttpGet("activity")]
         public ActionResult<Activity> GetActivity(int id)
         {
-            var activity = db.Activities.FirstOrDefault(itm => itm.Id == id);
+            var activity = db.Activities.Include(a => a.Tags).FirstOrDefault(itm => itm.Id == id);
 
             if (activity == null)
             {
@@ -49,11 +50,27 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <summary>
         /// Create an activity.
         /// </summary>  
+        /// <param name="activityRequest">Activity.</param>
         /// <returns>A newly created activity.</returns>
         [HttpPost("activity")]
-        public ActionResult<Activity> CreateActivity()
+        public ActionResult<Activity> CreateActivity(CreateActivityRequest activityRequest)
         {
             var activity = new Activity();
+            activity.Name = activityRequest.Name;
+            activity.Description = activityRequest.Description;
+            activity.Capacity = activityRequest.Capacity;
+            activity.Id_Creator = activityRequest.IdCreator;
+
+            activity.Creator = db.Users.Find(activityRequest.IdCreator);
+
+            foreach (int id in activityRequest.TagIds)
+            {
+                activity.Tags.Add(db.Tags.Find(id));
+            }
+
+            db.Activities.Add(activity);
+            db.SaveChanges();
+
             return activity;
         }
     }
