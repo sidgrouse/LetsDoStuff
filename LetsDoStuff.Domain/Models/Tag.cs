@@ -15,7 +15,6 @@ namespace LetsDoStuff.Domain.Models
         [Required]
         public string Name { get; set; }
 
-        [NotMapped]
         public virtual ICollection<Activity> Activities { get; set; }
         
         public Tag()

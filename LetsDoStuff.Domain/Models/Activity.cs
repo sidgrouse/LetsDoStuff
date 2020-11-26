@@ -21,10 +21,8 @@ namespace LetsDoStuff.Domain.Models
 
         public int? Id_Creator { get; set; }
         
-        [NotMapped]
         public virtual User Creator { get; set; }
 
-        [NotMapped]
         public virtual ICollection<Tag> Tags { get; set; }
 
         public Activity()
