@@ -60,7 +60,7 @@ namespace LetsDoStuff.WebApi.Controllers
 
         private ClaimsIdentity GetIdentity(string login, string passeword)
         {
-            var user = context.Users.FirstOrDefault<User>(x => x.Login == login && x.Passeword == passeword);
+            var user = context.Users.FirstOrDefault<User>(x => x.Login == login && x.Password == passeword);
             if (user != null)
             {
                 var claims = new List<Claim>

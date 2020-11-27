@@ -32,7 +32,7 @@ namespace LetsDoStuff.WebApi.Controllers
 
             if (user == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             return user;
@@ -52,7 +52,7 @@ namespace LetsDoStuff.WebApi.Controllers
             var user = db.Users.FirstOrDefault(itm => itm.Id == id);
             if (user == null)
             {
-                return BadRequest();
+                return NotFound();
             }
                 
             return user;

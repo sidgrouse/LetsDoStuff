@@ -8,7 +8,7 @@
 
         public string Login { get; set; }
 
-        public string Passeword { get; set; }
+        public string Password { get; set; }
 
         public int Age { get; set; }
 

@@ -53,8 +53,8 @@ namespace LetsDoStuff.WebApi
 
                 if (!context.Users.Any())
                 {
-                    context.Users.Add(new User { Name = "Tom", Login = "Tom1", Passeword = "1234", Age = 33, Role = "admin" });
-                    context.Users.Add(new User { Name = "Alice", Login = "Alice1", Passeword = "0000", Age = 26, Role = "user" });
+                    context.Users.Add(new User { Name = "Tom", Login = "Tom1", Password = "1234", Age = 33, Role = "admin" });
+                    context.Users.Add(new User { Name = "Alice", Login = "Alice1", Password = "0000", Age = 26, Role = "user" });
                     context.SaveChanges();
                 }
             }
