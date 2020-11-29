@@ -28,10 +28,10 @@ namespace LetsDoStuff.WebApi.Controllers
             return "test output";
         }
 
-        [HttpPost("token")]
-        public IActionResult Token(string userLogin, string userPasseword)
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] AuthParam userAuthParam)
         {
-            var identity = GetIdentity(userLogin, userPasseword);
+            var identity = GetIdentity(userAuthParam.Login, userAuthParam.Password);
 
             if (identity == null)
             {
