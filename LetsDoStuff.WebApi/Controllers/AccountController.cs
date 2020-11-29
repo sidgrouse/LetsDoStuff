@@ -58,9 +58,9 @@ namespace LetsDoStuff.WebApi.Controllers
             return Json(response);
         }
 
-        private ClaimsIdentity GetIdentity(string login, string passeword)
+        private ClaimsIdentity GetIdentity(string login, string password)
         {
-            var user = context.Users.FirstOrDefault<User>(x => x.Login == login && x.Password == passeword);
+            var user = context.Users.FirstOrDefault<User>(x => x.Login == login && x.Password == password);
             if (user != null)
             {
                 var claims = new List<Claim>
