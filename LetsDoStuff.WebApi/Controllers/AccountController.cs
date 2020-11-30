@@ -29,13 +29,13 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] AuthParam userAuthParam)
+        public IActionResult Login([FromBody] LoginRequest userAuthParam)
         {
             var identity = GetIdentity(userAuthParam.Login, userAuthParam.Password);
 
             if (identity == null)
             {
-                return BadRequest(new { errorText = "Invalid login or passeword" });
+                return BadRequest(new { errorText = "Invalid login or password" });
             }
 
             var now = DateTime.Now;

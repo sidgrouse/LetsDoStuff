@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LetsDoStuff.WebApi.SettingsForAuth
 {
-    public class AuthParam
+    public class LoginRequest
     {
         public string Login { get; set; }
 
