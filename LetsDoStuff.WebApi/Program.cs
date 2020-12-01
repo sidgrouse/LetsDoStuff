@@ -58,6 +58,7 @@ namespace LetsDoStuff.WebApi
         {
             using (LdsContext context = new LdsContext(options))
             {
+                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
 
                 if (!context.Users.Any())
@@ -79,8 +80,12 @@ namespace LetsDoStuff.WebApi
 
                 if (!context.Activities.Any())
                 {
-                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Id_Creator = 1 });
-                    context.Activities.Add(new Activity { Name = "Hicking", Description = "Altai Mountains", Capacity = 10, Id_Creator = 1 });
+                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
+                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Alice")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
+                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
+                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
+                    context.Activities.Add(new Activity { Name = "Hicking", Description = "Altai Mountains", Capacity = 10, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault() });
+                    context.Activities.Add(new Activity { Name = "Meeting", Description = "10 am", Capacity = 10 });
                     context.SaveChanges();
                 }
             }

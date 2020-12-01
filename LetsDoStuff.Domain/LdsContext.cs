@@ -17,17 +17,25 @@ namespace LetsDoStuff.Domain
             Database.EnsureCreated();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=relationsdb;Trusted_Connection=True;");
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Activity>()
-                    .HasMany(a => a.Tags)
-                    .WithMany(t => t.Activities)
-                    .UsingEntity(j => j.ToTable("Enrollments"));
+            modelBuilder
+              .Entity<Activity>()
+              .HasMany(a => a.Tags)
+              .WithMany(t => t.Activities)
+              .UsingEntity<ActivityTag>(
+                j => j
+                  .HasOne(at => at.Tag)
+                  .WithMany()
+                  .HasForeignKey(at => at.TagId),
+                j => j
+                  .HasOne(at => at.Activity)
+                  .WithMany()
+                  .HasForeignKey(at => at.ActivityId),
+                j =>
+                {
+                    j.HasKey(t => new { t.ActivityId, t.TagId });
+                });
         }
     }
 }

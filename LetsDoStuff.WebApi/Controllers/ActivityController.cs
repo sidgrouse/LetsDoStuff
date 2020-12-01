@@ -2,31 +2,38 @@
 using System.Linq;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
+using LetsDoStuff.Domain.Models.DTO;
+using LetsDoStuff.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Controllers
 {
-    [Route("api/activities")]
+    [Route("api")]
     public class ActivityController : ControllerBase
     {
-        private LdsContext db;
+        private ActivityManager am;
 
-        public ActivityController(LdsContext context)
+        public ActivityController(ActivityManager activityManager)
         {
-            db = context;
+            am = activityManager;
         }
 
         /// <summary>
         /// Get list of activities.
         /// </summary>
         /// <returns>All activities.</returns>
-        [HttpGet]
-        public ActionResult<ICollection<Activity>> GetActivityOutput()
+        [HttpGet("activities")]
+        public ActionResult<List<Activity>> GetActivities()
         {
-            var activities = db.Activities.Include(a => a.Tags).Include(a => a.Creator).ToList();
+            var activities = am.GetActivities();
 
-            return activities;
+            if (activities == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(activities);
         }
 
         /// <summary>
@@ -34,44 +41,28 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <param name="id">ID of activity.</param>
         /// <returns>A specified activity.</returns>
-        [HttpGet("activity")]
+        [HttpGet("{id}")]
         public ActionResult<Activity> GetActivity(int id)
         {
-            var activity = db.Activities.Include(a => a.Tags).Include(a => a.Creator).FirstOrDefault(itm => itm.Id == id);
+            var activity = am.GetActivityById(id);
 
             if (activity == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            return activity;        
+            return Ok(activity);
         }
 
         /// <summary>
-        /// Create an activity.
-        /// </summary>  
-        /// <param name="activityRequest">Activity.</param>
-        /// <returns>A newly created activity.</returns>
-        [HttpPost("activity")]
-        public ActionResult<Activity> CreateActivity(CreateActivityRequest activityRequest)
+        /// Create activity.
+        /// </summary>
+        /// <param name="newActivity">Activity.</param>
+        /// <returns>Action result.</returns>
+        [HttpPost("createactivity")]
+        public IActionResult CreateActivity(CreateActivityCommand newActivity)
         {
-            var activity = new Activity();
-            activity.Name = activityRequest.Name;
-            activity.Description = activityRequest.Description;
-            activity.Capacity = activityRequest.Capacity;
-            activity.Id_Creator = activityRequest.IdCreator;
-
-            activity.Creator = db.Users.Find(activityRequest.IdCreator);
-
-            foreach (int id in activityRequest.TagIds)
-            {
-                activity.Tags.Add(db.Tags.Find(id));
-            }
-
-            db.Activities.Add(activity);
-            db.SaveChanges();
-
-            return activity;
+            return am.CreateActivity(newActivity);
         }
     }
 }
