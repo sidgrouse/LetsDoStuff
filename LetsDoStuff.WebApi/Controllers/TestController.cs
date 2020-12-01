@@ -2,6 +2,7 @@
 using System.Linq;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
@@ -16,22 +17,44 @@ namespace LetsDoStuff.WebApi.Controllers
             db = context;
         }
 
-        [HttpGet]
-        public IEnumerable<User> GetTestOutput()
+        public string GetTestOutput()
+        {
+            return "test output";
+        }
+
+        [HttpGet("userinfo")]
+        [Authorize]
+        public ActionResult<User> GetUserInfo()
+        {
+            var userLogin = this.HttpContext.User.Claims.FirstOrDefault().Value;
+
+            var user = db.Users.FirstOrDefault(itm => itm.Login == userLogin);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
+        [HttpGet("allusers")]
+        [Authorize(Roles = "admin")]
+        public ActionResult<IEnumerable<User>> GetTestUsers()
         {
             return db.Users.ToList();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("user/{id}")]
+        [Authorize(Roles = "admin")]
         public ActionResult<User> GetUser(int id)
         {
             var user = db.Users.FirstOrDefault(itm => itm.Id == id);
-
             if (user == null)
             {
-               return BadRequest();
+                return NotFound();
             }
-
+                
             return user;
         }
     }
