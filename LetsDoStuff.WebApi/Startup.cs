@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using LetsDoStuff.Domain;
+using LetsDoStuff.WebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -39,13 +40,14 @@ namespace LetsDoStuff.WebApi
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<LdsContext>(options =>
                 options.UseSqlServer(connection));
-            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+            services.AddSingleton<ActivityManager>();
         }
     }
 }
