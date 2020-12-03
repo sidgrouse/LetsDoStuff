@@ -17,6 +17,7 @@ namespace LetsDoStuff.WebApi.Controllers
             db = context;
         }
 
+        [HttpGet]
         public string GetTestOutput()
         {
             return "test output";
