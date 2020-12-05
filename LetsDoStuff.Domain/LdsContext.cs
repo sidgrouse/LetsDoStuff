@@ -1,8 +1,5 @@
 ﻿using LetsDoStuff.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LetsDoStuff.Domain
 {
@@ -10,16 +7,12 @@ namespace LetsDoStuff.Domain
     {
         public DbSet<User> Users { get; set; }
 
-        public LdsContext()
+        public DbSet<Activite> Activites { get; set; }
+
+        public LdsContext(DbContextOptions<LdsContext> options)
+            : base(options)
         {
             Database.EnsureCreated();
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=LetsDoStuffDb;Trusted_Connection=True;");
-        }
-
-        
     }
 }

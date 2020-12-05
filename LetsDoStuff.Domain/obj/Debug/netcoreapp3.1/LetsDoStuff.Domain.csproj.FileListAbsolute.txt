@@ -1,0 +1,12 @@
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\bin\Debug\netcoreapp3.1\LetsDoStuff.Domain.deps.json
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\bin\Debug\netcoreapp3.1\LetsDoStuff.Domain.runtimeconfig.json
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\bin\Debug\netcoreapp3.1\LetsDoStuff.Domain.runtimeconfig.dev.json
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\bin\Debug\netcoreapp3.1\LetsDoStuff.Domain.dll
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\bin\Debug\netcoreapp3.1\LetsDoStuff.Domain.pdb
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\obj\Debug\netcoreapp3.1\LetsDoStuff.Domain.csprojAssemblyReference.cache
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\obj\Debug\netcoreapp3.1\LetsDoStuff.Domain.AssemblyInfoInputs.cache
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\obj\Debug\netcoreapp3.1\LetsDoStuff.Domain.AssemblyInfo.cs
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\obj\Debug\netcoreapp3.1\LetsDoStuff.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\obj\Debug\netcoreapp3.1\LetsDoStuff.Domain.dll
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\obj\Debug\netcoreapp3.1\LetsDoStuff.Domain.pdb
+C:\Users\Ludsaq\Downloads\LetsDoStuff-master\LetsDoStuff.Domain\obj\Debug\netcoreapp3.1\LetsDoStuff.Domain.genruntimeconfig.cache
