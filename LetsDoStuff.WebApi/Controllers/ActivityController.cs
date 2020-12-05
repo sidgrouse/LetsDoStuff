@@ -1,39 +1,37 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using LetsDoStuff.Domain;
+﻿using System;
+using System.Collections.Generic;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.Domain.Models.DTO;
 using LetsDoStuff.WebApi.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Controllers
 {
-    [Route("api")]
+    [Route("api/activity")]
     public class ActivityController : ControllerBase
     {
-        private ActivityManager am;
+        private readonly IActivityService _activityService;
 
-        public ActivityController(ActivityManager activityManager)
+        public ActivityController(IActivityService activityService)
         {
-            am = activityManager;
+            _activityService = activityService;
         }
 
         /// <summary>
         /// Get list of activities.
         /// </summary>
         /// <returns>All activities.</returns>
-        [HttpGet("activities")]
-        public ActionResult<List<Activity>> GetActivities()
+        [HttpGet("all")]
+        public ActionResult<List<ActivityResponse>> GetActivities()
         {
-            var activities = am.GetActivities();
+            var activities = _activityService.GetAllActivities();
 
             if (activities == null)
             {
                 return NotFound();
             }
 
-            return Ok(activities);
+            return activities;
         }
 
         /// <summary>
@@ -42,16 +40,16 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <param name="id">ID of activity.</param>
         /// <returns>A specified activity.</returns>
         [HttpGet("{id}")]
-        public ActionResult<Activity> GetActivity(int id)
+        public ActionResult<ActivityResponse> GetActivity(int id)
         {
-            var activity = am.GetActivityById(id);
+            var activity = _activityService.GetActivityById(id);
 
             if (activity == null)
             {
                 return NotFound();
             }
 
-            return Ok(activity);
+            return activity;
         }
 
         /// <summary>
@@ -59,10 +57,18 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <param name="newActivity">Activity.</param>
         /// <returns>Action result.</returns>
-        [HttpPost("createactivity")]
-        public IActionResult CreateActivity(CreateActivityCommand newActivity)
+        [HttpPost("create")]
+        public IActionResult CreateActivity([FromBody]CreateActivityCommand newActivity)
         {
-            return am.CreateActivity(newActivity);
+            try
+            {
+                _activityService.CreateActivity(newActivity);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }

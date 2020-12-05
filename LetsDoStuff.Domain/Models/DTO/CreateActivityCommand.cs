@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace LetsDoStuff.Domain.Models.DTO
 {

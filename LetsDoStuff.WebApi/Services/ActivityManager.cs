@@ -1,86 +1,76 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.Domain.Models.DTO;
-using LetsDoStuff.WebApi.SQC;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
 {
-    public class ActivityManager
+    public class ActivityManager : IActivityService
     {
-        private LdsContext db;
+        private readonly LdsContext db;
 
         public ActivityManager(LdsContext context)
         {
             db = context;
         }
 
-        public List<GetActivitiesQueryResult> GetActivities()
+        public List<ActivityResponse> GetAllActivities()
         {
             var activities = db.Activities.AsNoTracking()
-                .Select(a => new GetActivitiesQueryResult()
+                .Select(a => new ActivityResponse()
                 {
                     Id = a.Id,
                     Name = a.Name,
                     Description = a.Description,
                     Capacity = a.Capacity,
                     Creator = a.Creator,
-                    Tags = a.Tags.Select(t => new Tag
-                    {
-                        Id = t.Id,
-                        Name = t.Name
-                    }).ToList()
+                    Tags = a.Tags.Select(t => t.Name).ToList()
                 }).ToList();
 
             return activities;
         }
 
-        public GetActivitiesQueryResult GetActivityById(int id)
+        public ActivityResponse GetActivityById(int id)
         {
             var activity = db.Activities.AsNoTracking()
-                .Where(a => a.Id == id)
-                .Select(a => new GetActivitiesQueryResult()
-                {
-                    Id = a.Id,
-                    Name = a.Name,
-                    Description = a.Description,
-                    Capacity = a.Capacity,
-                    Creator = a.Creator,
-                    Tags = a.Tags.Select(t => new Tag
-                    {
-                        Id = t.Id,
-                        Name = t.Name
-                    }).ToList()
-                }).FirstOrDefault();
+                .FirstOrDefault(a => a.Id == id)
+                ?? throw new ArgumentException($"There is no activity with id {id}");
 
-            return activity;
+            return new ActivityResponse()
+            {
+                Id = activity.Id,
+                Name = activity.Name,
+                Description = activity.Description,
+                Capacity = activity.Capacity,
+                Creator = activity.Creator,
+                Tags = activity.Tags
+                    .Select(t => t.Name)
+                    .ToList()
+            };
         }
 
-        public IActionResult CreateActivity(CreateActivityCommand newActivity)
+        public void CreateActivity(CreateActivityCommand newActivity)
         {
-            var activity = new Activity(); 
+            var creator = db.Users.Find(newActivity.CreatorId)
+                ?? throw new ArgumentException($"{nameof(newActivity.CreatorId)} has to point to an existed user");
 
-            activity.Name = newActivity.Name;
-            activity.Description = newActivity.Description;
-            activity.Capacity = newActivity.Capacity;
-            activity.Creator = db.Users.Find(newActivity.CreatorId);
-            if (activity.Creator == null)
+            var activity = new Activity
             {
-                return new BadRequestResult();
-            }
+                Creator = creator,
+                Name = newActivity.Name,
+                Description = newActivity.Description,
+                Capacity = newActivity.Capacity
+            };
 
-            Tag tag;
             foreach (int id in newActivity.TagIds)
             {
-                tag = db.Tags.Find(id);
+                var tag = db.Tags.Find(id);
                 if (tag == null)
                 {
-                    return new BadRequestResult();
+                    throw new ArgumentException($"Tag with id {id} has not been found");
                 }
 
                 activity.Tags.Add(tag);
@@ -88,8 +78,6 @@ namespace LetsDoStuff.WebApi.Services
 
             db.Activities.Add(activity);
             db.SaveChanges();
-
-            return new OkResult();
         }
     }
 }
