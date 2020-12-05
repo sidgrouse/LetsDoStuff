@@ -3,10 +3,13 @@ using System.IO;
 using System.Reflection;
 using LetsDoStuff.Domain;
 using LetsDoStuff.WebApi.Services;
+using LetsDoStuff.WebApi.SettingsForAuth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LetsDoStuff.WebApi
 {
@@ -28,6 +31,8 @@ namespace LetsDoStuff.WebApi
                 c.RoutePrefix = string.Empty;
             });
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(
                 endpoints =>
                 {
@@ -48,6 +53,21 @@ namespace LetsDoStuff.WebApi
                 c.IncludeXmlComments(xmlPath);
             });
             services.AddSingleton<ActivityManager>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = AuthOptions.ISSUER,
+                        ValidateAudience = true,
+                        ValidAudience = AuthOptions.AUDIENCE,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        ValidateIssuerSigningKey = true
+                    };
+                });
         }
     }
 }
