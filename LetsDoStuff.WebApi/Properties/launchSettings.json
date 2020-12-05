@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "LetsDoStuff.WebApi": {
+      "commandName": "Project",
+      "commandLineArgs": "ASPNETCORE_ENVIRONMENT",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
