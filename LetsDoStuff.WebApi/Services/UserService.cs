@@ -17,7 +17,7 @@ namespace LetsDoStuff.WebApi.Services
         }
 
         /// <summary>
-        /// Gets a user by his userName.
+        /// Gets a users by their userName.
         /// </summary>
         /// <param name="userName">User UserName.</param>
         /// <returns>Result of query.</returns>
@@ -42,6 +42,20 @@ namespace LetsDoStuff.WebApi.Services
             }
 
             return user;
+        }
+
+        public string GetUserNameByEmail(string email)
+        {
+            var userName = _context.Users.AsNoTracking()
+                .Where(x => x.Email == email)
+                .Select(x => x.UserName).FirstOrDefault();
+
+            if (userName == null)
+            {
+                throw new ArgumentNullException(nameof(userName));
+            }
+
+            return userName;
         }
 
         /// <summary>
