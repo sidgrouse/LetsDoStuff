@@ -48,7 +48,6 @@ namespace LetsDoStuff.WebApi
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetService<LdsContext>();
-                context.Database.EnsureDeleted();
                 SeedTestData(context);
             }
 
