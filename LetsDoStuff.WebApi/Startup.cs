@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using LetsDoStuff.Domain;
+using LetsDoStuff.WebApi.Services;
 using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -51,6 +52,7 @@ namespace LetsDoStuff.WebApi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+            services.AddSingleton<ActivityManager>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {

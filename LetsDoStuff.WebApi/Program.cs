@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using LetsDoStuff.Domain;
@@ -49,12 +50,34 @@ namespace LetsDoStuff.WebApi
         {
             using (LdsContext context = new LdsContext(options))
             {
+                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
 
                 if (!context.Users.Any())
                 {
                     context.Users.Add(new User { Name = "Tom", Login = "Tom1", Password = "1234", Age = 33, Role = "admin" });
                     context.Users.Add(new User { Name = "Alice", Login = "Alice1", Password = "0000", Age = 26, Role = "user" });
+                    context.SaveChanges();
+                }
+
+                if (!context.Tags.Any())
+                {
+                    context.Tags.Add(new Tag { Name = "Music" });
+                    context.Tags.Add(new Tag { Name = "Open-air" });
+                    context.Tags.Add(new Tag { Name = "Indoor" });
+                    context.Tags.Add(new Tag { Name = "Sport" });
+                    context.Tags.Add(new Tag { Name = "Intellectual" });
+                    context.SaveChanges();
+                }
+
+                if (!context.Activities.Any())
+                {
+                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
+                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Alice")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
+                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
+                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
+                    context.Activities.Add(new Activity { Name = "Hicking", Description = "Altai Mountains", Capacity = 10, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault() });
+                    context.Activities.Add(new Activity { Name = "Meeting", Description = "10 am", Capacity = 10 });
                     context.SaveChanges();
                 }
             }
