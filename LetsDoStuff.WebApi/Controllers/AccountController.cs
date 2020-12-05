@@ -55,7 +55,7 @@ namespace LetsDoStuff.WebApi.Controllers
                 login = identity.Name
             };
 
-            return new JsonResult(response);
+            return Json(response);
         }
 
         private ClaimsIdentity GetIdentity(string login, string password)
