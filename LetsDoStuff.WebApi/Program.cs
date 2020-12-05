@@ -78,14 +78,19 @@ namespace LetsDoStuff.WebApi
                     context.SaveChanges();
                 }
 
+                var userTom = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault();
+                var userAlice = context.Users.Where(u => u.Name.Contains("Alice")).FirstOrDefault();
+                var tagMusic = context.Tags.FirstOrDefault(itm => itm.Name == "Music");
+                var tagIntellectual = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
+
                 if (!context.Activities.Any())
                 {
-                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
-                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Alice")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
-                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
-                    context.Activities.Add(new Activity { Name = "Concert", Description = "Classical music", Capacity = 100, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault(), Tags = new List<Tag>(context.Tags.Where(e => e.Name.Contains("Music"))) });
-                    context.Activities.Add(new Activity { Name = "Hicking", Description = "Altai Mountains", Capacity = 10, Creator = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault() });
-                    context.Activities.Add(new Activity { Name = "Meeting", Description = "10 am", Capacity = 10 });
+                    context.Activities.Add(new Activity() { Creator = userTom, Name = "Concert 1", Description = "Classical music", Capacity = 100, Tags = new List<Tag> { tagMusic } });
+                    context.Activities.Add(new Activity() { Creator = userAlice, Name = "Concert 2", Description = "Classical music", Capacity = 100, Tags = new List<Tag> { tagMusic } });
+                    context.Activities.Add(new Activity() { Creator = userTom, Name = "Concert 3", Description = "Classical music", Capacity = 100, Tags = new List<Tag> { tagMusic } });
+                    context.Activities.Add(new Activity() { Creator = userTom, Name = "Concert 4", Description = "Classical music", Capacity = 100, Tags = new List<Tag> { tagMusic } });
+                    context.Activities.Add(new Activity() { Creator = userTom, Name = "Hicking", Description = "Altai Mountains", Capacity = 10 });
+                    context.Activities.Add(new Activity() { Creator = userTom, Name = "PubQuiz mindstorm", Description = "In central perk", Capacity = 6, Tags = new List<Tag> { tagIntellectual } });
                     context.SaveChanges();
                 }
             }
