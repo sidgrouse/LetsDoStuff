@@ -12,7 +12,7 @@ namespace LetsDoStuff.Domain.Models.DTO
 
         public int Capacity { get; set; }
 
-        public User Creator { get; set; }
+        public ActivityCreatorResponse Creator { get; set; }
 
         public List<string> Tags { get; set; }
 
