@@ -36,6 +36,8 @@ namespace LetsDoStuff.WebApi.Services
         public ActivityResponse GetActivityById(int id)
         {
             var activity = db.Activities.AsNoTracking()
+                .Include(a => a.Tags)
+                .Include(a => a.Creator)
                 .FirstOrDefault(a => a.Id == id)
                 ?? throw new ArgumentException($"There is no activity with id {id}");
 
