@@ -26,7 +26,12 @@ namespace LetsDoStuff.WebApi.Services
                     Name = a.Name,
                     Description = a.Description,
                     Capacity = a.Capacity,
-                    Creator = a.Creator,
+                    Creator = new ActivityCreatorResponse()
+                    {
+                        Id = a.Creator.Id,
+                        Name = a.Creator.Name,
+                        Login = a.Creator.Login
+                    },
                     Tags = a.Tags.Select(t => t.Name).ToList()
                 }).ToList();
 
@@ -47,7 +52,12 @@ namespace LetsDoStuff.WebApi.Services
                 Name = activity.Name,
                 Description = activity.Description,
                 Capacity = activity.Capacity,
-                Creator = activity.Creator,
+                Creator = new ActivityCreatorResponse()
+                    { 
+                        Id = activity.Creator.Id,
+                        Name = activity.Creator.Name,
+                        Login = activity.Creator.Login
+                    },
                 Tags = activity.Tags
                     .Select(t => t.Name)
                     .ToList()
