@@ -24,7 +24,8 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         [HttpGet("userinfo")]
-        [Authorize]
+
+        // [Authorize]
         public ActionResult<User> GetUserInfo()
         {
             var userLogin = this.HttpContext.User.Claims.FirstOrDefault().Value;
@@ -40,14 +41,16 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         [HttpGet("allusers")]
-        [Authorize(Roles = "admin")]
+
+        // [Authorize(Roles = "admin")]
         public ActionResult<IEnumerable<User>> GetTestUsers()
         {
             return db.Users.ToList();
         }
 
         [HttpGet("user/{id}")]
-        [Authorize(Roles = "admin")]
+
+        // [Authorize(Roles = "admin")]
         public ActionResult<User> GetUser(int id)
         {
             var user = db.Users.FirstOrDefault(itm => itm.Id == id);
