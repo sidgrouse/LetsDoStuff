@@ -145,6 +145,14 @@ namespace LetsDoStuff.Domain.Migrations
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("LetsDoStuff.Domain.Models.Tag", null)
+                        .WithMany("ActivityTags")
+                        .HasForeignKey("TagId1");
+
+                    b.Navigation("Activity");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("LetsDoStuff.Domain.Models.Activity", b =>
