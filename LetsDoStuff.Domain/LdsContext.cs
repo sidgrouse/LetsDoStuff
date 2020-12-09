@@ -19,6 +19,16 @@ namespace LetsDoStuff.Domain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            ManyToManyBetweenActivitiesAndTegs(modelBuilder);
+            ManyToManyBetweenActivitiesAndSubscribers(modelBuilder);
+            modelBuilder
+                .Entity<User>()
+                .HasMany(u => u.CreatedActivities)
+                .WithOne(a => a.Creator);
+        }
+
+        private void ManyToManyBetweenActivitiesAndTegs(ModelBuilder modelBuilder)
+        {
             modelBuilder
               .Entity<Activity>()
               .HasMany(a => a.Tags)
@@ -36,6 +46,27 @@ namespace LetsDoStuff.Domain
                 {
                     j.HasKey(t => new { t.ActivityId, t.TagId });
                 });
+        }
+        
+        private void ManyToManyBetweenActivitiesAndSubscribers(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+               .Entity<Activity>()
+               .HasMany(a => a.Subscribers)
+               .WithMany(u => u.ActivitiesForAttending)
+               .UsingEntity<ActivityAttandingUser>(
+                 j => j
+                   .HasOne(au => au.Subscriber)
+                   .WithMany()
+                   .HasPrincipalKey(u => u.Id),
+                 j => j
+                   .HasOne(au => au.Activity)
+                   .WithMany()
+                   .HasForeignKey(au => au.ActivityId),
+                 j =>
+                 {
+                     j.HasKey(u => new { u.ActivityId, u.SubscriberId });
+                 });
         }
     }
 }

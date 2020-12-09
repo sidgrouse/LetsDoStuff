@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LetsDoStuff.Domain.Models
 {
-    public class Activity 
+    public class Activity
     {
         public int Id { get; set; }
 
@@ -27,9 +27,8 @@ namespace LetsDoStuff.Domain.Models
 
         /// <summary>
         /// Gets or sets the user who created the activity.
-        /// </summary>
-        [Required]
-        public User Creator { get; set; } 
+        /// </summary> 
+        public User Creator { get; set; }
 
         /// <summary>
         /// Gets or sets the list of ActivityTags.
@@ -40,5 +39,15 @@ namespace LetsDoStuff.Domain.Models
         /// Gets or sets the list of Tags.
         /// </summary>
         public List<Tag> Tags { get; set; } = new List<Tag>();
+
+        /// <summary>
+        /// Gets or sets the list of ActivityAttandingUser.
+        /// </summary>
+        public List<ActivityAttandingUser> ActivityAttandingUsers { get; set; } = new List<ActivityAttandingUser>();
+
+        /// <summary>
+        /// Gets or sets the list of Users that want to take participation or attendance in the activity.
+        /// </summary>
+        public List<User> Subscribers { get; set; } = new List<User>();
     }
 }

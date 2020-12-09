@@ -60,6 +60,7 @@ namespace LetsDoStuff.WebApi
                 c.IncludeXmlComments(xmlPath);
             });
             services.AddTransient<IActivityService, ActivityManager>();
+            services.AddTransient<ISubscribingService, SubscribingManager>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
