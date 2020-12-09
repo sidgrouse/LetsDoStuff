@@ -29,8 +29,8 @@ namespace LetsDoStuff.WebApi.Services
                     Creator = new ActivityCreatorResponse()
                     {
                         Id = a.Creator.Id,
-                        Name = a.Creator.Name,
-                        Login = a.Creator.Login
+                        Name = a.Creator.FirstName + a.Creator.LastName,
+                        Login = a.Creator.UserName
                     },
                     Tags = a.Tags.Select(t => t.Name).ToList()
                 }).ToList();
@@ -53,10 +53,10 @@ namespace LetsDoStuff.WebApi.Services
                 Description = activity.Description,
                 Capacity = activity.Capacity,
                 Creator = new ActivityCreatorResponse()
-                    { 
+                    {
                         Id = activity.Creator.Id,
-                        Name = activity.Creator.Name,
-                        Login = activity.Creator.Login
+                        Name = activity.Creator.FirstName + " " + activity.Creator.LastName,
+                        Login = activity.Creator.UserName
                     },
                 Tags = activity.Tags
                     .Select(t => t.Name)

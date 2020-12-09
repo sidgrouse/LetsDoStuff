@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LetsDoStuff.Domain.Models.DTO
 {
-    public sealed class CreateUserCommand
+    public sealed class RegisterRequest
     {
         [Required]
         public string FirstName { get; set; }

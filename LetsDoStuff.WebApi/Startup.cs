@@ -33,6 +33,7 @@ namespace LetsDoStuff.WebApi
                 c.RoutePrefix = string.Empty;
             });
             app.UseRouting();
+            app.UseHttpsRedirection();
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -59,7 +60,10 @@ namespace LetsDoStuff.WebApi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+
             services.AddTransient<IActivityService, ActivityManager>();
+            services.AddTransient<IUserService, UserService>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -84,7 +88,7 @@ namespace LetsDoStuff.WebApi
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer",
                     In = ParameterLocation.Header,
-                    Description = $"Login with creds: Tom1/1234, then past the token here"
+                    Description = $"Login with creds: user1/12test, then post the token here"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement

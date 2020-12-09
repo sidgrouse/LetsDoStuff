@@ -37,15 +37,13 @@ namespace LetsDoStuff.Domain.Models
         [Required]
         public string Role { get; set; }
 
-        public User(string userName, string firstName, string lastName, string email, string password, string role)
+        public User(string firstName, string lastName, string email, string password, string role)
         {
-            UserName = userName;
+            UserName = string.Empty;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Password = password;
-            Bio = string.Empty;
-            DateOfBirth = DateTime.MinValue;
             DateOfRegistration = DateTime.Now;
             Role = role;
         }

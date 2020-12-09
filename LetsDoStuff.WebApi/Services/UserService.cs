@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly LdsContext _context;
 
@@ -16,67 +16,57 @@ namespace LetsDoStuff.WebApi.Services
             _context = context;
         }
 
-        /// <summary>
-        /// Gets a users by their userName.
-        /// </summary>
-        /// <param name="userName">User UserName.</param>
-        /// <returns>Result of query.</returns>
-        public GetUserByUserNameQueryResult GetUserByUserName(string userName)
+        public UserSettingsResponse GetUserSettings(string userName)
         {
             var user = _context.Users.AsNoTracking()
-                .Where(x => x.UserName == userName)
-                .Select(x => new GetUserByUserNameQueryResult(userName)
-                {
-                    UserName = x.UserName,
-                    ContactName = x.FirstName + " " + x.LastName,
-                    Email = x.Email,
-                    Bio = x.Bio,
-                    DateOfBirth = x.DateOfBirth.Date.ToLongDateString(),
-                    DateOfRegistration = x.DateOfRegistration.Date.ToLongDateString(),
-                    Role = x.Role,
-                }).FirstOrDefault();
+                .FirstOrDefault(u => u.UserName == userName)
+                ?? throw new ArgumentException($"User is not found");
 
-            if (user == null)
+            return new UserSettingsResponse()
             {
-                throw new ArgumentNullException(nameof(user));
-            }
-
-            return user;
+                UserName = userName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Bio = user.Bio ?? string.Empty,
+                DateOfBirth = user.DateOfBirth.Date.ToLongDateString(),
+                DateOfRegistration = user.DateOfRegistration.Date.ToLongDateString(),
+                Role = user.Role,
+            };
         }
 
-        public string GetUserNameByEmail(string email)
+        public UserResponse GetUserByUserName(string userName)
         {
-            var userName = _context.Users.AsNoTracking()
-                .Where(x => x.Email == email)
-                .Select(x => x.UserName).FirstOrDefault();
+            var user = _context.Users.AsNoTracking()
+                .FirstOrDefault(u => u.UserName == userName)
+                ?? throw new ArgumentException($"User with userName: {userName} is not found");
 
-            if (userName == null)
+            return new UserResponse()
             {
-                throw new ArgumentNullException(nameof(userName));
-            }
-
-            return userName;
+                ContactName = user.FirstName + " " + user.LastName,
+                Email = user.Email,
+                Bio = user.Bio ?? string.Empty,
+                DateOfBirth = user.DateOfBirth.Date.ToLongDateString(),
+                Role = user.Role,
+            };
         }
 
-        /// <summary>
-        /// Creates a user and generate a userName with generated identity starts 1. "user1", "user2" e.g.
-        /// </summary>
-        /// <param name="userData">User registration data.</param>
-        public void CreateUser(CreateUserCommand userData)
+        public void RegisterUser(RegisterRequest userData)
+        {
+            UserValidation(userData);
+            CreateUser(userData);
+        }
+
+        private void CreateUser(RegisterRequest userData)
         {
             using var transaction = _context.Database.BeginTransaction();
             try
             {
-                var newUser = new User(string.Empty, userData.FirstName, userData.LastName, userData.Email, userData.Password, "User");
-                if (!string.IsNullOrWhiteSpace(userData.DateOfBirth.ToString()))
+                var newUser = new User(userData.FirstName, userData.LastName, userData.Email, userData.Password, "User")
                 {
-                    newUser.DateOfBirth = userData.DateOfBirth;
-                }
-
-                if (!string.IsNullOrWhiteSpace(userData.Bio))
-                {
-                    newUser.Bio = userData.Bio;
-                }
+                    DateOfBirth = userData.DateOfBirth,
+                    Bio = userData.Bio
+                };
 
                 _context.Users.Add(newUser);
                 _context.SaveChanges();
@@ -88,7 +78,20 @@ namespace LetsDoStuff.WebApi.Services
             catch (Exception)
             {
                 transaction.Rollback();
-                throw;
+                throw new ArgumentException($"User {userData.FirstName} {userData.LastName} is not created");
+            }
+        }
+
+        private void UserValidation(RegisterRequest userData)
+        {
+            EmailValidation(userData.Email);
+        }
+
+        private void EmailValidation(string email)
+        {
+            if (_context.Users.AsNoTracking().Any(u => u.Email == email))
+            {
+                throw new ArgumentException($"User with this email is already exist");
             }
         }
     }

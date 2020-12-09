@@ -1,10 +1,12 @@
 ﻿namespace LetsDoStuff.Domain.Models.DTO
 {
-    public sealed class GetUserByUserNameQueryResult
+    public sealed class UserSettingsResponse
     {
         public string UserName { get; set; }
 
-        public string ContactName { get; set; }
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
 
         public string Email { get; set; }
 
@@ -15,10 +17,5 @@
         public string DateOfRegistration { get; set; }
 
         public string Role { get; set; }
-
-        public GetUserByUserNameQueryResult(string userName)
-        {
-            UserName = userName;
-        }
     }
 }
