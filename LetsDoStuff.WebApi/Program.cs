@@ -50,7 +50,6 @@ namespace LetsDoStuff.WebApi
         {
             using (LdsContext context = new LdsContext(options))
             {
-                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
 
                 if (!context.Users.Any())
