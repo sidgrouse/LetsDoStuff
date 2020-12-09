@@ -1,6 +1,6 @@
 ﻿using System;
 using LetsDoStuff.Domain.Models.DTO;
-using LetsDoStuff.WebApi.Services;
+using LetsDoStuff.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,7 +14,7 @@ namespace LetsDoStuff.WebApi.Controllers
         private readonly IUserService _userService;
         private readonly ILogger _logger;
 
-        public UserContoller(IUserService userService, ILogger<UserService> logger)
+        public UserContoller(IUserService userService, ILogger<IUserService> logger)
         {
             _userService = userService;
             _logger = logger;

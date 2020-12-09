@@ -1,6 +1,6 @@
 ﻿using LetsDoStuff.Domain.Models.DTO;
 
-namespace LetsDoStuff.WebApi.Services
+namespace LetsDoStuff.WebApi.Services.Interfaces
 {
     public interface IUserService
     {

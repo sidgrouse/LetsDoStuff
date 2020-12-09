@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LetsDoStuff.Domain.Models.DTO
 {
-    public class CreateActivityCommand 
+    public class CreateActivityCommand
     {
         public string Name { get; set; }
 

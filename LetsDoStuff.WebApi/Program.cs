@@ -5,7 +5,7 @@ using System.Reflection;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.Domain.Models.DTO;
-using LetsDoStuff.WebApi.Services;
+using LetsDoStuff.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +14,6 @@ using Microsoft.Extensions.Logging;
 
 namespace LetsDoStuff.WebApi
 {
-    [AllowAnonymous]
     public static class Program
     {
         public static void Main()
@@ -49,6 +48,7 @@ namespace LetsDoStuff.WebApi
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetService<LdsContext>();
+                var userService = services.GetService<IUserService>();
                 SeedTestData(context, userService);
             }
 

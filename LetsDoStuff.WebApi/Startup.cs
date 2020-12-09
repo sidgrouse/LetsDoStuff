@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using LetsDoStuff.Domain;
 using LetsDoStuff.WebApi.Services;
+using LetsDoStuff.WebApi.Services.Interfaces;
 using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;

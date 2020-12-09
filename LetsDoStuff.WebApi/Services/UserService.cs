@@ -3,6 +3,7 @@ using System.Linq;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.Domain.Models.DTO;
+using LetsDoStuff.WebApi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
