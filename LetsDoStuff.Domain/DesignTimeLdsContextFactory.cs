@@ -18,7 +18,7 @@ namespace LetsDoStuff.Domain
                 .AddJsonFile(settingsFileName) // Get the configuration from the "appsettings.json".
                 .Build() // Build the configuration.
                 .GetConnectionString("DefaultConnection"); // Get the database connection string from configuration.
-
+            
             var optionsBuilder = new DbContextOptionsBuilder<LdsContext>();
             var options = optionsBuilder
                 .UseSqlServer(connectionString)
