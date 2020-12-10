@@ -4,7 +4,7 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 {
     public interface IUserService
     {
-        public UserSettingsResponse GetUserSettings(string userName);
+        public UserSettingsResponse GetUserSettings(string username);
 
         public UserResponse GetUserByUsername(string username);
 

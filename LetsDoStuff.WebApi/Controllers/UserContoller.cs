@@ -46,7 +46,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <param name="username">Username of User.</param>
         /// <returns>A specified user.</returns>
         [Authorize]
-        [HttpGet("{userName}")]
+        [HttpGet("{username}")]
         public ActionResult<UserResponse> GetUserByUsername(string username)
         {
             try
