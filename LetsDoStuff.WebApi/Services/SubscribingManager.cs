@@ -18,19 +18,27 @@ namespace LetsDoStuff.WebApi.Services
             db = context;
         }
 
-        public void SubscribeUserToActivityByNames(string nameUser, string nameActivity)
+        public void SubscribeUserToActivityByNames(string loginUser, string nameActivity)
         {
-            User subscriber = FindUserByName(nameUser);
-            Activity activityForSubscribing = FindActivityByName(nameActivity);
-            foreach (Activity act in subscriber.ActivitiesForAttending)
+            User subscriber = db.Users.Where(h => h.Login == loginUser)
+                                    .Include(u => u.ActivitiesForParticipation)
+                                    .First();
+
+            Activity activityForSubscribing = db.Activities
+                                        .AsNoTracking()
+                                        .Where(a => a.Name == nameActivity)
+                                        .FirstOrDefault()
+                                        ?? throw new ArgumentException($"Activity with Name {nameActivity} has not been found");
+
+            foreach (Activity act in subscriber.ActivitiesForParticipation)
             {
-                if (activityForSubscribing == act)
+                if (activityForSubscribing.Id == act.Id)
                 {
-                    throw new ArgumentException($"{subscriber} has already subscribed to the event {nameActivity}");
+                    throw new ArgumentException($"{subscriber.Login} has already subscribed to the event {nameActivity}");
                 }    
             }
 
-            subscriber.ActivitiesForAttending.Add(activityForSubscribing);
+            subscriber.ActivitiesForParticipation.Add(activityForSubscribing);
 
             db.SaveChanges();
         }
@@ -39,10 +47,12 @@ namespace LetsDoStuff.WebApi.Services
         {
             var response = db.Users.AsNoTracking()
                .Where(u => u.Login == userName)
-               .Include(u => u.ActivitiesForAttending)
+               .Include(u => u.ActivitiesForParticipation)
                .ThenInclude(a => a.Creator)
+               .Include(u => u.ActivitiesForParticipation)
+               .ThenInclude(a => a.Tags)
                .FirstOrDefault()
-               .ActivitiesForAttending
+               .ActivitiesForParticipation
                .Select(a => new ActivityResponse()
                {
                    Id = a.Id,
@@ -57,11 +67,8 @@ namespace LetsDoStuff.WebApi.Services
                    },
                    Tags = a.Tags.Select(t => t.Name).ToList()
                });
+
             return response.ToList();
         }
-
-        private User FindUserByName(string nameUser) => db.Users.AsNoTracking().Where(h => h.Login == nameUser).Include(u => u.ActivitiesForAttending).FirstOrDefault();
-
-        private Activity FindActivityByName(string nameActivity) => db.Activities.Where(a => a.Name == nameActivity).First() ?? throw new ArgumentException($"Activity with Name {nameActivity} has not been found");
     }
 }

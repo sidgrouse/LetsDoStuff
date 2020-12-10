@@ -19,13 +19,13 @@ namespace LetsDoStuff.Domain.Models
         public List<Activity> CreatedActivities { get; set; } = new List<Activity>();
 
         /// <summary>
-        /// Gets or sets the list of ActivityAttandingUser.
+        /// Gets or sets the list of ActivityParticipant.
         /// </summary>
-        public List<ActivityAttandingUser> AttandingUserActivities { get; set; } = new List<ActivityAttandingUser>();
+        public List<ActivityParticipant> ActivityParticipants { get; set; } = new List<ActivityParticipant>();
 
         /// <summary>
         /// Gets or sets the list of Activities for participation or attendance.
         /// </summary>
-        public List<Activity> ActivitiesForAttending { get; set; } = new List<Activity>();
+        public List<Activity> ActivitiesForParticipation { get; set; } = new List<Activity>();
     }
 }

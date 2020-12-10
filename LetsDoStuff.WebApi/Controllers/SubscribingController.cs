@@ -21,17 +21,17 @@ namespace LetsDoStuff.WebApi.Controllers
 
         [HttpGet("SubscribeToActivityByName")]
         [Authorize]
-        public IActionResult SubscribeToActivityByName(string nameActivity)
+        public IActionResult SubscribeToActivityByLogin(string nameActivity)
         {
-            var userName = this.HttpContext.User.Claims.FirstOrDefault().Value;
+            var loginName = this.HttpContext.User.Claims.First().Value;
             try
             {
-                _subscribingService.SubscribeUserToActivityByNames(userName, nameActivity);
+                _subscribingService.SubscribeUserToActivityByNames(loginName, nameActivity);
                 return Ok();
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
 
@@ -41,11 +41,6 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             var userName = this.HttpContext.User.Claims.FirstOrDefault().Value;
             var subscriberinfo = _subscribingService.GetAllActivitiesOfTheUser(userName);
-            if (subscriberinfo.Count == 0)
-            {
-                return NotFound();
-            }
-
             return subscriberinfo;
         }
     }

@@ -41,13 +41,13 @@ namespace LetsDoStuff.Domain.Models
         public List<Tag> Tags { get; set; } = new List<Tag>();
 
         /// <summary>
-        /// Gets or sets the list of ActivityAttandingUser.
+        /// Gets or sets the list of ActivityParticipant.
         /// </summary>
-        public List<ActivityAttandingUser> ActivityAttandingUsers { get; set; } = new List<ActivityAttandingUser>();
+        public List<ActivityParticipant> ActivityParticipants { get; set; } = new List<ActivityParticipant>();
 
         /// <summary>
         /// Gets or sets the list of Users that want to take participation or attendance in the activity.
         /// </summary>
-        public List<User> Subscribers { get; set; } = new List<User>();
+        public List<User> Participants { get; set; } = new List<User>();
     }
 }

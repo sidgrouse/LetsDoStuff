@@ -4,14 +4,14 @@ using System.Text;
 
 namespace LetsDoStuff.Domain.Models
 {
-    public class ActivityAttandingUser
+    public class ActivityParticipant
     {
         public int ActivityId { get; set; }
 
         public Activity Activity { get; set; }
 
-        public int SubscriberId { get; set; }
+        public int ParticipantId { get; set; }
 
-        public User Subscriber { get; set; }
+        public User Participant { get; set; }
     }
 }

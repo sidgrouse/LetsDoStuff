@@ -21,10 +21,7 @@ namespace LetsDoStuff.Domain
         {
             ManyToManyBetweenActivitiesAndTegs(modelBuilder);
             ManyToManyBetweenActivitiesAndSubscribers(modelBuilder);
-            modelBuilder
-                .Entity<User>()
-                .HasMany(u => u.CreatedActivities)
-                .WithOne(a => a.Creator);
+            OneToManyBetweenCreatorAndActivity(modelBuilder);
         }
 
         private void ManyToManyBetweenActivitiesAndTegs(ModelBuilder modelBuilder)
@@ -52,11 +49,11 @@ namespace LetsDoStuff.Domain
         {
             modelBuilder
                .Entity<Activity>()
-               .HasMany(a => a.Subscribers)
-               .WithMany(u => u.ActivitiesForAttending)
-               .UsingEntity<ActivityAttandingUser>(
+               .HasMany(a => a.Participants)
+               .WithMany(u => u.ActivitiesForParticipation)
+               .UsingEntity<ActivityParticipant>(
                  j => j
-                   .HasOne(au => au.Subscriber)
+                   .HasOne(au => au.Participant)
                    .WithMany()
                    .HasPrincipalKey(u => u.Id),
                  j => j
@@ -65,8 +62,16 @@ namespace LetsDoStuff.Domain
                    .HasForeignKey(au => au.ActivityId),
                  j =>
                  {
-                     j.HasKey(u => new { u.ActivityId, u.SubscriberId });
+                     j.HasKey(u => new { u.ActivityId, u.ParticipantId });
                  });
+        }
+
+        private void OneToManyBetweenCreatorAndActivity(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<User>()
+                .HasMany(u => u.CreatedActivities)
+                .WithOne(a => a.Creator);
         }
     }
 }
