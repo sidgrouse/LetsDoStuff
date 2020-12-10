@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace LetsDoStuff.Domain
 {
-    public class LdsContextFactory : IDesignTimeDbContextFactory<LdsContext>
+    public class DesignTimeLdsContextFactory : IDesignTimeDbContextFactory<LdsContext>
     {
         public LdsContext CreateDbContext(string[] args)
         {
@@ -24,7 +24,7 @@ namespace LetsDoStuff.Domain
                 .UseSqlServer(connectionString)
                 .Options;
 
-            return new LdsContext(optionsBuilder.Options);
+            return new LdsContext(options);
         }
     }
 }

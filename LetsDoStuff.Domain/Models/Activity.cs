@@ -32,11 +32,6 @@ namespace LetsDoStuff.Domain.Models
         public User Creator { get; set; } 
 
         /// <summary>
-        /// Gets or sets the list of ActivityTags.
-        /// </summary>
-        public List<ActivityTag> ActivityTags { get; set; } = new List<ActivityTag>();
-
-        /// <summary>
         /// Gets or sets the list of Tags.
         /// </summary>
         public List<Tag> Tags { get; set; } = new List<Tag>();
