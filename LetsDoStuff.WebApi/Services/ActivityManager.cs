@@ -54,7 +54,7 @@ namespace LetsDoStuff.WebApi.Services
                 Description = activity.Description,
                 Capacity = activity.Capacity,
                 Creator = new ActivityCreatorResponse()
-                    {
+                    { 
                         Id = activity.Creator.Id,
                         Name = activity.Creator.FirstName + " " + activity.Creator.LastName,
                         Login = activity.Creator.Username
