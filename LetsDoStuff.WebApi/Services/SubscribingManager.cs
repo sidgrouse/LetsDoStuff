@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
+using LetsDoStuff.Domain.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
@@ -34,10 +35,29 @@ namespace LetsDoStuff.WebApi.Services
             db.SaveChanges();
         }
 
-        public List<Activity> GetAllActivitiesOfTheUser(string userName)
+        public List<ActivityResponse> GetAllActivitiesOfTheUser(string userName)
         {
-            User currentUser = FindUserByName(userName);
-            return currentUser.ActivitiesForAttending.ToList();
+            var response = db.Users.AsNoTracking()
+               .Where(u => u.Login == userName)
+               .Include(u => u.ActivitiesForAttending)
+               .ThenInclude(a => a.Creator)
+               .FirstOrDefault()
+               .ActivitiesForAttending
+               .Select(a => new ActivityResponse()
+               {
+                   Id = a.Id,
+                   Name = a.Name,
+                   Description = a.Description,
+                   Capacity = a.Capacity,
+                   Creator = new ActivityCreatorResponse()
+                   {
+                       Id = a.Creator.Id,
+                       Name = a.Creator.Name,
+                       Login = a.Creator.Login
+                   },
+                   Tags = a.Tags.Select(t => t.Name).ToList()
+               });
+            return response.ToList();
         }
 
         private User FindUserByName(string nameUser) => db.Users.AsNoTracking().Where(h => h.Login == nameUser).Include(u => u.ActivitiesForAttending).FirstOrDefault();

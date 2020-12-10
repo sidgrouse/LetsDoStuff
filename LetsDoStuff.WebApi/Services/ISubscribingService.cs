@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using LetsDoStuff.Domain.Models;
+using LetsDoStuff.Domain.Models.DTO;
 
 namespace LetsDoStuff.WebApi.Services
 {
@@ -9,6 +10,6 @@ namespace LetsDoStuff.WebApi.Services
     {
         void SubscribeUserToActivityByNames(string nameUser, string nameActivity);
 
-        List<Activity> GetAllActivitiesOfTheUser(string userName);
+        List<ActivityResponse> GetAllActivitiesOfTheUser(string userName);
     }
 }
