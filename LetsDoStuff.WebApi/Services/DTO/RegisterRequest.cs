@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace LetsDoStuff.Domain.Models.DTO
+namespace LetsDoStuff.WebApi.Services.DTO
 {
     public sealed class RegisterRequest
     {

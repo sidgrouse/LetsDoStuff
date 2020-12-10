@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using LetsDoStuff.Domain.Models;
-using LetsDoStuff.Domain.Models.DTO;
+using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

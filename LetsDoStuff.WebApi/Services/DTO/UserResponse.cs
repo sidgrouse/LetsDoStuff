@@ -1,4 +1,4 @@
-﻿namespace LetsDoStuff.Domain.Models.DTO
+﻿namespace LetsDoStuff.WebApi.Services.DTO
 {
     public sealed class UserResponse
     {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using LetsDoStuff.Domain.Models.DTO;
+using LetsDoStuff.WebApi.Services.DTO;
 
 namespace LetsDoStuff.WebApi.Services.Interfaces
 {

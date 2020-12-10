@@ -1,5 +1,5 @@
 ﻿using System;
-using LetsDoStuff.Domain.Models.DTO;
+using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

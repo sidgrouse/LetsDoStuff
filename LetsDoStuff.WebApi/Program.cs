@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
-using LetsDoStuff.Domain.Models.DTO;
+using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -101,14 +101,13 @@ namespace LetsDoStuff.WebApi
             var userAlice = context.Users.FirstOrDefault(u => u.UserName == "user3");
             var tagMusic = context.Tags.FirstOrDefault(itm => itm.Name == "Music");
             var tagIntellectual = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
+            var tagOpenAir = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
 
             if (!context.Activities.Any())
             {
-                context.Activities.Add(new Activity() { Creator = userDee, Name = "Concert 1", Description = "Classical music", Capacity = 100, Tags = new List<Tag> { tagMusic } });
-                context.Activities.Add(new Activity() { Creator = userAlice, Name = "Concert 2", Description = "Classical music", Capacity = 100, Tags = new List<Tag> { tagMusic } });
-                context.Activities.Add(new Activity() { Creator = userDee, Name = "Concert 3", Description = "Classical music", Capacity = 100, Tags = new List<Tag> { tagMusic } });
-                context.Activities.Add(new Activity() { Creator = userDee, Name = "Concert 4", Description = "Classical music", Capacity = 100, Tags = new List<Tag> { tagMusic } });
-                context.Activities.Add(new Activity() { Creator = userDee, Name = "Hicking", Description = "Altai Mountains", Capacity = 10 });
+                context.Activities.Add(new Activity() { Creator = userDee, Name = "Octoberfest", Description = "Go for beer n music in my car", Capacity = 4, Tags = new List<Tag> { tagMusic, tagOpenAir } });
+                context.Activities.Add(new Activity() { Creator = userAlice, Name = "Home violin concert", Description = "I am gonna play old good classic songs in my place", Capacity = 20, Tags = new List<Tag> { tagMusic } });
+                context.Activities.Add(new Activity() { Creator = userDee, Name = "Hicking in Altai Mountains", Description = "Weekend trip", Capacity = 4 });
                 context.Activities.Add(new Activity() { Creator = userDee, Name = "PubQuiz mindstorm", Description = "In central perk", Capacity = 6, Tags = new List<Tag> { tagIntellectual } });
                 context.SaveChanges();
             }

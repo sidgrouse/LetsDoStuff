@@ -14,19 +14,8 @@ namespace LetsDoStuff.Domain.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the list of ActivityTags.
-        /// </summary>
-        public List<ActivityTag> ActivityTags { get; set; }
-
-        /// <summary>
         /// Gets or sets the list of Activities having this tag.
         /// </summary>
-        public List<Activity> Activities { get; set; }
-
-        public Tag()
-        {
-            ActivityTags = new List<ActivityTag>();
-            Activities = new List<Activity>();
-        }
+        public List<Activity> Activities { get; set; } = new List<Activity>();
     }
 }
