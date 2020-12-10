@@ -97,8 +97,8 @@ namespace LetsDoStuff.WebApi
                 context.SaveChanges();
             }
 
-            var userDee = context.Users.FirstOrDefault(u => u.UserName == "user2");
-            var userAlice = context.Users.FirstOrDefault(u => u.UserName == "user3");
+            var userDee = context.Users.FirstOrDefault(u => u.Username == "user2");
+            var userAlice = context.Users.FirstOrDefault(u => u.Username == "user3");
             var tagMusic = context.Tags.FirstOrDefault(itm => itm.Name == "Music");
             var tagIntellectual = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
             var tagOpenAir = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");

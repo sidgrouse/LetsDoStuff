@@ -6,7 +6,7 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
     {
         public UserSettingsResponse GetUserSettings(string userName);
 
-        public UserResponse GetUserByUserName(string userName);
+        public UserResponse GetUserByUsername(string username);
 
         public void RegisterUser(RegisterRequest userData);
     }

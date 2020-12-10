@@ -4,14 +4,16 @@ using LetsDoStuff.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LetsDoStuff.Domain.Migrations
 {
     [DbContext(typeof(LdsContext))]
-    partial class LdsContextModelSnapshot : ModelSnapshot
+    [Migration("20201210172254_AddColumnsUserEntity")]
+    partial class AddColumnsUserEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,7 +116,7 @@ namespace LetsDoStuff.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -126,7 +128,7 @@ namespace LetsDoStuff.Domain.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.HasIndex("Username")
+                    b.HasIndex("UserName")
                         .IsUnique();
 
                     b.ToTable("Users");

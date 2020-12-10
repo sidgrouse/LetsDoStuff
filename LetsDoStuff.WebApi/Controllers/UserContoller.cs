@@ -41,17 +41,17 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
-        /// Get a user by userName.
+        /// Get a user by username.
         /// </summary>
-        /// <param name="userName">UserName of User.</param>
+        /// <param name="username">Username of User.</param>
         /// <returns>A specified user.</returns>
         [Authorize]
         [HttpGet("{userName}")]
-        public ActionResult<UserResponse> GetUserByUserName(string userName)
+        public ActionResult<UserResponse> GetUserByUsername(string username)
         {
             try
             {
-                var user = _userService.GetUserByUserName(userName);
+                var user = _userService.GetUserByUsername(username);
                 return user;
             }
             catch (ArgumentException ae)
@@ -61,7 +61,7 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
-        /// Register a user and generate the userName with identity starts 1. "user1", "user2" e.g.
+        /// Register a user and generate the username with identity starts 1. "user1", "user2" e.g.
         /// </summary>
         /// <param name="request">User registration data.</param>
         /// /// <returns>Action result.</returns>

@@ -20,12 +20,12 @@ namespace LetsDoStuff.WebApi.Services
         public UserSettingsResponse GetUserSettings(string userName)
         {
             var user = _context.Users.AsNoTracking()
-                .FirstOrDefault(u => u.UserName == userName)
+                .FirstOrDefault(u => u.Username == userName)
                 ?? throw new ArgumentException($"User is not found");
 
             return new UserSettingsResponse()
             {
-                UserName = userName,
+                Username = userName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
@@ -36,11 +36,11 @@ namespace LetsDoStuff.WebApi.Services
             };
         }
 
-        public UserResponse GetUserByUserName(string userName)
+        public UserResponse GetUserByUsername(string username)
         {
             var user = _context.Users.AsNoTracking()
-                .FirstOrDefault(u => u.UserName == userName)
-                ?? throw new ArgumentException($"User with userName: {userName} is not found");
+                .FirstOrDefault(u => u.Username == username)
+                ?? throw new ArgumentException($"User with userName: {username} is not found");
 
             return new UserResponse()
             {
@@ -72,7 +72,7 @@ namespace LetsDoStuff.WebApi.Services
                 _context.Users.Add(newUser);
                 _context.SaveChanges();
 
-                newUser.UserName = $"user{newUser.Id}";
+                newUser.Username = $"user{newUser.Id}";
                 _context.SaveChanges();
                 transaction.Commit();
             }

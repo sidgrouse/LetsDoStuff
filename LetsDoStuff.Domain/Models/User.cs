@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace LetsDoStuff.Domain.Models
 {
     [Index("Id", IsUnique = true)]
-    [Index("UserName", IsUnique = true)]
+    [Index("Username", IsUnique = true)]
     [Index("Email", IsUnique = true)]
     public class User
     {
         public int Id { get; set; }
 
         [Required]
-        public string UserName { get; set; }
+        public string Username { get; set; }
 
         [Required]
         public string FirstName { get; set; }
@@ -39,7 +39,7 @@ namespace LetsDoStuff.Domain.Models
 
         public User(string firstName, string lastName, string email, string password, string role)
         {
-            UserName = string.Empty;
+            Username = string.Empty;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
