@@ -63,7 +63,8 @@ namespace LetsDoStuff.WebApi.Services
             using var transaction = _context.Database.BeginTransaction();
             try
             {
-                var newUser = new User(profileLink: "user", userData.FirstName, userData.LastName, userData.Email, userData.Password, role: "User")
+                string userRoleName = "User";
+                var newUser = new User(profileLink: "user", userData.FirstName, userData.LastName, userData.Email, userData.Password, userRoleName)
                 {
                     DateOfBirth = userData.DateOfBirth,
                     Bio = userData.Bio
@@ -72,7 +73,7 @@ namespace LetsDoStuff.WebApi.Services
                 _context.Users.Add(newUser);
                 _context.SaveChanges();
 
-                var generatedId = newUser.Id;
+                int generatedId = newUser.Id;
                 newUser.ProfileLink = $"user{generatedId}";
                 _context.SaveChanges();
                 transaction.Commit();

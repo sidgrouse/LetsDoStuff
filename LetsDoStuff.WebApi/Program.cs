@@ -57,12 +57,13 @@ namespace LetsDoStuff.WebApi
 
         private static void SeedTestData(LdsContext context, IUserService userService)
         {
+            int userID = 1;
+            string userRoleName = "User";
             context.Database.EnsureCreated();
             if (!context.Users.Any())
             {
-                context.Users.Add(new User(profileLink: "user1", firstName: "Roman", lastName: "Onofreichuk", email: "test@gmail.com", password: "12test", role: "Admin"));
-                context.Users.Add(new User(profileLink: "user2", firstName: "Dee", lastName: "Snider", email: "snider@gmail.com", password: "89test", role: "User"));
-                context.Users.Add(new User(profileLink: "user3", firstName: "Alice", lastName: "Cooper", email: "acooper@gmail.com", password: "test123", role: "User"));
+                context.Users.Add(new User(profileLink: $"user{userID++}", firstName: "Dee", lastName: "Snider", email: "dee@gmail.com", password: "12test", userRoleName));
+                context.Users.Add(new User(profileLink: $"user{userID++}", firstName: "Alice", lastName: "Cooper", email: "alice@gmail.com", password: "test12", userRoleName));
                 context.SaveChanges();
             }
 
