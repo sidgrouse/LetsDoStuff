@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LetsDoStuff.Domain.Models.DTO
+namespace LetsDoStuff.WebApi.Services.DTO
 {
-    public class CreateActivityCommand 
+    public class CreateActivityCommand
     {
         public string Name { get; set; }
 

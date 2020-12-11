@@ -4,10 +4,13 @@ using System.Linq;
 using System.Reflection;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
+using LetsDoStuff.WebApi.Services.DTO;
+using LetsDoStuff.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace LetsDoStuff.WebApi
 {
@@ -19,70 +22,74 @@ namespace LetsDoStuff.WebApi
             var basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var baseUrl = new ConfigurationBuilder().AddJsonFile(settingsFileName).Build().GetValue<string>("BaseUrl");
 
-            var connectionString = new ConfigurationBuilder()
-                .SetBasePath(basePath) // Set the path of the current directory.
-                .AddJsonFile(settingsFileName) // Get the configuration from the "appsettings.json".
-                .Build() // Build the configuration.
-                .GetConnectionString("DefaultConnection"); // Get the database connection string from configuration.
-
-            var optionsBuilder = new DbContextOptionsBuilder<LdsContext>();
-            var options = optionsBuilder
-                .UseSqlServer(connectionString)
-                .Options;
-
-            SeedTestData(options);
-
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .ConfigureAppConfiguration(
-                    (host, configurationBuilder) =>
-                    {
-                        configurationBuilder.AddJsonFile("appsettings.json");
-                    })
+                .ConfigureAppConfiguration((host, configurationBuilder) =>
+                {
+                  configurationBuilder.AddJsonFile("appsettings.json");
+                })
+                .ConfigureLogging((context, logging) =>
+                {
+                    var env = context.HostingEnvironment;
+                    var config = context.Configuration.GetSection("Logging");
+                    logging.AddConfiguration(config);
+                    logging.AddConsole();
+                    logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Critical)
+                    .AddFilter("Default", LogLevel.Trace)
+                    .AddFilter("Microsoft", LogLevel.Warning)
+                    .AddFilter("System", LogLevel.Information)
+                    .AddFilter("Microsoft.AspNetCore.Authentication", LogLevel.Warning);
+                })
                 .UseStartup<Startup>()
                 .UseUrls(baseUrl)
                 .Build();
 
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetService<LdsContext>();
+                var userService = services.GetService<IUserService>();
+                SeedTestData(context, userService);
+            }
+
             host.Run();
         }
 
-        private static void SeedTestData(DbContextOptions<LdsContext> options)
+        private static void SeedTestData(LdsContext context, IUserService userService)
         {
-            using (LdsContext context = new LdsContext(options))
+            int userID = 1;
+            string userRoleName = "User";
+            context.Database.EnsureCreated();
+            if (!context.Users.Any())
             {
-                context.Database.EnsureCreated();
+                context.Users.Add(new User(profileLink: $"user{userID++}", firstName: "Dee", lastName: "Snider", email: "dee@gmail.com", password: "12test", userRoleName));
+                context.Users.Add(new User(profileLink: $"user{userID++}", firstName: "Alice", lastName: "Cooper", email: "alice@gmail.com", password: "test12", userRoleName));
+                context.SaveChanges();
+            }
 
-                if (!context.Users.Any())
-                {
-                    context.Users.Add(new User { Name = "Tom", Login = "Tom1", Password = "1234", Age = 33, Role = "admin" });
-                    context.Users.Add(new User { Name = "Alice", Login = "Alice1", Password = "0000", Age = 26, Role = "user" });
-                    context.SaveChanges();
-                }
+            if (!context.Tags.Any())
+            {
+                context.Tags.Add(new Tag { Name = "Music" });
+                context.Tags.Add(new Tag { Name = "Open-air" });
+                context.Tags.Add(new Tag { Name = "Indoor" });
+                context.Tags.Add(new Tag { Name = "Sport" });
+                context.Tags.Add(new Tag { Name = "Intellectual" });
+                context.SaveChanges();
+            }
 
-                if (!context.Tags.Any())
-                {
-                    context.Tags.Add(new Tag { Name = "Music" });
-                    context.Tags.Add(new Tag { Name = "Open-air" });
-                    context.Tags.Add(new Tag { Name = "Indoor" });
-                    context.Tags.Add(new Tag { Name = "Sport" });
-                    context.Tags.Add(new Tag { Name = "Intellectual" });
-                    context.SaveChanges();
-                }
+            var userDee = context.Users.FirstOrDefault(u => u.ProfileLink == "user2");
+            var userAlice = context.Users.FirstOrDefault(u => u.ProfileLink == "user3");
+            var tagMusic = context.Tags.FirstOrDefault(itm => itm.Name == "Music");
+            var tagIntellectual = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
+            var tagOpenAir = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
 
-                var userTom = context.Users.Where(u => u.Name.Contains("Tom")).FirstOrDefault();
-                var userAlice = context.Users.Where(u => u.Name.Contains("Alice")).FirstOrDefault();
-                var tagMusic = context.Tags.FirstOrDefault(itm => itm.Name == "Music");
-                var tagIntellectual = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
-                var tagOpenAir = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
-
-                if (!context.Activities.Any())
-                {
-                    context.Activities.Add(new Activity() { Creator = userTom, Name = "Octoberfest", Description = "Go for beer n music in my car", Capacity = 4, Tags = new List<Tag> { tagMusic, tagOpenAir } });
-                    context.Activities.Add(new Activity() { Creator = userAlice, Name = "Home violin concert", Description = "I am gonna play old good classic songs in my place", Capacity = 20, Tags = new List<Tag> { tagMusic } });
-                    context.Activities.Add(new Activity() { Creator = userTom, Name = "Hicking in Altai Mountains", Description = "Weekend trip", Capacity = 4 });
-                    context.Activities.Add(new Activity() { Creator = userTom, Name = "PubQuiz mindstorm", Description = "In central perk", Capacity = 6, Tags = new List<Tag> { tagIntellectual } });
-                    context.SaveChanges();
-                }
+            if (!context.Activities.Any())
+            {
+                context.Activities.Add(new Activity() { Creator = userDee, Name = "Octoberfest", Description = "Go for beer n music in my car", Capacity = 4, Tags = new List<Tag> { tagMusic, tagOpenAir } });
+                context.Activities.Add(new Activity() { Creator = userAlice, Name = "Home violin concert", Description = "I am gonna play old good classic songs in my place", Capacity = 20, Tags = new List<Tag> { tagMusic } });
+                context.Activities.Add(new Activity() { Creator = userDee, Name = "Hicking in Altai Mountains", Description = "Weekend trip", Capacity = 4 });
+                context.Activities.Add(new Activity() { Creator = userDee, Name = "PubQuiz mindstorm", Description = "In central park", Capacity = 6, Tags = new List<Tag> { tagIntellectual } });
+                context.SaveChanges();
             }
         }
     }

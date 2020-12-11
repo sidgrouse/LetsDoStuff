@@ -4,14 +4,16 @@ using LetsDoStuff.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LetsDoStuff.Domain.Migrations
 {
     [DbContext(typeof(LdsContext))]
-    partial class LdsContextModelSnapshot : ModelSnapshot
+    [Migration("20201211002031_RenameUsername")]
+    partial class RenameUsername
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
