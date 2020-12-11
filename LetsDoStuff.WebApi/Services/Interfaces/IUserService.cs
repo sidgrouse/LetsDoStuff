@@ -4,9 +4,9 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 {
     public interface IUserService
     {
-        public UserSettingsResponse GetUserSettings(string username);
+        public UserSettingsResponse GetUserSettings(string email);
 
-        public UserResponse GetUserByUsername(string username);
+        public UserResponse GetUserByProfileLink(string profileLink);
 
         public void RegisterUser(RegisterRequest userData);
     }

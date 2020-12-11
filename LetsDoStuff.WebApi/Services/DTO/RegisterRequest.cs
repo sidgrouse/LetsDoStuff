@@ -20,7 +20,7 @@ namespace LetsDoStuff.WebApi.Services.DTO
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public string Bio { get; set; }
     }

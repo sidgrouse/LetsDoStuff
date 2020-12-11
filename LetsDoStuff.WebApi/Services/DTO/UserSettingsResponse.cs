@@ -2,7 +2,7 @@
 {
     public sealed class UserSettingsResponse
     {
-        public string Username { get; set; }
+        public string ProfileLink { get; set; }
 
         public string FirstName { get; set; }
 

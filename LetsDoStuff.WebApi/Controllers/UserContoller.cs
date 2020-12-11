@@ -28,10 +28,10 @@ namespace LetsDoStuff.WebApi.Controllers
         [HttpGet("settings")]
         public ActionResult<UserSettingsResponse> GetUserSettings()
         {
-            var userName = HttpContext.User.Identity.Name;
+            var email = HttpContext.User.Identity.Name;
             try
             {
-                var user = _userService.GetUserSettings(userName);
+                var user = _userService.GetUserSettings(email);
                 return user;
             }
             catch (ArgumentException ae)
@@ -41,17 +41,17 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
-        /// Get a user by username.
+        /// Get a specific user.
         /// </summary>
-        /// <param name="username">Username of User.</param>
+        /// <param name="profilelink">A User profile link.</param>
         /// <returns>A specified user.</returns>
         [Authorize]
-        [HttpGet("{username}")]
-        public ActionResult<UserResponse> GetUserByUsername(string username)
+        [HttpGet("{profilelink}")]
+        public ActionResult<UserResponse> GetUserByUserProfile(string profilelink)
         {
             try
             {
-                var user = _userService.GetUserByUsername(username);
+                var user = _userService.GetUserByProfileLink(profilelink);
                 return user;
             }
             catch (ArgumentException ae)
@@ -61,7 +61,7 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
-        /// Register a user and generate the username with identity starts 1. "user1", "user2" e.g.
+        /// Register user and generate the profileLink with identity starts 1. "user1", "user2" e.g.
         /// </summary>
         /// <param name="request">User registration data.</param>
         /// /// <returns>Action result.</returns>
@@ -74,8 +74,11 @@ namespace LetsDoStuff.WebApi.Controllers
             }
             catch (ArgumentException ae)
             {
-                _logger.LogError(ae, $"{DateTime.Now}");
                 return BadRequest(ae.Message);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"{DateTime.Now}");
             }
 
             return Ok();

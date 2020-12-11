@@ -17,37 +17,37 @@ namespace LetsDoStuff.WebApi.Services
             _context = context;
         }
 
-        public UserSettingsResponse GetUserSettings(string userName)
+        public UserSettingsResponse GetUserSettings(string email)
         {
             var user = _context.Users.AsNoTracking()
-                .FirstOrDefault(u => u.Username == userName)
+                .FirstOrDefault(u => u.Email == email)
                 ?? throw new ArgumentException($"User is not found");
 
             return new UserSettingsResponse()
             {
-                Username = userName,
+                ProfileLink = user.ProfileLink,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
                 Bio = user.Bio ?? string.Empty,
-                DateOfBirth = user.DateOfBirth.Date.ToLongDateString(),
+                DateOfBirth = user.DateOfBirth?.Date.ToLongDateString() ?? string.Empty,
                 DateOfRegistration = user.DateOfRegistration.Date.ToLongDateString(),
                 Role = user.Role,
             };
         }
 
-        public UserResponse GetUserByUsername(string username)
+        public UserResponse GetUserByProfileLink(string profileLink)
         {
             var user = _context.Users.AsNoTracking()
-                .FirstOrDefault(u => u.Username == username)
-                ?? throw new ArgumentException($"User with userName: {username} is not found");
+                .FirstOrDefault(u => u.ProfileLink == profileLink)
+                ?? throw new ArgumentException($"User with this profile is not found");
 
             return new UserResponse()
             {
                 ContactName = user.FirstName + " " + user.LastName,
                 Email = user.Email,
                 Bio = user.Bio ?? string.Empty,
-                DateOfBirth = user.DateOfBirth.Date.ToLongDateString(),
+                DateOfBirth = user.DateOfBirth?.Date.ToLongDateString() ?? string.Empty,
                 Role = user.Role,
             };
         }
@@ -63,7 +63,7 @@ namespace LetsDoStuff.WebApi.Services
             using var transaction = _context.Database.BeginTransaction();
             try
             {
-                var newUser = new User(userData.FirstName, userData.LastName, userData.Email, userData.Password, "User")
+                var newUser = new User(profileLink: "user", userData.FirstName, userData.LastName, userData.Email, userData.Password, role: "User")
                 {
                     DateOfBirth = userData.DateOfBirth,
                     Bio = userData.Bio
@@ -72,7 +72,8 @@ namespace LetsDoStuff.WebApi.Services
                 _context.Users.Add(newUser);
                 _context.SaveChanges();
 
-                newUser.Username = $"user{newUser.Id}";
+                var generatedId = newUser.Id;
+                newUser.ProfileLink = $"user{generatedId}";
                 _context.SaveChanges();
                 transaction.Commit();
             }

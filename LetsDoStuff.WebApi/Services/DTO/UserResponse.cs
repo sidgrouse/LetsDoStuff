@@ -6,7 +6,7 @@
 
         public string Email { get; set; }
 
-        public string Bio { get; set; }
+        public string Bio { get; set; } 
 
         public string DateOfBirth { get; set; }
 

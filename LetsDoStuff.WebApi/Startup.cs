@@ -89,7 +89,7 @@ namespace LetsDoStuff.WebApi
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer",
                     In = ParameterLocation.Header,
-                    Description = $"Login with creds: user1/12test, then post the token here"
+                    Description = $"Login with creds: test@gmail.com/12test, then post the token here"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement

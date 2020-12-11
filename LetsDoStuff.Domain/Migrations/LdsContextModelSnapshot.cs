@@ -88,10 +88,7 @@ namespace LetsDoStuff.Domain.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateOfRegistration")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -110,13 +107,13 @@ namespace LetsDoStuff.Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProfileLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -126,7 +123,7 @@ namespace LetsDoStuff.Domain.Migrations
                     b.HasIndex("Id")
                         .IsUnique();
 
-                    b.HasIndex("Username")
+                    b.HasIndex("ProfileLink")
                         .IsUnique();
 
                     b.ToTable("Users");

@@ -60,30 +60,9 @@ namespace LetsDoStuff.WebApi
             context.Database.EnsureCreated();
             if (!context.Users.Any())
             {
-                userService.RegisterUser(new RegisterRequest()
-                {
-                    FirstName = "Roman",
-                    LastName = "Onofreichuk",
-                    Email = "test@gmail.com",
-                    Password = "12test",
-                    ConfirmPassword = "12test"
-                });
-                userService.RegisterUser(new RegisterRequest()
-                {
-                    FirstName = "Dee",
-                    LastName = "Snider",
-                    Email = "snider@gmail.com",
-                    Password = "89test",
-                    ConfirmPassword = "89test"
-                });
-                userService.RegisterUser(new RegisterRequest()
-                {
-                    FirstName = "Alice",
-                    LastName = "Cooper",
-                    Email = "acooper@gmail.com",
-                    Password = "test123",
-                    ConfirmPassword = "test123"
-                });
+                context.Users.Add(new User(profileLink: "user1", firstName: "Roman", lastName: "Onofreichuk", email: "test@gmail.com", password: "12test", role: "Admin"));
+                context.Users.Add(new User(profileLink: "user2", firstName: "Dee", lastName: "Snider", email: "snider@gmail.com", password: "89test", role: "User"));
+                context.Users.Add(new User(profileLink: "user3", firstName: "Alice", lastName: "Cooper", email: "acooper@gmail.com", password: "test123", role: "User"));
                 context.SaveChanges();
             }
 
@@ -97,8 +76,8 @@ namespace LetsDoStuff.WebApi
                 context.SaveChanges();
             }
 
-            var userDee = context.Users.FirstOrDefault(u => u.Username == "user2");
-            var userAlice = context.Users.FirstOrDefault(u => u.Username == "user3");
+            var userDee = context.Users.FirstOrDefault(u => u.ProfileLink == "user2");
+            var userAlice = context.Users.FirstOrDefault(u => u.ProfileLink == "user3");
             var tagMusic = context.Tags.FirstOrDefault(itm => itm.Name == "Music");
             var tagIntellectual = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
             var tagOpenAir = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
@@ -108,7 +87,7 @@ namespace LetsDoStuff.WebApi
                 context.Activities.Add(new Activity() { Creator = userDee, Name = "Octoberfest", Description = "Go for beer n music in my car", Capacity = 4, Tags = new List<Tag> { tagMusic, tagOpenAir } });
                 context.Activities.Add(new Activity() { Creator = userAlice, Name = "Home violin concert", Description = "I am gonna play old good classic songs in my place", Capacity = 20, Tags = new List<Tag> { tagMusic } });
                 context.Activities.Add(new Activity() { Creator = userDee, Name = "Hicking in Altai Mountains", Description = "Weekend trip", Capacity = 4 });
-                context.Activities.Add(new Activity() { Creator = userDee, Name = "PubQuiz mindstorm", Description = "In central perk", Capacity = 6, Tags = new List<Tag> { tagIntellectual } });
+                context.Activities.Add(new Activity() { Creator = userDee, Name = "PubQuiz mindstorm", Description = "In central park", Capacity = 6, Tags = new List<Tag> { tagIntellectual } });
                 context.SaveChanges();
             }
         }

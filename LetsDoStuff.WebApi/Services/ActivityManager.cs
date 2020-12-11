@@ -31,7 +31,7 @@ namespace LetsDoStuff.WebApi.Services
                     {
                         Id = a.Creator.Id,
                         Name = a.Creator.FirstName + " " + a.Creator.LastName,
-                        Login = a.Creator.Username
+                        Login = a.Creator.ProfileLink
                     },
                     Tags = a.Tags.Select(t => t.Name).ToList()
                 }).ToList();
@@ -57,7 +57,7 @@ namespace LetsDoStuff.WebApi.Services
                     { 
                         Id = activity.Creator.Id,
                         Name = activity.Creator.FirstName + " " + activity.Creator.LastName,
-                        Login = activity.Creator.Username
+                        Login = activity.Creator.ProfileLink
                     },
                 Tags = activity.Tags
                     .Select(t => t.Name)

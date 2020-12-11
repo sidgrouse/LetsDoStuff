@@ -6,40 +6,76 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace LetsDoStuff.Domain.Models
 {
     [Index("Id", IsUnique = true)]
-    [Index("Username", IsUnique = true)]
+    [Index("ProfileLink", IsUnique = true)]
     [Index("Email", IsUnique = true)]
     public class User
     {
         public int Id { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user profile link.
+        /// </summary>
         [Required]
-        public string Username { get; set; }
+        public string ProfileLink { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user first name.
+        /// </summary>
         [Required]
         public string FirstName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user last name.
+        /// </summary>
         [Required]
         public string LastName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user email address.
+        /// </summary>
         [Required]
         public string Email { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user password.
+        /// </summary>
         [Required]
         public string Password { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        /// <summary>
+        /// Gets or sets the user birth date.
+        /// </summary>
+        public DateTime? DateOfBirth { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user biographic.
+        /// </summary>
         public string Bio { get; set; }
 
+        /// <summary>
+        /// Gets the user registration date.
+        /// </summary>
         [Required]
-        public DateTime DateOfRegistration { get; set; }
+        public DateTime DateOfRegistration { get; }
 
+        /// <summary>
+        /// Gets or sets the user role.
+        /// </summary>
         [Required]
         public string Role { get; set; }
 
-        public User(string firstName, string lastName, string email, string password, string role)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="User"/> class.
+        /// </summary>
+        /// <param name="profileLink">The user profile link.</param>
+        /// <param name="firstName">The user first name.</param>
+        /// <param name="lastName">The user last name.</param>
+        /// <param name="email">The user email address.</param>
+        /// <param name="password">The user password.</param>
+        /// <param name="role">The user role.</param>
+        public User(string profileLink, string firstName, string lastName, string email, string password, string role)
         {
-            Username = string.Empty;
+            ProfileLink = profileLink;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
