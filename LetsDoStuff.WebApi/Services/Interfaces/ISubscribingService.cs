@@ -7,8 +7,10 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 {
     public interface ISubscribingService
     {
-        void SubscribeUserToActivityByNames(string nameUser, string nameActivity);
+        void MakeUserSubscribedToActivityByEmailAndId(string emailUser, int idActivity);
 
-        List<ActivityResponse> GetAllActivitiesOfTheUser(string userName);
+        void MakeUserUnsubscribedToActivityByEmailAndId(string emailUser, int idActivity);
+
+        List<ActivityResponse> GetAllActivitiesOfTheUser(string emailUser);
     }
 }

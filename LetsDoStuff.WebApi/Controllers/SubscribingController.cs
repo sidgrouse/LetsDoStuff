@@ -20,14 +20,30 @@ namespace LetsDoStuff.WebApi.Controllers
             _subscribingService = subscribingService;
         }
 
-        [HttpGet("SubscribeToActivityByName")]
+        [HttpGet("SubscribeToActivityById")]
         [Authorize]
-        public IActionResult SubscribeToActivityByLogin(string nameActivity)
+        public IActionResult SubscribeToActivityById(int idActivity)
         {
             var loginName = this.HttpContext.User.Claims.First().Value;
             try
             {
-                _subscribingService.SubscribeUserToActivityByNames(loginName, nameActivity);
+                _subscribingService.MakeUserSubscribedToActivityByEmailAndId(loginName, idActivity);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("UnsubscribeToActivityById")]
+        [Authorize]
+        public IActionResult UnsubscribeToActivityById(int idActivity)
+        {
+            var loginName = this.HttpContext.User.Claims.First().Value;
+            try
+            {
+                _subscribingService.MakeUserUnsubscribedToActivityByEmailAndId(loginName, idActivity);
                 return Ok();
             }
             catch (ArgumentException ex)

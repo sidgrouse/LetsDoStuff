@@ -19,29 +19,50 @@ namespace LetsDoStuff.WebApi.Services
             db = context;
         }
 
-        public void SubscribeUserToActivityByNames(string loginUser, string nameActivity)
+        public void MakeUserSubscribedToActivityByEmailAndId(string emailUser, int idActivity)
         {
-            User subscriber = db.Users.Where(h => h.Email == loginUser)
+            User subscriber = db.Users.Where(h => h.Email == emailUser)
                                     .Include(u => u.Partis)
                                     .First();
 
             Activity activityForSubscribing = db.Activities
-                                        .AsNoTracking()
-                                        .Where(a => a.Name == nameActivity)
-                                        .FirstOrDefault()
-                                        ?? throw new ArgumentException($"Activity with Name {nameActivity} has not been found");
+                                        .Find(idActivity)
+                                        ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
 
             foreach (Activity act in subscriber.Partis)
             {
                 if (activityForSubscribing.Id == act.Id)
                 {
-                    throw new ArgumentException($"{subscriber.Email} has already subscribed to the event {nameActivity}");
+                    throw new ArgumentException($"{subscriber.Email} has already subscribed to the event with id {idActivity}");
                 }    
             }
 
             subscriber.Partis.Add(activityForSubscribing);
 
             db.SaveChanges();
+        }
+
+        public void MakeUserUnsubscribedToActivityByEmailAndId(string emailUser, int idActivity)
+        {
+            User subscriber = db.Users.Where(h => h.Email == emailUser)
+                                    .Include(u => u.Partis)
+                                    .First();
+
+            Activity activityForUnsubscribing = db.Activities
+                                        .Find(idActivity)
+                                        ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
+
+            foreach (Activity act in subscriber.Partis)
+            {
+                if (activityForUnsubscribing.Id == act.Id)
+                {
+                    subscriber.Partis.Remove(activityForUnsubscribing);
+                    db.SaveChanges();
+                    return;
+                }
+            }
+
+            throw new ArgumentException($"{subscriber.Email} hasn't had subscription to the event with id {idActivity}");
         }
 
         public List<ActivityResponse> GetAllActivitiesOfTheUser(string userName)
