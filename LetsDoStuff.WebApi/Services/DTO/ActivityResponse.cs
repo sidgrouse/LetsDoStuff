@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LetsDoStuff.Domain.Models.DTO
+namespace LetsDoStuff.WebApi.Services.DTO
 {
     public sealed class ActivityResponse
     {

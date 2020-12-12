@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
-using LetsDoStuff.Domain.Models.DTO;
+using LetsDoStuff.WebApi.Services.DTO;
+using LetsDoStuff.WebApi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
@@ -29,8 +30,8 @@ namespace LetsDoStuff.WebApi.Services
                     Creator = new ActivityCreatorResponse()
                     {
                         Id = a.Creator.Id,
-                        Name = a.Creator.Name,
-                        Login = a.Creator.Login
+                        Name = a.Creator.FirstName + " " + a.Creator.LastName,
+                        Login = a.Creator.ProfileLink
                     },
                     Tags = a.Tags.Select(t => t.Name).ToList()
                 }).ToList();
@@ -55,8 +56,8 @@ namespace LetsDoStuff.WebApi.Services
                 Creator = new ActivityCreatorResponse()
                     { 
                         Id = activity.Creator.Id,
-                        Name = activity.Creator.Name,
-                        Login = activity.Creator.Login
+                        Name = activity.Creator.FirstName + " " + activity.Creator.LastName,
+                        Login = activity.Creator.ProfileLink
                     },
                 Tags = activity.Tags
                     .Select(t => t.Name)

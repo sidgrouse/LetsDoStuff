@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using LetsDoStuff.Domain;
 using LetsDoStuff.WebApi.Services;
+using LetsDoStuff.WebApi.Services.Interfaces;
 using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -33,6 +34,7 @@ namespace LetsDoStuff.WebApi
                 c.RoutePrefix = string.Empty;
             });
             app.UseRouting();
+            app.UseHttpsRedirection();
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -59,8 +61,10 @@ namespace LetsDoStuff.WebApi
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+
             services.AddTransient<IActivityService, ActivityManager>();
-            services.AddTransient<ISubscribingService, SubscribingManager>();
+            services.AddTransient<IUserService, UserService>();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -85,7 +89,7 @@ namespace LetsDoStuff.WebApi
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer",
                     In = ParameterLocation.Header,
-                    Description = $"Login with creds: Tom1/1234, then past the token here"
+                    Description = $"Login with creds: dee@gmail.com/12test, then post the token here"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement

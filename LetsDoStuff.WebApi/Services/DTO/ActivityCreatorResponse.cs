@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace LetsDoStuff.Domain.Models.DTO
+namespace LetsDoStuff.WebApi.Services.DTO
 {
     public sealed class ActivityCreatorResponse
     {

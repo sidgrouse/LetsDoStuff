@@ -22,12 +22,6 @@ namespace LetsDoStuff.WebApi.Controllers
             this.context = context;
         }
 
-        [HttpGet]
-        public string GetTestOutput()
-        {
-            return "test output";
-        }
-
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest userAuthParam)
         {
@@ -60,12 +54,12 @@ namespace LetsDoStuff.WebApi.Controllers
 
         private ClaimsIdentity GetIdentity(string login, string password)
         {
-            var user = context.Users.FirstOrDefault<User>(x => x.Login == login && x.Password == password);
+            var user = context.Users.FirstOrDefault<User>(x => x.Email == login && x.Password == password);
             if (user != null)
             {
                 var claims = new List<Claim>
                     {
-                        new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                        new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
                         new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
                     };
                 ClaimsIdentity claimsIdentity =
