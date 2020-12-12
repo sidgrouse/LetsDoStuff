@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
-using LetsDoStuff.Domain.Models.DTO;
+using LetsDoStuff.WebApi.Services.DTO;
+using LetsDoStuff.WebApi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
@@ -20,8 +21,8 @@ namespace LetsDoStuff.WebApi.Services
 
         public void SubscribeUserToActivityByNames(string loginUser, string nameActivity)
         {
-            User subscriber = db.Users.Where(h => h.Login == loginUser)
-                                    .Include(u => u.ActivitiesForParticipation)
+            User subscriber = db.Users.Where(h => h.Email == loginUser)
+                                    .Include(u => u.Partis)
                                     .First();
 
             Activity activityForSubscribing = db.Activities
@@ -30,15 +31,15 @@ namespace LetsDoStuff.WebApi.Services
                                         .FirstOrDefault()
                                         ?? throw new ArgumentException($"Activity with Name {nameActivity} has not been found");
 
-            foreach (Activity act in subscriber.ActivitiesForParticipation)
+            foreach (Activity act in subscriber.Partis)
             {
                 if (activityForSubscribing.Id == act.Id)
                 {
-                    throw new ArgumentException($"{subscriber.Login} has already subscribed to the event {nameActivity}");
+                    throw new ArgumentException($"{subscriber.Email} has already subscribed to the event {nameActivity}");
                 }    
             }
 
-            subscriber.ActivitiesForParticipation.Add(activityForSubscribing);
+            subscriber.Partis.Add(activityForSubscribing);
 
             db.SaveChanges();
         }
@@ -46,13 +47,13 @@ namespace LetsDoStuff.WebApi.Services
         public List<ActivityResponse> GetAllActivitiesOfTheUser(string userName)
         {
             var response = db.Users.AsNoTracking()
-               .Where(u => u.Login == userName)
-               .Include(u => u.ActivitiesForParticipation)
+               .Where(u => u.Email == userName)
+               .Include(u => u.Partis)
                .ThenInclude(a => a.Creator)
-               .Include(u => u.ActivitiesForParticipation)
+               .Include(u => u.Partis)
                .ThenInclude(a => a.Tags)
                .FirstOrDefault()
-               .ActivitiesForParticipation
+               .Partis
                .Select(a => new ActivityResponse()
                {
                    Id = a.Id,
@@ -62,8 +63,8 @@ namespace LetsDoStuff.WebApi.Services
                    Creator = new ActivityCreatorResponse()
                    {
                        Id = a.Creator.Id,
-                       Name = a.Creator.Name,
-                       Login = a.Creator.Login
+                       Name = a.Creator.FirstName,
+                       Login = a.Creator.Email
                    },
                    Tags = a.Tags.Select(t => t.Name).ToList()
                });

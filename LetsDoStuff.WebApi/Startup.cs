@@ -63,6 +63,7 @@ namespace LetsDoStuff.WebApi
             });
 
             services.AddTransient<IActivityService, ActivityManager>();
+            services.AddTransient<ISubscribingService, SubscribingManager>();
             services.AddTransient<IUserService, UserService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

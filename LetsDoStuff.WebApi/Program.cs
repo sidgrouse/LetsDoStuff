@@ -77,8 +77,8 @@ namespace LetsDoStuff.WebApi
                 context.SaveChanges();
             }
 
-            var userDee = context.Users.FirstOrDefault(u => u.ProfileLink == "user2");
-            var userAlice = context.Users.FirstOrDefault(u => u.ProfileLink == "user3");
+            var userDee = context.Users.FirstOrDefault(u => u.ProfileLink == "user1");
+            var userAlice = context.Users.FirstOrDefault(u => u.ProfileLink == "user2");
             var tagMusic = context.Tags.FirstOrDefault(itm => itm.Name == "Music");
             var tagIntellectual = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
             var tagOpenAir = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");

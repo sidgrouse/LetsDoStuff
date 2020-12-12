@@ -27,8 +27,14 @@ namespace LetsDoStuff.Domain.Models
 
         /// <summary>
         /// Gets or sets the user who created the activity.
-        /// </summary> 
+        /// </summary>
+        [Required]
         public User Creator { get; set; }
+
+        /// <summary>
+        /// Gets or sets participants of the actibities.
+        /// </summary>
+        public List<User> Participants { get; set; } = new List<User>();
 
         /// <summary>
         /// Gets or sets the list of Tags.
@@ -38,11 +44,9 @@ namespace LetsDoStuff.Domain.Models
         /// <summary>
         /// Gets or sets the list of ActivityParticipant.
         /// </summary>
-        public List<ActivityParticipant> ActivityParticipants { get; set; } = new List<ActivityParticipant>();
 
         /// <summary>
         /// Gets or sets the list of Users that want to take participation or attendance in the activity.
         /// </summary>
-        public List<User> Participants { get; set; } = new List<User>();
     }
 }

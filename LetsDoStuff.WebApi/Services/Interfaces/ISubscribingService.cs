@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using LetsDoStuff.Domain.Models;
-using LetsDoStuff.Domain.Models.DTO;
+using LetsDoStuff.WebApi.Services.DTO;
 
-namespace LetsDoStuff.WebApi.Services
+namespace LetsDoStuff.WebApi.Services.Interfaces
 {
     public interface ISubscribingService
     {
