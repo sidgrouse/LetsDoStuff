@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -48,14 +49,13 @@ namespace LetsDoStuff.WebApi
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetService<LdsContext>();
-                var userService = services.GetService<IUserService>();
-                SeedTestData(context, userService);
+                SeedTestData(context);
             }
 
             host.Run();
         }
 
-        private static void SeedTestData(LdsContext context, IUserService userService)
+        private static void SeedTestData(LdsContext context)
         {
             int userID = 1;
             string userRoleName = "User";
@@ -77,8 +77,8 @@ namespace LetsDoStuff.WebApi
                 context.SaveChanges();
             }
 
-            var userDee = context.Users.FirstOrDefault(u => u.ProfileLink == "user2");
-            var userAlice = context.Users.FirstOrDefault(u => u.ProfileLink == "user3");
+            var userDee = context.Users.FirstOrDefault(u => u.ProfileLink == "user1");
+            var userAlice = context.Users.FirstOrDefault(u => u.ProfileLink == "user2");
             var tagMusic = context.Tags.FirstOrDefault(itm => itm.Name == "Music");
             var tagIntellectual = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
             var tagOpenAir = context.Tags.FirstOrDefault(itm => itm.Name == "Intellectual");
