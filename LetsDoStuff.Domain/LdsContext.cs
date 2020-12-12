@@ -14,7 +14,6 @@ namespace LetsDoStuff.Domain
         public LdsContext(DbContextOptions<LdsContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
