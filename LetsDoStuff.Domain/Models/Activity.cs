@@ -40,13 +40,5 @@ namespace LetsDoStuff.Domain.Models
         /// Gets or sets the list of Tags.
         /// </summary>
         public List<Tag> Tags { get; set; } = new List<Tag>();
-
-        /// <summary>
-        /// Gets or sets the list of ActivityParticipant.
-        /// </summary>
-
-        /// <summary>
-        /// Gets or sets the list of Users that want to take participation or attendance in the activity.
-        /// </summary>
     }
 }
