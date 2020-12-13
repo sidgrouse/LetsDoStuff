@@ -9,12 +9,12 @@ namespace LetsDoStuff.WebApi.Controllers
 {
     [ApiController]
     [Route("api")]
-    public class UserContoller : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly ILogger _logger;
 
-        public UserContoller(IUserService userService, ILogger<IUserService> logger)
+        public UserController(IUserService userService, ILogger<IUserService> logger)
         {
             _userService = userService;
             _logger = logger;
