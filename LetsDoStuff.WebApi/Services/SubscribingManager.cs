@@ -21,20 +21,14 @@ namespace LetsDoStuff.WebApi.Services
 
         public void MakeUserSubscribedToActivityByEmailAndId(string emailUser, int idActivity)
         {
-            User subscriber = db.Users.Where(h => h.Email == emailUser)
-                                    .Include(u => u.Partis)
-                                    .First();
+            User subscriber = FindSubscriberByEmail(emailUser);
 
-            Activity activityForSubscribing = db.Activities
-                                        .Find(idActivity)
-                                        ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
+            Activity activityForSubscribing = GetActivityOrNull(idActivity)
+                                                        ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
 
-            foreach (Activity act in subscriber.Partis)
+            if (IsThereActivityinUserPartis(subscriber, activityForSubscribing))
             {
-                if (activityForSubscribing.Id == act.Id)
-                {
-                    throw new ArgumentException($"{subscriber.Email} has already subscribed to the event with id {idActivity}");
-                }    
+                throw new ArgumentException($"{subscriber.Email} has already subscribed to the event with id {idActivity}");
             }
 
             subscriber.Partis.Add(activityForSubscribing);
@@ -44,25 +38,19 @@ namespace LetsDoStuff.WebApi.Services
 
         public void MakeUserUnsubscribedToActivityByEmailAndId(string emailUser, int idActivity)
         {
-            User subscriber = db.Users.Where(h => h.Email == emailUser)
-                                    .Include(u => u.Partis)
-                                    .First();
+            User subscriber = FindSubscriberByEmail(emailUser);
 
-            Activity activityForUnsubscribing = db.Activities
-                                        .Find(idActivity)
+            Activity activityForUnsubscribing = GetActivityOrNull(idActivity)
                                         ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
 
-            foreach (Activity act in subscriber.Partis)
+            if (!IsThereActivityinUserPartis(subscriber, activityForUnsubscribing))
             {
-                if (activityForUnsubscribing.Id == act.Id)
-                {
-                    subscriber.Partis.Remove(activityForUnsubscribing);
-                    db.SaveChanges();
-                    return;
-                }
+                throw new ArgumentException($"{subscriber.Email} hasn't had subscription to the event with id {idActivity}");
             }
 
-            throw new ArgumentException($"{subscriber.Email} hasn't had subscription to the event with id {idActivity}");
+            subscriber.Partis.Remove(activityForUnsubscribing);
+            db.SaveChanges();
+            return;    
         }
 
         public List<ActivityResponse> GetAllActivitiesOfTheUser(string userName)
@@ -92,5 +80,27 @@ namespace LetsDoStuff.WebApi.Services
 
             return response.ToList();
         }
+
+        #region
+        private User FindSubscriberByEmail(string emailUser) => db.Users.Where(h => h.Email == emailUser)
+                                   .Include(u => u.Partis)
+                                   .Single();
+
+        private Activity GetActivityOrNull(int idActivity) => db.Activities
+                                        .Find(idActivity);
+
+        private bool IsThereActivityinUserPartis(User user, Activity activity)
+        {
+            foreach (Activity act in user.Partis)
+            {
+                if (activity.Id == act.Id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        #endregion
     }
 }
