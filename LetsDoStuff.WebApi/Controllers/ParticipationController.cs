@@ -5,6 +5,7 @@ using System.Text;
 using LetsDoStuff.WebApi.Services;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
+using LetsDoStuff.WebApi.SettingsForAuthJwt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +33,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == "Id")
+                    .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
                     .First().Value);
                 _subscribingService.MakeUserSubscribedToActivityByIds(idUser, idActivity);
                 return Ok();
@@ -55,7 +56,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == "Id")
+                    .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
                     .First().Value);
                 _subscribingService.MakeUserUnsubscribedToActivityByIds(idUser, idActivity);
                 return Ok();
@@ -81,7 +82,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == "Id")
+                    .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
                     .First().Value);
                 var subscriberinfo = _subscribingService.GetUsersParticipations(idUser);
                 return subscriberinfo;
