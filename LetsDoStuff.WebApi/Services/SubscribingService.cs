@@ -22,12 +22,13 @@ namespace LetsDoStuff.WebApi.Services
         public void MakeUserSubscribedToActivityByEmailAndId(string emailUser, int idActivity)
         {
             User subscriber = db.Users.Where(h => h.Email == emailUser)
-                                   .Include(u => u.ParticipationActivities)
-                                   .Single();
+                .Include(u => u.ParticipationActivities)
+                .FirstOrDefault()
+                ?? throw new ArgumentException($"User with id {emailUser} has not been found");
 
             Activity participation = db.Activities
-                                                .Find(idActivity)
-                                                 ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
+                .Find(idActivity)
+                ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
 
             SubscribeCreator(subscriber, participation);
         }
@@ -36,7 +37,8 @@ namespace LetsDoStuff.WebApi.Services
         {
             User subscriber = db.Users.Where(h => h.Email == emailUser)
                                    .Include(u => u.ParticipationActivities)
-                                   .Single();
+                                   .FirstOrDefault()
+                                   ?? throw new ArgumentException($"User with id {emailUser} has not been found");
 
             Activity participation = db.Activities
                                         .Find(idActivity)
@@ -48,13 +50,13 @@ namespace LetsDoStuff.WebApi.Services
         public void MakeUserSubscribedToActivityByIds(int idUser, int idActivity)
         {
             User subscriber = db.Users.Where(h => h.Id == idUser)
-                                  .Include(u => u.ParticipationActivities)
-                                  .FirstOrDefault()
-                                  ?? throw new ArgumentException($"User with id {idUser} has not been found");
+                .Include(u => u.ParticipationActivities)
+                .FirstOrDefault()
+                 ?? throw new ArgumentException($"User with id {idUser} has not been found");
 
             Activity participation = db.Activities
-                                                .Find(idActivity)
-                                                 ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
+                .Find(idActivity)
+                ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
 
             SubscribeCreator(subscriber, participation);
         }
