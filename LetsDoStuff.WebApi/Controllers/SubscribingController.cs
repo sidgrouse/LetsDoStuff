@@ -24,10 +24,12 @@ namespace LetsDoStuff.WebApi.Controllers
         [Authorize]
         public IActionResult SubscribeToActivity(int idActivity)
         {
-            var loginName = this.HttpContext.User.Claims.First().Value;
             try
             {
-                _subscribingService.MakeUserSubscribedToActivityByEmailAndId(loginName, idActivity);
+                var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == "Id")
+                    .First().Value);
+                _subscribingService.MakeUserSubscribedToActivityByIds(idUser, idActivity);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -40,13 +42,19 @@ namespace LetsDoStuff.WebApi.Controllers
         [Authorize]
         public IActionResult UnsubscribeToActivity(int idActivity)
         {
-            var loginName = this.HttpContext.User.Claims.First().Value;
             try
             {
-                _subscribingService.MakeUserUnsubscribedToActivityByEmailAndId(loginName, idActivity);
+                var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == "Id")
+                    .First().Value);
+                _subscribingService.MakeUserUnsubscribedToActivityByIds(idUser, idActivity);
                 return Ok();
             }
             catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
