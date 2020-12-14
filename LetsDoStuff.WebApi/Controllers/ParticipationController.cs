@@ -22,7 +22,7 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
-        /// Take participation in an activity.
+        /// Add an Activity to User's Participations.
         /// </summary>
         /// <param name="idActivity">The Id of an Activity.</param>
         /// <returns>Action result.</returns>
@@ -45,7 +45,7 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
-        /// Refuse to participation in an Activity.
+        /// Remove an Activity from User's Participations.
         /// </summary>
         /// <param name="idActivity">The Id of an Activity.</param>
         /// <returns>Action result.</returns>
@@ -74,7 +74,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <summary>
         /// Get all user's Activities for participation.
         /// </summary>
-        /// <returns>Action result.</returns>
+        /// <returns>All user's activities for Participations.</returns>
         [HttpGet("GetUsersParticipations")]
         [Authorize]
         public ActionResult<List<ActivityResponse>> GetUsersParticipations()
