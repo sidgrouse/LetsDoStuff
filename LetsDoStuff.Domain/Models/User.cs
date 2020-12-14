@@ -68,12 +68,12 @@ namespace LetsDoStuff.Domain.Models
         /// <summary>
         /// Gets or sets activities that user want to wisit.
         /// </summary>
-        public List<Activity> Partis { get; set; } = new List<Activity>();
+        public List<Activity> ParticipationActivities { get; set; } = new List<Activity>();
 
         /// <summary>
         /// Gets or sets activities that was created by User oneself.
         /// </summary>
-        public List<Activity> MyActivities { get; set; } = new List<Activity>();
+        public List<Activity> OwnActivities { get; set; } = new List<Activity>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="User"/> class.

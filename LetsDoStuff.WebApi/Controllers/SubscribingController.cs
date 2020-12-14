@@ -20,9 +20,9 @@ namespace LetsDoStuff.WebApi.Controllers
             _subscribingService = subscribingService;
         }
 
-        [HttpGet("SubscribeToActivityById")]
+        [HttpGet("SubscribeToActivity")]
         [Authorize]
-        public IActionResult SubscribeToActivityById(int idActivity)
+        public IActionResult SubscribeToActivity(int idActivity)
         {
             var loginName = this.HttpContext.User.Claims.First().Value;
             try
@@ -36,14 +36,44 @@ namespace LetsDoStuff.WebApi.Controllers
             }
         }
 
-        [HttpGet("UnsubscribeToActivityById")]
+        [HttpGet("UnsubscribeToActivity")]
         [Authorize]
-        public IActionResult UnsubscribeToActivityById(int idActivity)
+        public IActionResult UnsubscribeToActivity(int idActivity)
         {
             var loginName = this.HttpContext.User.Claims.First().Value;
             try
             {
                 _subscribingService.MakeUserUnsubscribedToActivityByEmailAndId(loginName, idActivity);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("SubscribeToActivityById")]
+        [Authorize]
+        public IActionResult SubscribeToActivityById(int idUser, int idActivity)
+        {
+            try
+            {
+                _subscribingService.MakeUserSubscribedToActivityByIds(idUser, idActivity);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("UnsubscribeToActivityById")]
+        [Authorize]
+        public IActionResult UnsubscribeToActivityById(int idUser, int idActivity)
+        {
+            try
+            {
+                _subscribingService.MakeUserUnsubscribedToActivityByIds(idUser, idActivity);
                 return Ok();
             }
             catch (ArgumentException ex)

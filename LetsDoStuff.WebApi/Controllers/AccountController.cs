@@ -15,7 +15,7 @@ namespace LetsDoStuff.WebApi.Controllers
     [Route("api/account")]
     public class AccountController : Controller
     {
-        private LdsContext context;
+        private readonly LdsContext context;
 
         public AccountController(LdsContext context)
         {

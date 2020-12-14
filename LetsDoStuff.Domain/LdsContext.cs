@@ -25,7 +25,7 @@ namespace LetsDoStuff.Domain
         {
             modelBuilder
                 .Entity<User>()
-                .HasMany(u => u.MyActivities)
+                .HasMany(u => u.OwnActivities)
                 .WithOne(a => a.Creator)
                 .OnDelete(DeleteBehavior.Restrict);
         }
