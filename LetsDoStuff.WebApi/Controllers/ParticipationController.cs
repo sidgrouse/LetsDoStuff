@@ -24,18 +24,18 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <summary>
         /// Add an Activity to User's Participations.
         /// </summary>
-        /// <param name="idActivity">The Id of an Activity.</param>
+        /// <param name="request">The Id of an Activity.</param>
         /// <returns>Action result.</returns>
         [HttpPost("AddParticipation")]
         [Authorize]
-        public IActionResult AddParticipation(int idActivity)
+        public IActionResult AddParticipation(ParticipationRequest request)
         {
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
                     .First().Value);
-                _participationService.AddParticipation(idUser, idActivity);
+                _participationService.AddParticipation(idUser, request.IdActivity);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -47,18 +47,18 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <summary>
         /// Remove an Activity from User's Participations.
         /// </summary>
-        /// <param name="idActivity">The Id of an Activity.</param>
+        /// <param name="request">The Id of an Activity.</param>
         /// <returns>Action result.</returns>
         [HttpDelete("RemoveParticipation")]
         [Authorize]
-        public IActionResult RemoveParticipation(int idActivity)
+        public IActionResult RemoveParticipation(ParticipationRequest request)
         {
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
                     .First().Value);
-                _participationService.RemoveParticipation(idUser, idActivity);
+                _participationService.RemoveParticipation(idUser, request.IdActivity);
                 return Ok();
             }
             catch (ArgumentException ex)
