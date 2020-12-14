@@ -26,7 +26,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <param name="idActivity">The Id of an Activity.</param>
         /// <returns>Action result.</returns>
-        [HttpGet("AddParticipation")]
+        [HttpPost("AddParticipation")]
         [Authorize]
         public IActionResult AddParticipation(int idActivity)
         {
@@ -49,7 +49,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <param name="idActivity">The Id of an Activity.</param>
         /// <returns>Action result.</returns>
-        [HttpGet("RemoveParticipation")]
+        [HttpDelete("RemoveParticipation")]
         [Authorize]
         public IActionResult RemoveParticipation(int idActivity)
         {
@@ -75,7 +75,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// Get all user's Activities for participation.
         /// </summary>
         /// <returns>All user's activities for Participations.</returns>
-        [HttpGet("GetUsersParticipations")]
+        [HttpGet]
         [Authorize]
         public ActionResult<List<ActivityResponse>> GetUsersParticipations()
         {
