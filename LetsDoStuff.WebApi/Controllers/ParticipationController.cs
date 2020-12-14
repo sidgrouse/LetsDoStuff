@@ -11,15 +11,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace LetsDoStuff.WebApi.Controllers
 {
     [Route("api/subscribing")]
-    public class SubscribingController : ControllerBase
+    public class ParticipationController : ControllerBase
     {
-        private readonly ISubscribingService _subscribingService;
+        private readonly IParticipationService _subscribingService;
 
-        public SubscribingController(ISubscribingService subscribingService)
+        public ParticipationController(IParticipationService subscribingService)
         {
             _subscribingService = subscribingService;
         }
 
+        /// <summary>
+        /// Take participation in an activity.
+        /// </summary>
+        /// <param name="idActivity">The Id of an Activity.</param>
+        /// <returns>Action result.</returns>
         [HttpGet("SubscribeToActivity")]
         [Authorize]
         public IActionResult SubscribeToActivity(int idActivity)
@@ -38,6 +43,11 @@ namespace LetsDoStuff.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Refuse to participation in an Activity.
+        /// </summary>
+        /// <param name="idActivity">The Id of an Activity.</param>
+        /// <returns>Action result.</returns>
         [HttpGet("UnsubscribeToActivity")]
         [Authorize]
         public IActionResult UnsubscribeToActivity(int idActivity)
@@ -60,36 +70,10 @@ namespace LetsDoStuff.WebApi.Controllers
             }
         }
 
-        [HttpGet("SubscribeToActivityById")]
-        [Authorize]
-        public IActionResult SubscribeToActivityById(int idUser, int idActivity)
-        {
-            try
-            {
-                _subscribingService.MakeUserSubscribedToActivityByIds(idUser, idActivity);
-                return Ok();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("UnsubscribeToActivityById")]
-        [Authorize]
-        public IActionResult UnsubscribeToActivityById(int idUser, int idActivity)
-        {
-            try
-            {
-                _subscribingService.MakeUserUnsubscribedToActivityByIds(idUser, idActivity);
-                return Ok();
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
+        /// <summary>
+        /// Get all user's Activities for participation.
+        /// </summary>
+        /// <returns>Action result.</returns>
         [HttpGet("subscriberinfo")]
         [Authorize]
         public ActionResult<List<ActivityResponse>> GetSubscriberInfo()

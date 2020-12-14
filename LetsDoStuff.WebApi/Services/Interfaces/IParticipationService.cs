@@ -5,7 +5,7 @@ using LetsDoStuff.WebApi.Services.DTO;
 
 namespace LetsDoStuff.WebApi.Services.Interfaces
 {
-    public interface ISubscribingService
+    public interface IParticipationService
     {
         void MakeUserSubscribedToActivityByIds(int idUser, int idActivity);
 
