@@ -15,6 +15,6 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 
         void MakeUserUnsubscribedToActivityByEmailAndId(string emailUser, int idActivity);
 
-        List<ActivityResponse> GetAllActivitiesOfTheUser(string emailUser);
+        List<ActivityResponse> GetUsersParticipations(int userId);
     }
 }

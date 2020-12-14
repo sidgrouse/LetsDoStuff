@@ -75,10 +75,10 @@ namespace LetsDoStuff.WebApi.Services
             UnsubscribeCreator(subscriber, participation);
         }
 
-        public List<ActivityResponse> GetAllActivitiesOfTheUser(string userName)
+        public List<ActivityResponse> GetUsersParticipations(int userId)
         {
             var response = db.Users.AsNoTracking()
-               .Where(u => u.Email == userName)
+               .Where(u => u.Id == userId)
                .Include(u => u.ParticipationActivities)
                .ThenInclude(a => a.Creator)
                .Include(u => u.ParticipationActivities)

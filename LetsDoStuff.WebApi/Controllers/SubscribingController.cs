@@ -94,9 +94,18 @@ namespace LetsDoStuff.WebApi.Controllers
         [Authorize]
         public ActionResult<List<ActivityResponse>> GetSubscriberInfo()
         {
-            var userName = this.HttpContext.User.Claims.FirstOrDefault().Value;
-            var subscriberinfo = _subscribingService.GetAllActivitiesOfTheUser(userName);
-            return subscriberinfo;
+            try
+            {
+                var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == "Id")
+                    .First().Value);
+                var subscriberinfo = _subscribingService.GetUsersParticipations(idUser);
+                return subscriberinfo;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
