@@ -11,14 +11,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
 {
-    [Route("api/subscribing")]
+    [Route("api/participation")]
     public class ParticipationController : ControllerBase
     {
-        private readonly IParticipationService _subscribingService;
+        private readonly IParticipationService _participationService;
 
-        public ParticipationController(IParticipationService subscribingService)
+        public ParticipationController(IParticipationService participationService)
         {
-            _subscribingService = subscribingService;
+            _participationService = participationService;
         }
 
         /// <summary>
@@ -26,16 +26,16 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <param name="idActivity">The Id of an Activity.</param>
         /// <returns>Action result.</returns>
-        [HttpGet("SubscribeToActivity")]
+        [HttpGet("AddParticipation")]
         [Authorize]
-        public IActionResult SubscribeToActivity(int idActivity)
+        public IActionResult AddParticipation(int idActivity)
         {
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
                     .First().Value);
-                _subscribingService.MakeUserSubscribedToActivityByIds(idUser, idActivity);
+                _participationService.AddParticipation(idUser, idActivity);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -49,16 +49,16 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <param name="idActivity">The Id of an Activity.</param>
         /// <returns>Action result.</returns>
-        [HttpGet("UnsubscribeToActivity")]
+        [HttpGet("RemoveParticipation")]
         [Authorize]
-        public IActionResult UnsubscribeToActivity(int idActivity)
+        public IActionResult RemoveParticipation(int idActivity)
         {
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
                     .First().Value);
-                _subscribingService.MakeUserUnsubscribedToActivityByIds(idUser, idActivity);
+                _participationService.RemoveParticipation(idUser, idActivity);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -75,17 +75,17 @@ namespace LetsDoStuff.WebApi.Controllers
         /// Get all user's Activities for participation.
         /// </summary>
         /// <returns>Action result.</returns>
-        [HttpGet("subscriberinfo")]
+        [HttpGet("GetUsersParticipations")]
         [Authorize]
-        public ActionResult<List<ActivityResponse>> GetSubscriberInfo()
+        public ActionResult<List<ActivityResponse>> GetUsersParticipations()
         {
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
                     .First().Value);
-                var subscriberinfo = _subscribingService.GetUsersParticipations(idUser);
-                return subscriberinfo;
+                var userinfo = _participationService.GetUsersParticipations(idUser);
+                return userinfo;
             }
             catch (Exception ex)
             {

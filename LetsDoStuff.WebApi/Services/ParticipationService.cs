@@ -19,60 +19,45 @@ namespace LetsDoStuff.WebApi.Services
             db = context;
         }
 
-        public void MakeUserSubscribedToActivityByEmailAndId(string emailUser, int idActivity)
+        public void AddParticipation(int idUser, int idActivity)
         {
-            User subscriber = db.Users.Where(h => h.Email == emailUser)
-                .Include(u => u.ParticipationActivities)
-                .FirstOrDefault()
-                ?? throw new ArgumentException($"User with id {emailUser} has not been found");
-
-            Activity participation = db.Activities
-                .Find(idActivity)
-                ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
-
-            SubscribeCreator(subscriber, participation);
-        }
-
-        public void MakeUserUnsubscribedToActivityByEmailAndId(string emailUser, int idActivity)
-        {
-            User subscriber = db.Users.Where(h => h.Email == emailUser)
-                                   .Include(u => u.ParticipationActivities)
-                                   .FirstOrDefault()
-                                   ?? throw new ArgumentException($"User with id {emailUser} has not been found");
-
-            Activity participation = db.Activities
-                                        .Find(idActivity)
-                                        ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
-
-            UnsubscribeCreator(subscriber, participation);
-        }
-
-        public void MakeUserSubscribedToActivityByIds(int idUser, int idActivity)
-        {
-            User subscriber = db.Users.Where(h => h.Id == idUser)
+            User user = db.Users.Where(h => h.Id == idUser)
                 .Include(u => u.ParticipationActivities)
                 .FirstOrDefault()
                  ?? throw new ArgumentException($"User with id {idUser} has not been found");
 
-            Activity participation = db.Activities
+            Activity activity = db.Activities
                 .Find(idActivity)
                 ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
 
-            SubscribeCreator(subscriber, participation);
+            if (user.ParticipationActivities.Contains(activity))
+            {
+                throw new ArgumentException($"{user.Email} has already participated in the event with id {activity.Id}");
+            }
+
+            user.ParticipationActivities.Add(activity);
+
+            db.SaveChanges();
         }
 
-        public void MakeUserUnsubscribedToActivityByIds(int idUser, int idActivity)
+        public void RemoveParticipation(int idUser, int idActivity)
         {
-            User subscriber = db.Users.Where(h => h.Id == idUser)
-                                 .Include(u => u.ParticipationActivities)
-                                 .FirstOrDefault()
-                                 ?? throw new ArgumentException($"User with id {idUser} has not been found");
+            User user = db.Users.Where(h => h.Id == idUser)
+                .Include(u => u.ParticipationActivities)
+                .FirstOrDefault()
+                ?? throw new ArgumentException($"User with id {idUser} has not been found");
 
-            Activity participation = db.Activities
-                                        .Find(idActivity)
-                                        ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
+            Activity activity = db.Activities
+                .Find(idActivity)
+                ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
 
-            UnsubscribeCreator(subscriber, participation);
+            if (!user.ParticipationActivities.Contains(activity))
+            {
+                throw new ArgumentException($"{user.Email} hasn't participated in the event with id {activity.Id}");
+            }
+
+            user.ParticipationActivities.Remove(activity);
+            db.SaveChanges();
         }
 
         public List<ActivityResponse> GetUsersParticipations(int userId)
@@ -102,31 +87,5 @@ namespace LetsDoStuff.WebApi.Services
 
             return response.ToList();
         }
-
-        #region
-
-        private void SubscribeCreator(User subscriber, Activity activity)
-        {
-            if (subscriber.ParticipationActivities.Contains(activity))
-            {
-                throw new ArgumentException($"{subscriber.Email} has already subscribed to the event with id {activity.Id}");
-            }
-
-            subscriber.ParticipationActivities.Add(activity);
-
-            db.SaveChanges();
-        }
-
-        private void UnsubscribeCreator(User subscriber, Activity activity)
-        {
-            if (!subscriber.ParticipationActivities.Contains(activity))
-            {
-                throw new ArgumentException($"{subscriber.Email} hasn't had subscription to the event with id {activity.Id}");
-            }
-
-            subscriber.ParticipationActivities.Remove(activity);
-            db.SaveChanges();
-        }
-        #endregion
     }
 }
