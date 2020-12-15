@@ -6,6 +6,7 @@ using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
 using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
@@ -26,6 +27,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <returns>All activities.</returns>
         [Authorize]
         [HttpGet("all")]
+        [EnableQuery]
         public List<ActivityResponse> GetActivities()
         {
             var activities = _activityService.GetAllActivities();

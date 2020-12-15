@@ -1,10 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using LetsDoStuff.Domain;
 using LetsDoStuff.WebApi.Services;
+using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
 using LetsDoStuff.WebApi.SettingsForAuth;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -12,6 +18,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OData.Edm;
 using Microsoft.OpenApi.Models;
 
 namespace LetsDoStuff.WebApi
@@ -49,6 +57,9 @@ namespace LetsDoStuff.WebApi
                 endpoints =>
                 {
                     endpoints.MapControllers();
+                    endpoints.EnableDependencyInjection();
+                    endpoints.Select().Filter().Expand().MaxTop(10);
+                    endpoints.MapODataRoute("api", "api", GetEdmModel());
                 });
         }
 
@@ -69,7 +80,8 @@ namespace LetsDoStuff.WebApi
                         .AllowCredentials());
             });
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
+            services.AddOData();
             services.AddSwaggerGen(c =>
             {
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -123,6 +135,30 @@ namespace LetsDoStuff.WebApi
                     }
                 });
             });
+            SetOutputFormatters(services);
+        }
+
+        private static void SetOutputFormatters(IServiceCollection services)
+        {
+            services.AddMvcCore(options =>
+            {
+                foreach (var outputFormatter in options.OutputFormatters.OfType<ODataOutputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
+                {
+                    outputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/odata"));
+                }
+
+                foreach (var inputFormatter in options.InputFormatters.OfType<ODataInputFormatter>().Where(_ => _.SupportedMediaTypes.Count == 0))
+                {
+                    inputFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/odata"));
+                }
+            });
+        }
+
+        private IEdmModel GetEdmModel()
+        {
+            var builder = new ODataConventionModelBuilder();
+            builder.EntitySet<ActivityResponse>("ActivityResponse");
+            return builder.GetEdmModel();
         }
     }
 }
