@@ -22,7 +22,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <returns>All activities.</returns>
         [HttpGet("all")]
-        public ActionResult<List<ActivityResponse>> GetActivities()
+        public List<ActivityResponse> GetActivities()
         {
             var activities = _activityService.GetAllActivities();
 
