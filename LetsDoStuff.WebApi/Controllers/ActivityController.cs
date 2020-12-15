@@ -63,7 +63,7 @@ namespace LetsDoStuff.WebApi.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
         }
     }
