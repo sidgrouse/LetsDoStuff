@@ -26,6 +26,11 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             var activities = _activityService.GetAllActivities();
 
+            if (activities == null)
+            {
+                return NotFound();
+            }
+
             return activities;
         }
 
@@ -37,15 +42,14 @@ namespace LetsDoStuff.WebApi.Controllers
         [HttpGet("{id}")]
         public ActionResult<ActivityResponse> GetActivity(int id)
         {
-            try
+            var activity = _activityService.GetActivityById(id);
+
+            if (activity == null)
             {
-                var activity = _activityService.GetActivityById(id);
-                return activity;
+                return NotFound();
             }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
-            }
+
+            return activity;
         }
 
         /// <summary>
@@ -63,7 +67,7 @@ namespace LetsDoStuff.WebApi.Controllers
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex);
             }
         }
     }
