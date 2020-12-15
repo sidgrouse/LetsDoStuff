@@ -4,14 +4,16 @@ using LetsDoStuff.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LetsDoStuff.Domain.Migrations
 {
     [DbContext(typeof(LdsContext))]
-    partial class LdsContextModelSnapshot : ModelSnapshot
+    [Migration("20201213002905_Activity-User-UserAcrivity")]
+    partial class ActivityUserUserAcrivity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,12 +41,12 @@ namespace LetsDoStuff.Domain.Migrations
                     b.Property<int>("ParticipantsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ParticipationActivitiesId")
+                    b.Property<int>("PartisId")
                         .HasColumnType("int");
 
-                    b.HasKey("ParticipantsId", "ParticipationActivitiesId");
+                    b.HasKey("ParticipantsId", "PartisId");
 
-                    b.HasIndex("ParticipationActivitiesId");
+                    b.HasIndex("PartisId");
 
                     b.ToTable("ActivityUser");
                 });
@@ -169,7 +171,7 @@ namespace LetsDoStuff.Domain.Migrations
 
                     b.HasOne("LetsDoStuff.Domain.Models.Activity", null)
                         .WithMany()
-                        .HasForeignKey("ParticipationActivitiesId")
+                        .HasForeignKey("PartisId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -177,7 +179,7 @@ namespace LetsDoStuff.Domain.Migrations
             modelBuilder.Entity("LetsDoStuff.Domain.Models.Activity", b =>
                 {
                     b.HasOne("LetsDoStuff.Domain.Models.User", "Creator")
-                        .WithMany("OwnActivities")
+                        .WithMany("MyActivities")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -187,7 +189,7 @@ namespace LetsDoStuff.Domain.Migrations
 
             modelBuilder.Entity("LetsDoStuff.Domain.Models.User", b =>
                 {
-                    b.Navigation("OwnActivities");
+                    b.Navigation("MyActivities");
                 });
 #pragma warning restore 612, 618
         }

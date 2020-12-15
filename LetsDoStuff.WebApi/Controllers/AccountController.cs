@@ -7,6 +7,7 @@ using System.Text;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.SettingsForAuth;
+using LetsDoStuff.WebApi.SettingsForAuthJwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -15,7 +16,7 @@ namespace LetsDoStuff.WebApi.Controllers
     [Route("api/account")]
     public class AccountController : Controller
     {
-        private LdsContext context;
+        private readonly LdsContext context;
 
         public AccountController(LdsContext context)
         {
@@ -59,11 +60,12 @@ namespace LetsDoStuff.WebApi.Controllers
             {
                 var claims = new List<Claim>
                     {
-                        new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                        new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role)
+                        new Claim(UserClaimIdentity.DefaultNameClaimType, user.Email),
+                        new Claim(UserClaimIdentity.DefaultRoleClaimType, user.Role),
+                        new Claim(UserClaimIdentity.DefaultIdClaimType, user.Id.ToString())
                     };
                 ClaimsIdentity claimsIdentity =
-                    new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+                    new ClaimsIdentity(claims);
                 return claimsIdentity;
             }
 

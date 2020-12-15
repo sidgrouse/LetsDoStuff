@@ -15,5 +15,19 @@ namespace LetsDoStuff.Domain
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            OneToManyBetweenCreatorAndActivity(modelBuilder);
+        }
+
+        private void OneToManyBetweenCreatorAndActivity(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<User>()
+                .HasMany(u => u.OwnActivities)
+                .WithOne(a => a.Creator)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }

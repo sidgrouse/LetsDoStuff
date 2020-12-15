@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -63,6 +64,16 @@ namespace LetsDoStuff.Domain.Models
         /// </summary>
         [Required]
         public string Role { get; set; }
+
+        /// <summary>
+        /// Gets or sets activities that user want to wisit.
+        /// </summary>
+        public List<Activity> ParticipationActivities { get; set; } = new List<Activity>();
+
+        /// <summary>
+        /// Gets or sets activities that was created by User oneself.
+        /// </summary>
+        public List<Activity> OwnActivities { get; set; } = new List<Activity>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="User"/> class.
