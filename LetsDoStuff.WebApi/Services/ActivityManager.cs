@@ -77,7 +77,7 @@ namespace LetsDoStuff.WebApi.Services
             return tags;
         }
 
-        public void CreateActivity(CreateActivityCommand newActivity)
+        public void CreateActivity(CreateActivityCommand newActivity, int idUser)
         {
             var creator = db.Users.FirstOrDefault(u => u.Id == idUser);
 
