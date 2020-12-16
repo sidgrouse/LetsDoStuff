@@ -7,6 +7,7 @@ using LetsDoStuff.WebApi.Services.Interfaces;
 using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
@@ -27,7 +28,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <returns>All activities.</returns>
         [Authorize]
         [HttpGet("all")]
-        [EnableQuery]
+        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Skip | AllowedQueryOptions.Filter, PageSize = 4)]
         public List<ActivityResponse> GetActivities()
         {
             var activities = _activityService.GetAllActivities();
