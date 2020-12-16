@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
@@ -29,9 +31,8 @@ namespace LetsDoStuff.WebApi.Services
                     Capacity = a.Capacity,
                     Creator = new ActivityCreatorResponse()
                     {
-                        Id = a.Creator.Id,
                         Name = a.Creator.FirstName + " " + a.Creator.LastName,
-                        Login = a.Creator.ProfileLink
+                        ProfileLink = a.Creator.ProfileLink
                     },
                     Tags = a.Tags.Select(t => t.Name).ToList()
                 }).ToList();
@@ -54,11 +55,10 @@ namespace LetsDoStuff.WebApi.Services
                 Description = activity.Description,
                 Capacity = activity.Capacity,
                 Creator = new ActivityCreatorResponse()
-                    { 
-                        Id = activity.Creator.Id,
-                        Name = activity.Creator.FirstName + " " + activity.Creator.LastName,
-                        Login = activity.Creator.ProfileLink
-                    },
+                {
+                    Name = activity.Creator.FirstName + " " + activity.Creator.LastName,
+                    ProfileLink = activity.Creator.ProfileLink
+                },
                 Tags = activity.Tags
                     .Select(t => t.Name)
                     .ToList()
@@ -79,8 +79,7 @@ namespace LetsDoStuff.WebApi.Services
 
         public void CreateActivity(CreateActivityCommand newActivity)
         {
-            var creator = db.Users.Find(newActivity.CreatorId)
-                ?? throw new ArgumentException($"{nameof(newActivity.CreatorId)} has to point to an existed user");
+            var creator = db.Users.FirstOrDefault(u => u.Id == idUser);
 
             var activity = new Activity
             {

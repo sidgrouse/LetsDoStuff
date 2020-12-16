@@ -7,9 +7,9 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
     {
         List<ActivityResponse> GetAllActivities();
 
-        List<TagResponse> GetAvailableTags();
+        void CreateActivity(CreateActivityCommand newActivity, int idUser);
 
-        void CreateActivity(CreateActivityCommand newActivity);
+        List<TagResponse> GetAvailableTags();
 
         ActivityResponse GetActivityById(int activityId);
     }
