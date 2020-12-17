@@ -49,6 +49,18 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
+        /// Get list of available tags.
+        /// </summary>
+        /// <returns>All available tags.</returns>
+        [HttpGet("tags")]
+        public List<TagResponse> GetAvailableTags()
+        {
+            var tags = _activityService.GetAvailableTags();
+
+            return tags;
+        }
+
+        /// <summary>
         /// Create activity.
         /// </summary>
         /// <param name="newActivity">Activity.</param>

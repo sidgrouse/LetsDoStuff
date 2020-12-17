@@ -65,6 +65,18 @@ namespace LetsDoStuff.WebApi.Services
             };
         }
 
+        public List<TagResponse> GetAvailableTags()
+        {
+            var tags = db.Tags.AsNoTracking()
+                .Select(t => new TagResponse()
+                {
+                    Id = t.Id,
+                    Name = t.Name
+                }).ToList();
+
+            return tags;
+        }
+
         public void CreateActivity(CreateActivityCommand newActivity)
         {
             var creator = db.Users.Find(newActivity.CreatorId)
