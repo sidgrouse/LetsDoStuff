@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
+import { useAppContext } from "../libs/contextLib";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
+import axios from 'axios';
 
 export default function Login() {
+  const { setAuthToken } = useAppContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -11,8 +14,18 @@ export default function Login() {
     return email.length > 0 && password.length > 0;
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    axios.post('https://localhost:8081/api/account/login', { login: email, password: password})
+      .then(resp => {
+
+        setAuthToken(resp.data.access_token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${resp.data.access_token}`;
+        console.log("logged in");
+      })
+      .catch(err => console.log(err));
+      
   }
 
   return (
@@ -23,6 +36,7 @@ export default function Login() {
           <Form.Control
             autoFocus
             type="email"
+            name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -32,6 +46,7 @@ export default function Login() {
           <Form.Control
             type="password"
             value={password}
+            name="password"
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>

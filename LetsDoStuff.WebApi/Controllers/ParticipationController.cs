@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using LetsDoStuff.WebApi.Services;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
-using LetsDoStuff.WebApi.SettingsForAuthJwt;
+using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +31,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
                 _participationService.AddParticipation(idUser, request.IdActivity);
                 return Ok();
@@ -56,7 +54,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
                 _participationService.RemoveParticipation(idUser, request.IdActivity);
                 return Ok();
@@ -82,7 +80,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
                 var userinfo = _participationService.GetUsersParticipations(idUser);
                 return userinfo;
