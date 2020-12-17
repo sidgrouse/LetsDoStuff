@@ -59,11 +59,13 @@ namespace LetsDoStuff.WebApi
         {
             int userID = 1;
             string userRoleName = "User";
+            string adminRoleName = "Admin";
             context.Database.EnsureCreated();
             if (!context.Users.Any())
             {
                 context.Users.Add(new User(profileLink: $"user{userID++}", firstName: "Dee", lastName: "Snider", email: "dee@gmail.com", password: "12test", userRoleName));
                 context.Users.Add(new User(profileLink: $"user{userID++}", firstName: "Alice", lastName: "Cooper", email: "alice@gmail.com", password: "test12", userRoleName));
+                context.Users.Add(new User(profileLink: $"user{userID++}", firstName: "Roman", lastName: "Onofreichuk", email: "admin@gmail.com", password: "123", adminRoleName));
                 context.SaveChanges();
             }
 

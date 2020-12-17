@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +19,19 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             _userService = userService;
             _logger = logger;
+        }
+
+        /// <summary>
+        /// Get list of all users. To access this you need to have the "Admin" role.
+        /// </summary>
+        /// <returns>All users.</returns>
+        [Authorize(Roles = "Admin")]
+        [HttpGet("users")]
+        public List<UserSettingsResponse> GetAllUsers()
+        {
+            var users = _userService.GetAllUsers();
+
+            return users;
         }
 
         /// <summary>
