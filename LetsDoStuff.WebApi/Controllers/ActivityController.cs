@@ -24,6 +24,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// Get list of activities.
         /// </summary>
         /// <returns>All activities.</returns>
+        [Authorize]
         [HttpGet("all")]
         public List<ActivityResponse> GetActivities()
         {

@@ -7,7 +7,6 @@ using System.Text;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.SettingsForAuth;
-using LetsDoStuff.WebApi.SettingsForAuthJwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -36,12 +35,12 @@ namespace LetsDoStuff.WebApi.Controllers
             var now = DateTime.Now;
 
             var jwt = new JwtSecurityToken(
-                issuer: AuthOptions.ISSUER,
-                audience: AuthOptions.AUDIENCE,
+                issuer: AuthConstants.Issuer,
+                audience: AuthConstants.Audience,
                 notBefore: now,
                 claims: identity.Claims,
-                expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+                expires: now.Add(AuthConstants.TokenLifetime),
+                signingCredentials: new SigningCredentials(AuthConstants.SymmetricSecurityKey, SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             var response = new
@@ -55,14 +54,15 @@ namespace LetsDoStuff.WebApi.Controllers
 
         private ClaimsIdentity GetIdentity(string login, string password)
         {
-            var user = context.Users.FirstOrDefault<User>(x => x.Email == login && x.Password == password);
+            var user = context.Users.FirstOrDefault<User>(x => x.Email == login && x.Password == password)
+                ?? context.Users.FirstOrDefault(itm => itm.ProfileLink == login);
             if (user != null)
             {
                 var claims = new List<Claim>
                     {
-                        new Claim(UserClaimIdentity.DefaultNameClaimType, user.Email),
-                        new Claim(UserClaimIdentity.DefaultRoleClaimType, user.Role),
-                        new Claim(UserClaimIdentity.DefaultIdClaimType, user.Id.ToString())
+                        new Claim(AuthConstants.NameClaimType, user.Email),
+                        new Claim(AuthConstants.RoleClaimType, user.Role),
+                        new Claim(AuthConstants.IdClaimType, user.Id.ToString())
                     };
                 ClaimsIdentity claimsIdentity =
                     new ClaimsIdentity(claims);
