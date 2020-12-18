@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
+using LetsDoStuff.WebApi.SettingsForAuthJwt;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
@@ -53,12 +56,17 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <param name="newActivity">Activity.</param>
         /// <returns>Action result.</returns>
+        [Authorize]
         [HttpPost("create")]
-        public IActionResult CreateActivity([FromBody]CreateActivityCommand newActivity)
+        public IActionResult CreateActivity([FromBody] CreateActivityCommand newActivity)
         {
             try
             {
-                _activityService.CreateActivity(newActivity);
+                var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
+                    .First().Value);
+
+                _activityService.CreateActivity(newActivity, idUser);
                 return Ok();
             }
             catch (ArgumentException ex)
