@@ -27,10 +27,18 @@ namespace LetsDoStuff.WebApi.Controllers
         /// Get list of all users. To access this you need to have the "Admin" role.
         /// </summary>
         /// <returns>All users.</returns>
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("users")]
-        public List<UserSettingsResponse> GetAllUsers()
+        public ActionResult<List<UserSettingsResponse>> GetAllUsers()
         {
+            var role = HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.RoleClaimType)
+                    .First().Value;
+            if (!(role == AuthConstants.AdminRoleName))
+            {
+                return Forbid();
+            }
+
             var users = _userService.GetAllUsers();
 
             return users;
