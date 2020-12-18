@@ -18,10 +18,10 @@ namespace LetsDoStuff.WebApi.Services
             _context = context;
         }
 
-        public UserSettingsResponse GetUserSettings(string email)
+        public UserSettingsResponse GetUserSettings(int id)
         {
             var user = _context.Users.AsNoTracking()
-                .FirstOrDefault(u => u.Email == email)
+                .FirstOrDefault(u => u.Id == id)
                 ?? throw new ArgumentException($"User is not found");
 
             return new UserSettingsResponse()

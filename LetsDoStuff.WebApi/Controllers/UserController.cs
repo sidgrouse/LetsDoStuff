@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
+using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -42,10 +43,12 @@ namespace LetsDoStuff.WebApi.Controllers
         [HttpGet("settings")]
         public ActionResult<UserSettingsResponse> GetUserSettings()
         {
-            var email = HttpContext.User.Identity.Name;
+            var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
+                    .First().Value);
             try
             {
-                var user = _userService.GetUserSettings(email);
+                var user = _userService.GetUserSettings(idUser);
                 return user;
             }
             catch (ArgumentException ae)
