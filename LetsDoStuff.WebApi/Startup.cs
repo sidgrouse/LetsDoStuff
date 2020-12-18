@@ -107,7 +107,6 @@ namespace LetsDoStuff.WebApi
 
             services.ConfigureSwaggerGen(c =>
             {
-                c.OperationFilter<CustomOperationFilter>();
                 c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
                     Name = "Authorization",

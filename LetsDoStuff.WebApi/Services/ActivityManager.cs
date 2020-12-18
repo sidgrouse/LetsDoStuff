@@ -22,7 +22,8 @@ namespace LetsDoStuff.WebApi.Services
 
         public List<ActivityResponse> GetAllActivities()
         {
-            var activities = db.Activities
+            var activities = db.Activities.AsNoTracking()
+                .OrderBy(o => o.Date)
                 .Select(a => new ActivityResponse()
                 {
                     Id = a.Id,
@@ -34,22 +35,11 @@ namespace LetsDoStuff.WebApi.Services
                         Name = a.Creator.FirstName + " " + a.Creator.LastName,
                         ProfileLink = a.Creator.ProfileLink
                     },
-                    Date = a.Date,
+                    Date = a.Date.ToLongDateString(),
                     Tags = a.Tags.Select(t => t.Name).ToList()
-                }).OrderBy(o => o.Date);
+                }).ToList();
 
-            var orderedActiv = new List<ActivityResponse>();
-            foreach (var item in activities)
-            {
-                orderedActiv.Add(item);
-            }
-
-            foreach (var item in orderedActiv)
-            {
-                Console.WriteLine(item.Date);
-            }
-
-            return orderedActiv;
+            return activities;
         }
 
         public ActivityResponse GetActivityById(int id)

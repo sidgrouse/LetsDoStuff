@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
 {
-    [Route("api/activity")]
+    [Route("api/activities")]
     public class ActivityController : ControllerBase
     {
         private readonly IActivityService _activityService;
@@ -23,12 +23,13 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
-        /// Get list of activities.
+        /// Get list of activities ordered by date.
         /// </summary>
         /// <returns>All activities.</returns>
+        [HttpGet]
+        [EnableQuery(EnsureStableOrdering = false, AllowedQueryOptions = AllowedQueryOptions.Filter | AllowedQueryOptions.Top | AllowedQueryOptions.Skip, PageSize = 20)]
         [Authorize]
-        [HttpGet("all")]
-        [EnableQuery(AllowedQueryOptions = AllowedQueryOptions.Skip | AllowedQueryOptions.Filter, PageSize = 4)]
+
         public List<ActivityResponse> GetActivities()
         {
             var activities = _activityService.GetAllActivities();

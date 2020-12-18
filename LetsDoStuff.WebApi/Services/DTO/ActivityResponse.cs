@@ -15,7 +15,7 @@ namespace LetsDoStuff.WebApi.Services.DTO
 
         public ActivityCreatorResponse Creator { get; set; }
 
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
 
         public List<string> Tags { get; set; }
 
