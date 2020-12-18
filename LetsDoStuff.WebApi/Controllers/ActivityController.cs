@@ -26,7 +26,6 @@ namespace LetsDoStuff.WebApi.Controllers
         /// Get list of activities ordered by date.
         /// </summary>
         /// <returns>All activities.</returns>
-        [Authorize]
         [HttpGet]
         [EnableQuery(EnsureStableOrdering = false, AllowedQueryOptions = AllowedQueryOptions.Filter | AllowedQueryOptions.Top | AllowedQueryOptions.Skip, PageSize = 20)]
         public List<ActivitiesResponse> GetActivities()
