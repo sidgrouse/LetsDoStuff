@@ -46,11 +46,13 @@ namespace LetsDoStuff.WebApi
                 endpoints =>
                 {
                     endpoints.MapControllers();
+                    endpoints.MapHub<SampleHub>("/chat");
                 });
         }
 
         public virtual void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<LdsContext>(options =>
                 options.UseSqlServer(connection));
