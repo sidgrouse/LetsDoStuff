@@ -4,7 +4,7 @@ using System.Linq;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
-using LetsDoStuff.WebApi.SettingsForAuthJwt;
+using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -64,7 +64,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == UserClaimIdentity.DefaultIdClaimType)
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
 
                 _activityService.CreateActivity(newActivity, idUser);
