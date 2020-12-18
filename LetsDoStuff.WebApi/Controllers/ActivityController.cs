@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
+using LetsDoStuff.WebApi.SettingsForAuth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
@@ -21,15 +24,11 @@ namespace LetsDoStuff.WebApi.Controllers
         /// Get list of activities.
         /// </summary>
         /// <returns>All activities.</returns>
+        [Authorize]
         [HttpGet("all")]
-        public ActionResult<List<ActivityResponse>> GetActivities()
+        public List<ActivityResponse> GetActivities()
         {
             var activities = _activityService.GetAllActivities();
-
-            if (activities == null)
-            {
-                return NotFound();
-            }
 
             return activities;
         }
@@ -42,14 +41,15 @@ namespace LetsDoStuff.WebApi.Controllers
         [HttpGet("{id}")]
         public ActionResult<ActivityResponse> GetActivity(int id)
         {
-            var activity = _activityService.GetActivityById(id);
-
-            if (activity == null)
+            try
             {
-                return NotFound();
+                var activity = _activityService.GetActivityById(id);
+                return activity;
             }
-
-            return activity;
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         /// <summary>
@@ -57,17 +57,22 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <param name="newActivity">Activity.</param>
         /// <returns>Action result.</returns>
+        [Authorize]
         [HttpPost("create")]
-        public IActionResult CreateActivity([FromBody]CreateActivityCommand newActivity)
+        public IActionResult CreateActivity([FromBody] CreateActivityCommand newActivity)
         {
             try
             {
-                _activityService.CreateActivity(newActivity);
+                var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
+                    .First().Value);
+
+                _activityService.CreateActivity(newActivity, idUser);
                 return Ok();
             }
             catch (ArgumentException ex)
             {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);
             }
         }
     }

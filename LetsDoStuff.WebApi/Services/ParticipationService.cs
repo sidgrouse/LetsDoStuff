@@ -78,9 +78,8 @@ namespace LetsDoStuff.WebApi.Services
                    Capacity = a.Capacity,
                    Creator = new ActivityCreatorResponse()
                    {
-                       Id = a.Creator.Id,
                        Name = a.Creator.FirstName,
-                       Login = a.Creator.Email
+                       ProfileLink = a.Creator.ProfileLink
                    },
                    Tags = a.Tags.Select(t => t.Name).ToList()
                });

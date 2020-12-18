@@ -11,8 +11,6 @@ namespace LetsDoStuff.WebApi.Services.DTO
 
         public int Capacity { get; set; }
 
-        public int CreatorId { get; set; }
-
         public List<int> TagIds { get; set; }
     }
 }

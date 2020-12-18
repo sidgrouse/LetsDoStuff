@@ -18,6 +18,8 @@ namespace LetsDoStuff.WebApi
 {
     public class Startup
     {
+        private const string CorsPolicyName = "_allowByCreds";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,6 +36,7 @@ namespace LetsDoStuff.WebApi
                 c.RoutePrefix = string.Empty;
             });
             app.UseRouting();
+            app.UseCors(CorsPolicyName);
             app.UseHttpsRedirection();
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
@@ -56,6 +59,18 @@ namespace LetsDoStuff.WebApi
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<LdsContext>(options =>
                 options.UseSqlServer(connection));
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(
+                    name: CorsPolicyName,
+                    builder => builder
+                        .WithOrigins("http://localhost:3000")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -75,11 +90,11 @@ namespace LetsDoStuff.WebApi
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = true,
-                        ValidIssuer = AuthOptions.ISSUER,
+                        ValidIssuer = AuthConstants.Issuer,
                         ValidateAudience = true,
-                        ValidAudience = AuthOptions.AUDIENCE,
+                        ValidAudience = AuthConstants.Audience,
                         ValidateLifetime = true,
-                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        IssuerSigningKey = AuthConstants.SymmetricSecurityKey,
                         ValidateIssuerSigningKey = true
                     };
                 });
