@@ -26,11 +26,11 @@ namespace LetsDoStuff.WebApi.Controllers
         /// Get list of activities ordered by date.
         /// </summary>
         /// <returns>All activities.</returns>
+        [Authorize]
         [HttpGet]
         [EnableQuery(EnsureStableOrdering = false, AllowedQueryOptions = AllowedQueryOptions.Filter | AllowedQueryOptions.Top | AllowedQueryOptions.Skip, PageSize = 20)]
-        [Authorize]
+        public List<ActivitiesResponse> GetActivities()
 
-        public List<ActivityResponse> GetActivities()
         {
             var activities = _activityService.GetAllActivities();
 

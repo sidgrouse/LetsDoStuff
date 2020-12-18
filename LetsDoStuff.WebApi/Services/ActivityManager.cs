@@ -20,21 +20,15 @@ namespace LetsDoStuff.WebApi.Services
             db = context;
         }
 
-        public List<ActivityResponse> GetAllActivities()
+        public List<ActivitiesResponse> GetAllActivities()
         {
             var activities = db.Activities.AsNoTracking()
                 .OrderBy(o => o.Date)
-                .Select(a => new ActivityResponse()
+                .Select(a => new ActivitiesResponse()
                 {
                     Id = a.Id,
                     Name = a.Name,
                     Description = a.Description,
-                    Capacity = a.Capacity,
-                    Creator = new ActivityCreatorResponse()
-                    {
-                        Name = a.Creator.FirstName + " " + a.Creator.LastName,
-                        ProfileLink = a.Creator.ProfileLink
-                    },
                     Date = a.Date.ToLongDateString(),
                     Tags = a.Tags.Select(t => t.Name).ToList()
                 }).ToList();
