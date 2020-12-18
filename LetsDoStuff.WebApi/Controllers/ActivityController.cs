@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
@@ -21,6 +22,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// Get list of activities.
         /// </summary>
         /// <returns>All activities.</returns>
+        [Authorize]
         [HttpGet("all")]
         public List<ActivityResponse> GetActivities()
         {
@@ -53,6 +55,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <param name="newActivity">Activity.</param>
         /// <returns>Action result.</returns>
+        [Authorize]
         [HttpPost("create")]
         public IActionResult CreateActivity([FromBody]CreateActivityCommand newActivity)
         {
