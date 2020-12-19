@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using LetsDoStuff.Domain;
 using LetsDoStuff.WebApi.Services;
 using LetsDoStuff.WebApi.Services.Interfaces;
@@ -8,6 +9,7 @@ using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,12 +51,13 @@ namespace LetsDoStuff.WebApi
                 endpoints =>
                 {
                     endpoints.MapControllers();
-                    endpoints.MapHub<SampleHub>("/chat");
+                    endpoints.MapHub<SampleHub>("/SampleHub");
                 });
         }
 
         public virtual void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
             services.AddSignalR();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<LdsContext>(options =>
@@ -96,6 +99,21 @@ namespace LetsDoStuff.WebApi
                         ValidateLifetime = true,
                         IssuerSigningKey = AuthConstants.SymmetricSecurityKey,
                         ValidateIssuerSigningKey = true
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = contrxt =>
+                        {
+                            var accessToken = contrxt.Request.Query["access_token"];
+
+                            var path = contrxt.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(path) && path.StartsWithSegments("/chat"))
+                            {
+                                contrxt.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 

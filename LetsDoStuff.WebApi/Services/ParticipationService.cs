@@ -6,6 +6,7 @@ using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
@@ -13,10 +14,12 @@ namespace LetsDoStuff.WebApi.Services
     public class ParticipationService : IParticipationService
     {
         private readonly LdsContext db;
-        
-        public ParticipationService(LdsContext context)
+        private readonly IHubContext<SampleHub> _hubContext;
+
+        public ParticipationService(LdsContext context, IHubContext<SampleHub> hubContext)
         {
             db = context;
+            _hubContext = hubContext;
         }
 
         public void AddParticipation(int idUser, int idActivity)
@@ -27,7 +30,8 @@ namespace LetsDoStuff.WebApi.Services
                  ?? throw new ArgumentException($"User with id {idUser} has not been found");
 
             Activity activity = db.Activities
-                .Find(idActivity)
+                .Include(a => a.Creator)
+                .FirstOrDefault(a => a.Id == idActivity)
                 ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
 
             if (user.ParticipationActivities.Contains(activity))
@@ -36,6 +40,7 @@ namespace LetsDoStuff.WebApi.Services
             }
 
             user.ParticipationActivities.Add(activity);
+            _hubContext.Clients.User(activity.Creator.Id.ToString()).SendAsync("Notify", "Someone gonna take a part in your Activity");
 
             db.SaveChanges();
         }
@@ -48,7 +53,8 @@ namespace LetsDoStuff.WebApi.Services
                 ?? throw new ArgumentException($"User with id {idUser} has not been found");
 
             Activity activity = db.Activities
-                .Find(idActivity)
+                .Include(a => a.Creator)
+                .FirstOrDefault(a => a.Id == idActivity)
                 ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
 
             if (!user.ParticipationActivities.Contains(activity))
@@ -56,6 +62,7 @@ namespace LetsDoStuff.WebApi.Services
                 throw new ArgumentException($"{user.Email} hasn't participated in the event with id {activity.Id}");
             }
 
+            _hubContext.Clients.User(activity.Creator.Id.ToString()).SendAsync("Notify", "Someone dont't want to take a part in your Activity");
             user.ParticipationActivities.Remove(activity);
             db.SaveChanges();
         }

@@ -8,6 +8,7 @@ using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 
 namespace LetsDoStuff.WebApi.Controllers
@@ -16,10 +17,12 @@ namespace LetsDoStuff.WebApi.Controllers
     public class AccountController : Controller
     {
         private readonly LdsContext context;
+        private readonly IHubContext<SampleHub> _hubContext;
 
-        public AccountController(LdsContext context)
+        public AccountController(LdsContext context, IHubContext<SampleHub> hubContext)
         {
             this.context = context;
+            _hubContext = hubContext;
         }
 
         [HttpPost("login")]
@@ -47,7 +50,7 @@ namespace LetsDoStuff.WebApi.Controllers
             {
                 access_token = encodedJwt
             };
-
+            _hubContext.Clients.All.SendAsync("Notify", "Someone gonna take a part in your Activity");
             return Json(response);
         }
 
