@@ -4,7 +4,10 @@ import { useAppContext } from "../libs/contextLib";
 import Button from "react-bootstrap/Button";
 import "./Registration.css";
 import axios from 'axios';
+import {toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
+toast.configure()
 export default function Registration() {
   const { setAuthToken } = useAppContext();
 
@@ -15,9 +18,31 @@ export default function Registration() {
   const [confirmPassword, setConfirmPassword] = useState("");
   //const [dateOfBirth, setDateOfBirth] = useState("");
   const [bio, setBio] = useState("");
+  const notifyError = () => {
+    toast.error('⚠️ Error!', {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
+  const notifySuccess = () => {
+    toast.success('🦄 Success!', {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
 
   function validateForm() {
-    return firstName.length > 0 && password.length > 0;
+    return email.length > 0 && firstName.length > 0 && lastName.length > 0 && password.length > 0 && confirmPassword.length > 0;
   }
 /*firstName*	string
 lastName*	string
@@ -27,15 +52,19 @@ confirmPassword	string nullable: true
 dateOfBirth	string($date-time) nullable: true
 bio	string*/
 
+
   function handleSubmit(e) {
     e.preventDefault();
 
     axios.post('https://localhost:8081/api/registration', { firstName, lastName, email, password, confirmPassword, bio })
       .then(resp => {
         console.log("registered", resp);
+        notifySuccess();
       })
-      .catch(err => console.log(err));
-      
+      .catch(err => {
+        console.log(err);
+        notifyError();
+      });
   }
 
   return (
@@ -68,11 +97,11 @@ bio	string*/
         </Form.Group>
         <Form.Group size="lg" controlId="bio">
           <Form.Label>Bio</Form.Label>
-          <Form.Control type="bio" value={bio} onChange={(e) => setBio(e.target.value)}
+          <Form.Control as="textarea" rows={4} type="bio" value={bio} onChange={(e) => setBio(e.target.value)}
           />
         </Form.Group>
         <Button block size="lg" type="submit" disabled={!validateForm()}>
-          Login
+          Submit
         </Button>
       </Form>
     </div>

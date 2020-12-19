@@ -4,11 +4,36 @@ import { useAppContext } from "../libs/contextLib";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
 import axios from 'axios';
+import {toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
+toast.configure()
 export default function Login() {
   const { setAuthToken } = useAppContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const notifyError = () => {
+    toast.error('⚠️ Error! Incorrect login or password.', {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
+  const notifySuccess = () => {
+    toast.success('🦄 Success!', {
+      position: "bottom-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+  }
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -19,13 +44,15 @@ export default function Login() {
 
     axios.post('https://localhost:8081/api/account/login', { login: email, password: password})
       .then(resp => {
-
         setAuthToken(resp.data.access_token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${resp.data.access_token}`;
         console.log("logged in");
+        notifySuccess();
       })
-      .catch(err => console.log(err));
-      
+      .catch(err => {
+        console.log(err);
+        notifyError();
+      });
   }
 
   return (
