@@ -85,7 +85,7 @@ namespace LetsDoStuff.WebApi.Controllers
                 _logger.LogError(e, $"{DateTime.Now}");
             }
 
-            return Ok();
+            return Ok(new { result = "Registration completed successfully." });
         }
     }
 }

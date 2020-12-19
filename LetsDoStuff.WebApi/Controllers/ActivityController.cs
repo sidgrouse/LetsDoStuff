@@ -68,7 +68,7 @@ namespace LetsDoStuff.WebApi.Controllers
                     .First().Value);
 
                 _activityService.CreateActivity(newActivity, idUser);
-                return Ok();
+                return Ok(new { result = "Activity successfully created." });
             }
             catch (ArgumentException ex)
             {

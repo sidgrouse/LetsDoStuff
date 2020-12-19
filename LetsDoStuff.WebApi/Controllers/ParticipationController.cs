@@ -34,7 +34,7 @@ namespace LetsDoStuff.WebApi.Controllers
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
                 _participationService.AddParticipation(idUser, request.IdActivity);
-                return Ok();
+                return Ok(new { result = "Activity successfully added to user`s Participations." });
             }
             catch (ArgumentException ex)
             {
@@ -57,7 +57,7 @@ namespace LetsDoStuff.WebApi.Controllers
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
                 _participationService.RemoveParticipation(idUser, request.IdActivity);
-                return Ok();
+                return Ok(new { result = "Activity successfully removed from user`s Participations." });
             }
             catch (ArgumentException ex)
             {
