@@ -50,7 +50,6 @@ namespace LetsDoStuff.WebApi.Controllers
             {
                 access_token = encodedJwt
             };
-            _hubContext.Clients.All.SendAsync("Notify", "Someone gonna take a part in your Activity");
             return Json(response);
         }
 
