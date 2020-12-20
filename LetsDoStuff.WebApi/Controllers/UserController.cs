@@ -45,6 +45,30 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
+        /// Set a user settings.
+        /// </summary>
+        /// <param name="newSettings">New user settings.</param>
+        /// <returns>Result of edit settings attempt.</returns>
+        [Authorize]
+        [HttpPost("edit")]
+        public ActionResult EditUserSettings(EditUserSettingsCommand newSettings)
+        {
+            var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
+                    .First().Value);
+            try
+            {
+                _userService.EditUserSettings(newSettings, idUser);
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
+
+            return Ok(new { result = "Settings successfully changed." });
+        }
+
+        /// <summary>
         /// Get a specific user.
         /// </summary>
         /// <param name="profilelink">A User profile link.</param>

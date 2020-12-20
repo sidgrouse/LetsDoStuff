@@ -36,6 +36,67 @@ namespace LetsDoStuff.WebApi.Services
             };
         }
 
+        public void EditUserSettings(EditUserSettingsCommand newSettings, int id)
+        {
+            using var transaction = _context.Database.BeginTransaction();
+            try
+            {
+                if (newSettings.Password != _context.Users.FirstOrDefault(u => u.Id == id).Password)
+                {
+                    throw new ArgumentException($"Incorrect password");
+                }
+
+                if (newSettings.Email != string.Empty)
+                {
+                    EmailValidation(newSettings.Email);
+                    _context.Users.FirstOrDefault(u => u.Id == id).Email = newSettings.Email;
+                }
+
+                if (newSettings.ProfileLink != string.Empty)
+                {
+                    _context.Users.FirstOrDefault(u => u.Id == id).ProfileLink = newSettings.ProfileLink;
+                }
+
+                if (newSettings.FirstName != string.Empty)
+                {
+                    _context.Users.FirstOrDefault(u => u.Id == id).FirstName = newSettings.FirstName;
+                }
+
+                if (newSettings.LastName != string.Empty)
+                {
+                    _context.Users.FirstOrDefault(u => u.Id == id).LastName = newSettings.LastName;
+                }
+
+                if (newSettings.Bio != string.Empty)
+                {
+                    _context.Users.FirstOrDefault(u => u.Id == id).Bio = newSettings.Bio;
+                }
+
+                if (newSettings.NewPassword != string.Empty)
+                {
+                    _context.Users.FirstOrDefault(u => u.Id == id).Password = newSettings.NewPassword;
+                }
+
+                if (newSettings.DateOfBirth != null)
+                {
+                    _context.Users.FirstOrDefault(u => u.Id == id).DateOfBirth = newSettings.DateOfBirth;
+                }
+            }
+            catch (ArgumentException ae)
+            {
+                transaction.Rollback();
+                throw ae;
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw new ArgumentException($"Settings are not changed");
+            }
+
+            _context.SaveChanges();
+            transaction.Commit();
+        }
+
         public UserResponse GetUserByProfileLink(string profileLink)
         {
             var user = _context.Users.AsNoTracking()

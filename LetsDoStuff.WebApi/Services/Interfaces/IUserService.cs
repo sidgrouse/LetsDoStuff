@@ -6,6 +6,8 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
     {
         public UserSettingsResponse GetUserSettings(int id);
 
+        public void EditUserSettings(EditUserSettingsCommand newSettings, int id);
+
         public UserResponse GetUserByProfileLink(string profileLink);
 
         public void RegisterUser(RegisterRequest userData);
