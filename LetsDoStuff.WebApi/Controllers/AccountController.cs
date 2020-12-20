@@ -34,7 +34,7 @@ namespace LetsDoStuff.WebApi.Controllers
 
             if (identity == null)
             {
-                return BadRequest(new { errorText = "Invalid login or password" });
+                return BadRequest(new { errorText = "Invalid email or password" });
             }
 
             var now = DateTime.Now;
