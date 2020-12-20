@@ -22,10 +22,15 @@ namespace LetsDoStuff.WebApi.Controllers
             this.context = context;
         }
 
+        /// <summary>
+        /// Login.
+        /// </summary>
+        /// <param name="userAuthParam">User`s email and password.</param>
+        /// <returns>Result of login attempt.</returns>
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest userAuthParam)
         {
-            var identity = GetIdentity(userAuthParam.Login, userAuthParam.Password);
+            var identity = GetIdentity(userAuthParam.Email, userAuthParam.Password);
 
             if (identity == null)
             {
