@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
+using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
@@ -19,6 +21,9 @@ namespace LetsDoStuff.WebApi.Controllers
 
         public List<UserResponse> GetActivities()
         {
+            var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
+                    .First().Value);
             var activities = _acceptionService.GetAllParticipantes();
 
             return activities;
@@ -26,12 +31,18 @@ namespace LetsDoStuff.WebApi.Controllers
 
         public IActionResult Accept(int participanteId)
         {
+            var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
+                    .First().Value);
             _acceptionService.Accept(participanteId);
             return Ok();
         }
 
         public IActionResult Reject(int participanteId)
         {
+            var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
+                    .First().Value);
             _acceptionService.Reject(participanteId);
             return Ok();
         }
