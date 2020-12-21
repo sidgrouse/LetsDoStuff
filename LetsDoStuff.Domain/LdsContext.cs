@@ -27,6 +27,7 @@ namespace LetsDoStuff.Domain
                 .Entity<User>()
                 .HasMany(u => u.OwnActivities)
                 .WithOne(a => a.Creator)
+                .HasForeignKey(u => u.CreatorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder

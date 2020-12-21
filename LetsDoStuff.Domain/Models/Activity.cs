@@ -31,6 +31,8 @@ namespace LetsDoStuff.Domain.Models
         [Required]
         public User Creator { get; set; }
 
+        public int CreatorId { get; set; }
+
         /// <summary>
         /// Gets or sets participants of the actibities.
         /// </summary>

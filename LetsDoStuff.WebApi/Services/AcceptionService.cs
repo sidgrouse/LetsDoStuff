@@ -22,11 +22,10 @@ namespace LetsDoStuff.WebApi.Services
         public void Accept(int idCreator, int acticitiId, int participanteId)
         {
             var creatorActivity = db.Activities.Include(a => a.ParticipantСertificates)
-                .Include(a => a.Creator)
                 .FirstOrDefault(a => a.Id == acticitiId)
                 ?? throw new ArgumentException($"Activity with id {acticitiId} has not been found");
 
-            if (creatorActivity.Creator.Id == idCreator)
+            if (creatorActivity.CreatorId == idCreator)
             {
                 var pc = creatorActivity.ParticipantСertificates.FirstOrDefault(pc => pc.UserId == participanteId)
                     ?? throw new ArgumentException($"User with id {participanteId} has not been found like someone who's willing take a part in the Activity with id {acticitiId}");
@@ -34,13 +33,16 @@ namespace LetsDoStuff.WebApi.Services
                 if (!pc.IsParticipante)
                 {
                     pc.IsParticipante = true;
+                    db.SaveChanges();
                     return;
                 }
                 else
                 {
                     throw new ArgumentException($"User with id {participanteId} has already been marked as participante");
                 }
-
+            }
+            else
+            {
                 throw new ArgumentException($"User with id {idCreator} is not the creator of the activity {acticitiId}!");
             }
         }
@@ -48,25 +50,27 @@ namespace LetsDoStuff.WebApi.Services
         public void Reject(int idCreator, int acticitiId, int participanteId)
         {
             var creatorActivity = db.Activities.Include(a => a.ParticipantСertificates)
-                .Include(a => a.Creator)
                 .FirstOrDefault(a => a.Id == acticitiId)
                 ?? throw new ArgumentException($"Activity with id {acticitiId} has not been found");
 
-            if (creatorActivity.Creator.Id == idCreator)
+            if (creatorActivity.CreatorId == idCreator)
             {
                 var pc = creatorActivity.ParticipantСertificates.FirstOrDefault(pc => pc.UserId == participanteId)
                     ?? throw new ArgumentException($"User with id {participanteId} has not been found like someone who's willing take a part in the Activity with id {acticitiId}");
 
-                if (!pc.IsParticipante)
+                if (pc.IsParticipante)
                 {
                     pc.IsParticipante = false;
+                    db.SaveChanges();
                     return;
                 }
                 else
                 {
                     throw new ArgumentException($"User with id {participanteId} has already been marked as participante");
                 }
-
+            }
+            else
+            {
                 throw new ArgumentException($"User with id {idCreator} is not the creator of the activity {acticitiId}!");
             }
         }

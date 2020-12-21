@@ -22,36 +22,52 @@ namespace LetsDoStuff.WebApi.Controllers
 
         [Authorize]
         [HttpGet("All")]
-        public List<MayParticipationResponse> GetAllParticipantes(int activityId)
+        public ActionResult<List<MayParticipationResponse>> GetAllParticipantes(int activityId)
         {
-            var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == AuthConstants.IdClaimType)
-                    .First().Value);
-            var activities = _acceptionService.GetAcrivityMayParticipantes(idUser, activityId);
+            try
+            {
+                var activities = _acceptionService.GetAcrivityMayParticipantes(IdUser, activityId);
 
-            return activities;
+                return activities;
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [Authorize]
         [HttpPut]
         public IActionResult Accept(int activityId, int participanteId)
         {
-            var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == AuthConstants.IdClaimType)
-                    .First().Value);
-            _acceptionService.Accept(idUser, activityId, participanteId);
-            return Ok();
+            try
+            {
+                _acceptionService.Accept(IdUser, activityId, participanteId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [Authorize]
         [HttpDelete]
         public IActionResult Reject(int activityId, int participanteId)
         {
-            var idUser = int.Parse(this.HttpContext.User.Claims
+            try
+            {
+                _acceptionService.Reject(IdUser, activityId, participanteId);
+                return Ok();
+            }
+           catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        private int IdUser => int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
-            _acceptionService.Reject(idUser, activityId, participanteId);
-            return Ok();
-        }
     }
 }
