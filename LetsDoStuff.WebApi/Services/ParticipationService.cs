@@ -60,7 +60,7 @@ namespace LetsDoStuff.WebApi.Services
             db.SaveChanges();
         }
 
-        public List<ActivityResponse> GetUsersParticipations(int userId)
+        public List<ParticipationResponseForUser> GetUsersParticipations(int userId)
         {
             var response = db.Users.AsNoTracking()
                .Where(u => u.Id == userId)
@@ -68,14 +68,17 @@ namespace LetsDoStuff.WebApi.Services
                .ThenInclude(a => a.Creator)
                .Include(u => u.ParticipationActivities)
                .ThenInclude(a => a.Tags)
+               .Include(a => a.ParticipationActivities)
+               .ThenInclude(pa => pa.ParticipantСertificates)
                .FirstOrDefault()
                .ParticipationActivities
-               .Select(a => new ActivityResponse()
+               .Select(a => new ParticipationResponseForUser()
                {
                    Id = a.Id,
                    Name = a.Name,
                    Description = a.Description,
                    Capacity = a.Capacity,
+                   AcceptAsParticipant = a.ParticipantСertificates.FirstOrDefault(pc => pc.UserId == userId).IsParticipante,
                    Creator = new ActivityCreatorResponse()
                    {
                        Name = a.Creator.FirstName,

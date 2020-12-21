@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LetsDoStuff.WebApi.Services.DTO
 {
-    public class MayParticipationResponse
+    public class ParticipationResponseForCreator
     {
         public string ContactName { get; set; }
 
@@ -12,8 +12,12 @@ namespace LetsDoStuff.WebApi.Services.DTO
 
         public string ProfileLink { get; set; }
 
+        public int ContactId { get; set; }
+
         public string ActivityName { get; set; }
 
         public int ActicityId { get; set; }
+
+        public bool AcceptAsParticipant { get; set; }
     }
 }

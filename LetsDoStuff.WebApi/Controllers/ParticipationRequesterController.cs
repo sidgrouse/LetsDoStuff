@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
 {
-    [Route("api/participation")]
-    public class ParticipationController : ControllerBase
+    [Route("api/ParticipationRequester")]
+    public class ParticipationRequesterController : ControllerBase
     {
         private readonly IParticipationService _participationService;
 
-        public ParticipationController(IParticipationService participationService)
+        public ParticipationRequesterController(IParticipationService participationService)
         {
             _participationService = participationService;
         }
@@ -75,7 +75,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <returns>All user's activities for Participations.</returns>
         [HttpGet]
         [Authorize]
-        public ActionResult<List<ActivityResponse>> GetUsersParticipations()
+        public ActionResult<List<ParticipationResponseForUser>> GetUsersParticipations()
         {
             try
             {

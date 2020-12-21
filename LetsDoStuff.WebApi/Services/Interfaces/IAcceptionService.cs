@@ -11,8 +11,6 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 
         void Reject(int idCreator, int acticitiId, int participanteId);
 
-        List<MayParticipationResponse> GetAcrivityMayParticipantes(int idCreator, int acticitiId);
-
-        List<MayParticipationResponse> GetAllMayParticipantes(int idCreator);
+        List<ParticipationResponseForCreator> GetAllParticipantes(int idCreator);
     }
 }

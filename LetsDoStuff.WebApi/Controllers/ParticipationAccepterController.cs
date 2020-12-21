@@ -10,23 +10,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
 {
-    [Route("api/acception")]
-    public class AcceptionController : ControllerBase
+    [Route("api/ParticipationAcception")]
+    public class ParticipationAccepterController : ControllerBase
     {
         private readonly IAcceptionService _acceptionService;
 
-        public AcceptionController(IAcceptionService acceptionService)
+        public ParticipationAccepterController(IAcceptionService acceptionService)
         {
             _acceptionService = acceptionService;
         }
 
         [Authorize]
-        [HttpGet("All")]
-        public ActionResult<List<MayParticipationResponse>> GetAllParticipantes(int activityId)
+        [HttpGet]
+        public ActionResult<List<ParticipationResponseForCreator>> GetActivityParticipantes()
         {
             try
             {
-                var activities = _acceptionService.GetAcrivityMayParticipantes(IdUser, activityId);
+                var activities = _acceptionService.GetAllParticipantes(IdUser);
 
                 return activities;
             }
