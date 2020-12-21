@@ -5,6 +5,7 @@ using System.Text;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
 using LetsDoStuff.WebApi.SettingsForAuth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
@@ -19,6 +20,7 @@ namespace LetsDoStuff.WebApi.Controllers
             _acceptionService = acceptionService;
         }
 
+        [Authorize]
         [HttpGet("All")]
         public List<MayParticipationResponse> GetAllParticipantes(int activityId)
         {
@@ -30,6 +32,7 @@ namespace LetsDoStuff.WebApi.Controllers
             return activities;
         }
 
+        [Authorize]
         [HttpPut]
         public IActionResult Accept(int activityId, int participanteId)
         {
@@ -40,6 +43,7 @@ namespace LetsDoStuff.WebApi.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpDelete]
         public IActionResult Reject(int activityId, int participanteId)
         {

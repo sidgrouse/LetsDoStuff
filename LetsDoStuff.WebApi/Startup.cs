@@ -78,6 +78,7 @@ namespace LetsDoStuff.WebApi
             });
 
             services.AddTransient<IActivityService, ActivityManager>();
+            services.AddTransient<IAcceptionService, AcceptionService>();
             services.AddTransient<IParticipationService, ParticipationService>();
             services.AddTransient<IUserService, UserService>();
 
