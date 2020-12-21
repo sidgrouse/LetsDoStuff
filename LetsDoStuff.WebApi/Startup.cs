@@ -74,7 +74,6 @@ namespace LetsDoStuff.WebApi
                         .AllowAnyHeader()
                         .AllowCredentials());
             });
-
             services.AddControllers().AddNewtonsoftJson();
             services.AddOData();
             services.AddSwaggerGen(c =>
