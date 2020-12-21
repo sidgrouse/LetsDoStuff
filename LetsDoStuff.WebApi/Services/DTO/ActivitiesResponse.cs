@@ -10,7 +10,7 @@ namespace LetsDoStuff.WebApi.Services.DTO
 
         public string Description { get; set; }
 
-        public string Date { get; set; }
+        public string DateStart { get; set; }
 
         public List<string> Tags { get; set; }
 

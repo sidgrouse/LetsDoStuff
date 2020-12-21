@@ -29,7 +29,7 @@ namespace LetsDoStuff.WebApi.Services
                     Id = a.Id,
                     Name = a.Name,
                     Description = a.Description,
-                    Date = a.DateStart.ToLongDateString(),
+                    DateStart = a.DateStart.ToLongDateString(),
                     Tags = a.Tags.Select(t => t.Name).ToList()
                 }).ToList();
 
@@ -55,6 +55,7 @@ namespace LetsDoStuff.WebApi.Services
                     Name = activity.Creator.FirstName + " " + activity.Creator.LastName,
                     ProfileLink = activity.Creator.ProfileLink
                 },
+                DateStart = activity.DateStart.ToLongDateString(),
                 Tags = activity.Tags
                     .Select(t => t.Name)
                     .ToList()
