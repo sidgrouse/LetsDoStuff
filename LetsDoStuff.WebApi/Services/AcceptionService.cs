@@ -89,7 +89,7 @@ namespace LetsDoStuff.WebApi.Services
 
                 return mayParticipants.Select(u => new MayParticipationResponse()
                 {
-                    ContactName = u.FirstName + u.FirstName,
+                    ContactName = u.FirstName + " " + u.LastName,
                     Email = u.Email,
                     ProfileLink = u.ProfileLink,
                     ActivityName = creatorActivity.Name,
