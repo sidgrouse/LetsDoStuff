@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace LetsDoStuff.WebApi.Controllers
 {
     [ApiController]
-    [Route("api")]
+    [Route("api/users")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -28,7 +28,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <returns>All users.</returns>
         [Authorize]
-        [HttpGet("users")]
+        [HttpGet]
         public ActionResult<List<UserSettingsResponse>> GetAllUsers()
         {
             var role = HttpContext.User.Claims

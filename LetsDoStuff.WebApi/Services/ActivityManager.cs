@@ -23,13 +23,13 @@ namespace LetsDoStuff.WebApi.Services
         public List<ActivitiesResponse> GetAllActivities()
         {
             var activities = db.Activities.AsNoTracking()
-                .OrderBy(o => o.Date)
+                .OrderBy(o => o.DateStart)
                 .Select(a => new ActivitiesResponse()
                 {
                     Id = a.Id,
                     Name = a.Name,
                     Description = a.Description,
-                    Date = a.Date.ToLongDateString(),
+                    Date = a.DateStart.ToLongDateString(),
                     Tags = a.Tags.Select(t => t.Name).ToList()
                 }).ToList();
 

@@ -36,7 +36,7 @@ namespace LetsDoStuff.Domain.Models
         /// Gets or sets a date to start the activity.
         /// </summary>
         [Required]
-        public DateTime Date { get; set; }
+        public DateTime DateStart { get; set; }
 
         /// <summary>
         /// Gets or sets participants of the activities.
