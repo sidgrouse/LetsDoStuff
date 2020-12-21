@@ -7,12 +7,12 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 {
     public interface IAcceptionService
     {
-        void Accept(int participanteId);
+        void Accept(int idCreator, int acticitiId, int participanteId);
 
-        void Reject(int participanteId);
+        void Reject(int idCreator, int acticitiId, int participanteId);
 
-        List<UserResponse> GetAcrivityParticipantes(int ActicitiId);
+        List<MayParticipationResponse> GetAcrivityMayParticipantes(int idCreator, int acticitiId);
 
-        List<UserResponse> GetAllParticipantes();
+        List<MayParticipationResponse> GetAllMayParticipantes(int idCreator);
     }
 }

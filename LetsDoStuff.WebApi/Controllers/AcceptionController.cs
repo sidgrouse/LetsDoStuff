@@ -19,31 +19,34 @@ namespace LetsDoStuff.WebApi.Controllers
             _acceptionService = acceptionService;
         }
 
-        public List<UserResponse> GetActivities()
+        [HttpGet("All")]
+        public List<MayParticipationResponse> GetAllParticipantes(int activityId)
         {
             var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
-            var activities = _acceptionService.GetAllParticipantes();
+            var activities = _acceptionService.GetAcrivityMayParticipantes(idUser, activityId);
 
             return activities;
         }
 
-        public IActionResult Accept(int participanteId)
+        [HttpPut]
+        public IActionResult Accept(int activityId, int participanteId)
         {
             var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
-            _acceptionService.Accept(participanteId);
+            _acceptionService.Accept(idUser, activityId, participanteId);
             return Ok();
         }
 
-        public IActionResult Reject(int participanteId)
+        [HttpDelete]
+        public IActionResult Reject(int activityId, int participanteId)
         {
             var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
-            _acceptionService.Reject(participanteId);
+            _acceptionService.Reject(idUser, activityId, participanteId);
             return Ok();
         }
     }

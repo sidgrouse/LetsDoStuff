@@ -40,5 +40,7 @@ namespace LetsDoStuff.Domain.Models
         /// Gets or sets the list of Tags.
         /// </summary>
         public List<Tag> Tags { get; set; } = new List<Tag>();
+
+        public List<ActivityUser> ParticipantСertificates { get; set; } = new List<ActivityUser>();
     }
 }
