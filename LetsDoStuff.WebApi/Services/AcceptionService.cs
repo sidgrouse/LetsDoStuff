@@ -75,9 +75,30 @@ namespace LetsDoStuff.WebApi.Services
             }
         }
 
-        public List<ParticipationResponseForCreator> GetAllParticipantes(int idCreator)
+        public List<ParticipationResponseForCreator> GetAllParticipations(int idCreator)
         {
-            throw new NotImplementedException();
+            var activitiesOfCreator = db.Activities.AsNoTracking()
+                .Include(a => a.ParticipantСertificates)
+                .ThenInclude(pc => pc.User)
+                .Where(a => a.CreatorId == idCreator).ToList();
+
+            List<ParticipationResponseForCreator> result = new List<ParticipationResponseForCreator>();
+
+            foreach (var activity in activitiesOfCreator)
+            {
+                result.AddRange(activity.ParticipantСertificates.Select(pc => new ParticipationResponseForCreator()
+                {
+                    ActivityName = activity.Name,
+                    ActicityId = activity.Id,
+                    ContactName = pc.User.FirstName + " " + pc.User.LastName,
+                    ContactId = pc.User.Id,
+                    Email = pc.User.Email,
+                    ProfileLink = pc.User.ProfileLink,
+                    AcceptAsParticipant = pc.IsParticipante
+                }));
+            }
+
+            return result;
         }
     }
 }

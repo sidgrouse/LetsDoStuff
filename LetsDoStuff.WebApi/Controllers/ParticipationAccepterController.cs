@@ -26,7 +26,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                var activities = _acceptionService.GetAllParticipantes(IdUser);
+                var activities = _acceptionService.GetAllParticipations(IdUser);
 
                 return activities;
             }
@@ -50,7 +50,7 @@ namespace LetsDoStuff.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+  
         [Authorize]
         [HttpDelete]
         public IActionResult Reject(int activityId, int participanteId)
