@@ -20,6 +20,25 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
+        /// Get user's info about activities for participation.
+        /// </summary>
+        /// <returns>All information about user's participations.</returns>
+        [HttpGet]
+        [Authorize]
+        public ActionResult<List<ParticipationResponseForUser>> GetUsersParticipations()
+        {
+            try
+            {
+                var userinfo = _participationRequester.GetUsersParticipations(UserId);
+                return userinfo;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Add an Activity to User's Participations.
         /// </summary>
         /// <param name="request">The Id of an Activity.</param>
@@ -56,25 +75,6 @@ namespace LetsDoStuff.WebApi.Controllers
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Get all user's Activities for participation.
-        /// </summary>
-        /// <returns>All user's activities for Participations.</returns>
-        [HttpGet]
-        [Authorize]
-        public ActionResult<List<ParticipationResponseForUser>> GetUsersParticipations()
-        {
-            try
-            {
-                var userinfo = _participationRequester.GetUsersParticipations(UserId);
-                return userinfo;
             }
             catch (Exception ex)
             {

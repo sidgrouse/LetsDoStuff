@@ -43,6 +43,9 @@ namespace LetsDoStuff.Domain.Models
         /// </summary>
         public List<Tag> Tags { get; set; } = new List<Tag>();
 
+        /// <summary>
+        /// Gets or sets ParticipantsTickets that were created for checking participations.
+        /// </summary>
         public List<ParticipantsTicket> ParticipantsTickets { get; set; } = new List<ParticipantsTicket>();
     }
 }

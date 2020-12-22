@@ -20,6 +20,10 @@ namespace LetsDoStuff.WebApi.Controllers
             _participationAccepter = participationAccepter;
         }
 
+        /// <summary>
+        /// Get Creator's info about all may participants that could help you with acception and Rejection.
+        /// </summary>
+        /// <returns>All information about participations that helps a creator to accept/reject users.</returns>
         [Authorize]
         [HttpGet]
         public ActionResult<List<ParticipationResponseForCreator>> GetActivityParticipantes()
@@ -36,13 +40,18 @@ namespace LetsDoStuff.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Accept a user as Participant.
+        /// </summary>
+        /// <param name="acceptReject">The Id of a Activity and the Id of a participant.</param>
+        /// <returns>Action result.</returns>
         [Authorize]
         [HttpPut]
-        public IActionResult AcceptParticipant(int activityId, int participanteId)
+        public IActionResult AcceptParticipant(AcceptRejectRequest acceptReject)
         {
             try
             {
-                _participationAccepter.AcceptParticipation(UserId, activityId, participanteId);
+                _participationAccepter.AcceptParticipation(UserId, acceptReject.ActivityId, acceptReject.ParticipanteId);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -50,14 +59,19 @@ namespace LetsDoStuff.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-  
+
+        /// <summary>
+        /// Reject a user as Participant.
+        /// </summary>
+        /// <param name="rejectRequest">The Id of a Activity and the Id of a participant.</param>
+        /// /// <returns>Action result.</returns>
         [Authorize]
         [HttpDelete]
-        public IActionResult RejectParticipant(int activityId, int participanteId)
+        public IActionResult RejectParticipant(AcceptRejectRequest rejectRequest)
         {
             try
             {
-                _participationAccepter.RejectParticipation(UserId, activityId, participanteId);
+                _participationAccepter.RejectParticipation(UserId, rejectRequest.ActivityId, rejectRequest.ParticipanteId);
                 return Ok();
             }
            catch (ArgumentException ex)
