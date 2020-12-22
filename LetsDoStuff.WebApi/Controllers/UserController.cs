@@ -72,8 +72,8 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <param name="newSettings">New user settings.</param>
         /// <returns>Result of edit settings attempt.</returns>
         [Authorize]
-        [HttpPost("edit")]
-        public ActionResult EditUserSettings(EditUserSettingsCommand newSettings)
+        [HttpPatch("edit")]
+        public ActionResult EditUserSettings(EditUserSettingsRequest newSettings)
         {
             var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == AuthConstants.IdClaimType)
@@ -85,6 +85,10 @@ namespace LetsDoStuff.WebApi.Controllers
             catch (ArgumentException ae)
             {
                 return BadRequest(ae.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { errorText = "Settings were not changed." });
             }
 
             return Ok(new { result = "Settings successfully changed." });

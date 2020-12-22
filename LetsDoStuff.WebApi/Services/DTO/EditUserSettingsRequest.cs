@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LetsDoStuff.WebApi.Services.DTO
 {
-    public class EditUserSettingsCommand
+    public class EditUserSettingsRequest
     {
         public string ProfileLink { get; set; }
 

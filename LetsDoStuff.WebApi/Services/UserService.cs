@@ -37,65 +37,52 @@ namespace LetsDoStuff.WebApi.Services
             };
         }
 
-        public void EditUserSettings(EditUserSettingsCommand newSettings, int id)
+        public void EditUserSettings(EditUserSettingsRequest newSettings, int id)
         {
-            using var transaction = _context.Database.BeginTransaction();
-            try
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+
+            if (newSettings.Password != _context.Users.FirstOrDefault(u => u.Id == id).Password)
             {
-                if (newSettings.Password != _context.Users.FirstOrDefault(u => u.Id == id).Password)
-                {
-                    throw new ArgumentException($"Incorrect password");
-                }
-
-                if (newSettings.Email != string.Empty)
-                {
-                    EmailValidation(newSettings.Email);
-                    _context.Users.FirstOrDefault(u => u.Id == id).Email = newSettings.Email;
-                }
-
-                if (newSettings.ProfileLink != string.Empty)
-                {
-                    _context.Users.FirstOrDefault(u => u.Id == id).ProfileLink = newSettings.ProfileLink;
-                }
-
-                if (newSettings.FirstName != string.Empty)
-                {
-                    _context.Users.FirstOrDefault(u => u.Id == id).FirstName = newSettings.FirstName;
-                }
-
-                if (newSettings.LastName != string.Empty)
-                {
-                    _context.Users.FirstOrDefault(u => u.Id == id).LastName = newSettings.LastName;
-                }
-
-                if (newSettings.Bio != string.Empty)
-                {
-                    _context.Users.FirstOrDefault(u => u.Id == id).Bio = newSettings.Bio;
-                }
-
-                if (newSettings.NewPassword != string.Empty)
-                {
-                    _context.Users.FirstOrDefault(u => u.Id == id).Password = newSettings.NewPassword;
-                }
-
-                if (newSettings.DateOfBirth != null)
-                {
-                    _context.Users.FirstOrDefault(u => u.Id == id).DateOfBirth = newSettings.DateOfBirth;
-                }
+                throw new ArgumentException($"Incorrect password");
             }
-            catch (ArgumentException ae)
+
+            if (newSettings.Email != string.Empty && newSettings.Email != null)
             {
-                transaction.Rollback();
-                throw ae;
+                EmailValidation(newSettings.Email);
+                user.Email = newSettings.Email;
             }
-            catch (Exception)
+
+            if (newSettings.ProfileLink != string.Empty && newSettings.ProfileLink != null)
             {
-                transaction.Rollback();
-                throw new ArgumentException($"Settings are not changed");
+                user.ProfileLink = newSettings.ProfileLink;
+            }
+
+            if (newSettings.FirstName != string.Empty && newSettings.FirstName != null)
+            {
+                user.FirstName = newSettings.FirstName;
+            }
+
+            if (newSettings.LastName != string.Empty && newSettings.LastName != null)
+            {
+                user.LastName = newSettings.LastName;
+            }
+
+            if (newSettings.Bio != null)
+            {
+                user.Bio = newSettings.Bio;
+            }
+
+            if (newSettings.NewPassword != string.Empty && newSettings.NewPassword != null)
+            {
+                user.Password = newSettings.NewPassword;
+            }
+
+            if (newSettings.DateOfBirth != null)
+            {
+                user.DateOfBirth = newSettings.DateOfBirth;
             }
 
             _context.SaveChanges();
-            transaction.Commit();
         }
 
         public UserResponse GetUserByProfileLink(string profileLink)
