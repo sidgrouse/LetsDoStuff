@@ -49,25 +49,18 @@ namespace LetsDoStuff.WebApi.Services
 
         public void Reject(int idCreator, int acticitiId, int participanteId)
         {
-            var activityCreator = db.Activities.Include(a => a.ParticipantsTickets)
+            var activityCreator = db.Activities.Include(a => a.Participants)
                 .FirstOrDefault(a => a.Id == acticitiId)
                 ?? throw new ArgumentException($"Activity with id {acticitiId} has not been found");
 
             if (activityCreator.CreatorId == idCreator)
             {
-                var pc = activityCreator.ParticipantsTickets.FirstOrDefault(pc => pc.UserId == participanteId)
-                    ?? throw new ArgumentException($"User with id {participanteId} has not been found like someone who's willing take a part in the Activity with id {acticitiId}");
+                var rejectingUser = activityCreator.Participants.FirstOrDefault(u => u.Id == participanteId)
+                    ?? throw new ArgumentException($"User with id {participanteId} has not been found");
 
-                if (pc.IsParticipante)
-                {
-                    pc.IsParticipante = false;
-                    db.SaveChanges();
-                    return;
-                }
-                else
-                {
-                    throw new ArgumentException($"User with id {participanteId} has already been marked as participante");
-                }
+                activityCreator.Participants.Remove(rejectingUser);
+                db.SaveChanges();
+                return;
             }
             else
             {

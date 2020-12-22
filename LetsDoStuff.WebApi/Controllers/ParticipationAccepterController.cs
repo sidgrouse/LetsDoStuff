@@ -45,7 +45,7 @@ namespace LetsDoStuff.WebApi.Controllers
                 _participationAccepter.Accept(IdUser, activityId, participanteId);
                 return Ok();
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -60,7 +60,7 @@ namespace LetsDoStuff.WebApi.Controllers
                 _participationAccepter.Reject(IdUser, activityId, participanteId);
                 return Ok();
             }
-           catch (Exception ex)
+           catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
