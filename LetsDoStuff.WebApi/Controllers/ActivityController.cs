@@ -1,16 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
 using LetsDoStuff.WebApi.SettingsForAuth;
+using Microsoft.AspNet.OData;
+using Microsoft.AspNet.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
 {
-    [Route("api/activity")]
+    [Route("api/activities")]
     public class ActivityController : ControllerBase
     {
         private readonly IActivityService _activityService;
@@ -21,12 +23,12 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
-        /// Get list of activities.
+        /// Get list of activities ordered by date.
         /// </summary>
         /// <returns>All activities.</returns>
-        [Authorize]
-        [HttpGet("all")]
-        public List<ActivityResponse> GetActivities()
+        [HttpGet]
+        [EnableQuery(EnsureStableOrdering = false, AllowedQueryOptions = AllowedQueryOptions.Filter | AllowedQueryOptions.Top | AllowedQueryOptions.Skip, PageSize = 20)]
+        public List<ActivitiesResponse> GetActivities()
         {
             var activities = _activityService.GetAllActivities();
 
