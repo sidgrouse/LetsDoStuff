@@ -50,6 +50,7 @@ namespace LetsDoStuff.WebApi.Controllers
             {
                 access_token = encodedJwt
             };
+
             return Json(response);
         }
 

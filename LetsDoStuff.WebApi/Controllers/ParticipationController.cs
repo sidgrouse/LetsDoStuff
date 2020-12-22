@@ -13,10 +13,12 @@ namespace LetsDoStuff.WebApi.Controllers
     public class ParticipationController : ControllerBase
     {
         private readonly IParticipationService _participationService;
+        private readonly IHubNotifier _hubNotifier;
 
-        public ParticipationController(IParticipationService participationService)
+        public ParticipationController(IParticipationService participationService, IHubNotifier hubNotifier)
         {
             _participationService = participationService;
+            _hubNotifier = hubNotifier;
         }
 
         /// <summary>
@@ -34,6 +36,7 @@ namespace LetsDoStuff.WebApi.Controllers
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
                 _participationService.AddParticipation(idUser, request.IdActivity);
+                _hubNotifier.NotifyAboutNewParticipationRequest(request.IdActivity, idUser);
                 return Ok();
             }
             catch (ArgumentException ex)

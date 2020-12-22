@@ -14,12 +14,10 @@ namespace LetsDoStuff.WebApi.Services
     public class ParticipationService : IParticipationService
     {
         private readonly LdsContext db;
-        private readonly IHubContext<SampleHub> _hubContext;
 
-        public ParticipationService(LdsContext context, IHubContext<SampleHub> hubContext)
+        public ParticipationService(LdsContext context)
         {
             db = context;
-            _hubContext = hubContext;
         }
 
         public void AddParticipation(int idUser, int idActivity)
@@ -40,7 +38,6 @@ namespace LetsDoStuff.WebApi.Services
             }
 
             user.ParticipationActivities.Add(activity);
-            _hubContext.Clients.User(activity.Creator.Id.ToString()).SendAsync("Notify", "Someone gonna take a part in your Activity");
 
             db.SaveChanges();
         }
@@ -62,7 +59,6 @@ namespace LetsDoStuff.WebApi.Services
                 throw new ArgumentException($"{user.Email} hasn't participated in the event with id {activity.Id}");
             }
 
-            _hubContext.Clients.User(activity.Creator.Id.ToString()).SendAsync("Notify", "Someone dont't want to take a part in your Activity");
             user.ParticipationActivities.Remove(activity);
             db.SaveChanges();
         }

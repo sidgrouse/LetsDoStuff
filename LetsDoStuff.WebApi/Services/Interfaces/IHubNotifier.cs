@@ -6,10 +6,10 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 {
     public interface IHubNotifier
     {
-        void NotifyAboutNewParticipationRequest();
+        void NotifyAboutNewParticipationRequest(int activiyId, int userId);
 
-        void NotifyAboutOwnerActivitiesAnswering();
+        void NotifyAboutOwnerActivitiesAnswering(int activitId, int userId, bool isAccepted);
 
-        void NotifyAboutInvitations();
+        void NotifyAboutInvitations(int creatorId, int activityId, int userId);
     }
 }
