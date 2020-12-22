@@ -4,14 +4,16 @@ using LetsDoStuff.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LetsDoStuff.Domain.Migrations
 {
     [DbContext(typeof(LdsContext))]
-    partial class LdsContextModelSnapshot : ModelSnapshot
+    [Migration("20201218034701_AddDateofActivity")]
+    partial class AddDateofActivity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,7 +64,7 @@ namespace LetsDoStuff.Domain.Migrations
                     b.Property<int>("CreatorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateStart")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")

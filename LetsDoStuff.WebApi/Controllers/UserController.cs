@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace LetsDoStuff.WebApi.Controllers
 {
     [ApiController]
-    [Route("api")]
+    [Route("api/users")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -20,6 +21,27 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             _userService = userService;
             _logger = logger;
+        }
+
+        /// <summary>
+        /// Get list of all users. To access this you need to have the "Admin" role.
+        /// </summary>
+        /// <returns>All users.</returns>
+        [Authorize]
+        [HttpGet]
+        public ActionResult<List<UserSettingsResponse>> GetAllUsers()
+        {
+            var role = HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.RoleClaimType)
+                    .First().Value;
+            if (!(role == AuthConstants.AdminRoleName))
+            {
+                return Forbid();
+            }
+
+            var users = _userService.GetAllUsers();
+
+            return users;
         }
 
         /// <summary>
@@ -109,7 +131,7 @@ namespace LetsDoStuff.WebApi.Controllers
                 _logger.LogError(e, $"{DateTime.Now}");
             }
 
-            return Ok();
+            return Ok(new { result = "Registration completed successfully." });
         }
     }
 }

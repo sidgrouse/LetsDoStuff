@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace LetsDoStuff.Domain.Models
@@ -32,7 +33,13 @@ namespace LetsDoStuff.Domain.Models
         public User Creator { get; set; }
 
         /// <summary>
-        /// Gets or sets participants of the actibities.
+        /// Gets or sets a date to start the activity.
+        /// </summary>
+        [Required]
+        public DateTime DateStart { get; set; }
+
+        /// <summary>
+        /// Gets or sets participants of the activities.
         /// </summary>
         public List<User> Participants { get; set; } = new List<User>();
 
