@@ -10,11 +10,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
 {
-    public class AcceptionService : IAcceptionService
+    public class ParticipationAccepterService : IParticipationAccepterService
     {
         private readonly LdsContext db;
 
-        public AcceptionService(LdsContext context)
+        public ParticipationAccepterService(LdsContext context)
         {
             db = context;
         }

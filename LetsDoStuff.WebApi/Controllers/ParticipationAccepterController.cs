@@ -13,11 +13,11 @@ namespace LetsDoStuff.WebApi.Controllers
     [Route("api/ParticipationAcception")]
     public class ParticipationAccepterController : ControllerBase
     {
-        private readonly IAcceptionService _acceptionService;
+        private readonly IParticipationAccepterService _participationAccepter;
 
-        public ParticipationAccepterController(IAcceptionService acceptionService)
+        public ParticipationAccepterController(IParticipationAccepterService participationAccepter)
         {
-            _acceptionService = acceptionService;
+            _participationAccepter = participationAccepter;
         }
 
         [Authorize]
@@ -26,7 +26,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                var activities = _acceptionService.GetAllParticipations(IdUser);
+                var activities = _participationAccepter.GetAllParticipations(IdUser);
 
                 return activities;
             }
@@ -42,7 +42,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                _acceptionService.Accept(IdUser, activityId, participanteId);
+                _participationAccepter.Accept(IdUser, activityId, participanteId);
                 return Ok();
             }
             catch (Exception ex)
@@ -57,7 +57,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                _acceptionService.Reject(IdUser, activityId, participanteId);
+                _participationAccepter.Reject(IdUser, activityId, participanteId);
                 return Ok();
             }
            catch (Exception ex)

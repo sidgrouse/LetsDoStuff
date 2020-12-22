@@ -12,11 +12,11 @@ namespace LetsDoStuff.WebApi.Controllers
     [Route("api/ParticipationRequester")]
     public class ParticipationRequesterController : ControllerBase
     {
-        private readonly IParticipationService _participationService;
+        private readonly IParticipationRequesterService _participationRequester;
 
-        public ParticipationRequesterController(IParticipationService participationService)
+        public ParticipationRequesterController(IParticipationRequesterService participationRequester)
         {
-            _participationService = participationService;
+            _participationRequester = participationRequester;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace LetsDoStuff.WebApi.Controllers
                 var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
-                _participationService.AddParticipation(idUser, request.IdActivity);
+                _participationRequester.AddParticipation(idUser, request.IdActivity);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -56,7 +56,7 @@ namespace LetsDoStuff.WebApi.Controllers
                 var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
-                _participationService.RemoveParticipation(idUser, request.IdActivity);
+                _participationRequester.RemoveParticipation(idUser, request.IdActivity);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -82,7 +82,7 @@ namespace LetsDoStuff.WebApi.Controllers
                 var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
-                var userinfo = _participationService.GetUsersParticipations(idUser);
+                var userinfo = _participationRequester.GetUsersParticipations(idUser);
                 return userinfo;
             }
             catch (Exception ex)
