@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace LetsDoStuff.WebApi.Services.DTO
 {
-    public sealed class ActivityResponse
+    public sealed class ActivitiesResponse
     {
         public int Id { get; set; }
 
@@ -11,15 +10,11 @@ namespace LetsDoStuff.WebApi.Services.DTO
 
         public string Description { get; set; }
 
-        public int Capacity { get; set; }
-
-        public ActivityCreatorResponse Creator { get; set; }
-
         public string DateStart { get; set; }
 
         public List<string> Tags { get; set; }
 
-        public ActivityResponse()
+        public ActivitiesResponse()
         {
             Tags = new List<string>();
         }

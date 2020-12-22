@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
@@ -50,6 +51,25 @@ namespace LetsDoStuff.WebApi.Services
                 DateOfBirth = user.DateOfBirth?.Date.ToLongDateString() ?? string.Empty,
                 Role = user.Role,
             };
+        }
+
+        public List<UserSettingsResponse> GetAllUsers()
+        {
+            var user = _context.Users.AsNoTracking().ToList();
+            var users = _context.Users.AsNoTracking()
+                .Select(u => new UserSettingsResponse()
+                {
+                    ProfileLink = u.ProfileLink,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email,
+                    Bio = u.Bio ?? string.Empty,
+                    DateOfBirth = u.DateOfBirth.Value.Date.ToLongDateString() ?? string.Empty,
+                    DateOfRegistration = u.DateOfRegistration.Date.ToLongDateString(),
+                    Role = u.Role
+                }).ToList();
+
+            return users;
         }
 
         public void RegisterUser(RegisterRequest userData)

@@ -20,20 +20,16 @@ namespace LetsDoStuff.WebApi.Services
             db = context;
         }
 
-        public List<ActivityResponse> GetAllActivities()
+        public List<ActivitiesResponse> GetAllActivities()
         {
             var activities = db.Activities.AsNoTracking()
-                .Select(a => new ActivityResponse()
+                .OrderBy(o => o.DateStart)
+                .Select(a => new ActivitiesResponse()
                 {
                     Id = a.Id,
                     Name = a.Name,
                     Description = a.Description,
-                    Capacity = a.Capacity,
-                    Creator = new ActivityCreatorResponse()
-                    {
-                        Name = a.Creator.FirstName + " " + a.Creator.LastName,
-                        ProfileLink = a.Creator.ProfileLink
-                    },
+                    DateStart = a.DateStart.ToLongDateString(),
                     Tags = a.Tags.Select(t => t.Name).ToList()
                 }).ToList();
 
@@ -59,15 +55,28 @@ namespace LetsDoStuff.WebApi.Services
                     Name = activity.Creator.FirstName + " " + activity.Creator.LastName,
                     ProfileLink = activity.Creator.ProfileLink
                 },
+                DateStart = activity.DateStart.ToLongDateString(),
                 Tags = activity.Tags
                     .Select(t => t.Name)
                     .ToList()
             };
         }
 
-        public void CreateActivity(CreateActivityCommand newActivity, int userId)
+        public List<TagResponse> GetAvailableTags()
         {
-            var creator = db.Users.FirstOrDefault(u => u.Id == userId);
+            var tags = db.Tags.AsNoTracking()
+                .Select(t => new TagResponse()
+                {
+                    Id = t.Id,
+                    Name = t.Name
+                }).ToList();
+
+            return tags;
+        }
+
+        public void CreateActivity(CreateActivityCommand newActivity, int idUser)
+        {
+            var creator = db.Users.FirstOrDefault(u => u.Id == idUser);
 
             var activity = new Activity
             {
