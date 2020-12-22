@@ -19,61 +19,61 @@ namespace LetsDoStuff.WebApi.Services
             db = context;
         }
 
-        public void Accept(int idCreator, int acticitiId, int participanteId)
+        public void AcceptParticipation(int creatorId, int acticitiId, int participantId)
         {
-            var activityCreator = db.Activities.Include(a => a.ParticipantsTickets)
+            var activity = db.Activities.Include(a => a.ParticipantsTickets)
                 .FirstOrDefault(a => a.Id == acticitiId)
                 ?? throw new ArgumentException($"Activity with id {acticitiId} has not been found");
 
-            if (activityCreator.CreatorId == idCreator)
+            if (activity.CreatorId == creatorId)
             {
-                var pc = activityCreator.ParticipantsTickets.FirstOrDefault(pc => pc.UserId == participanteId)
-                    ?? throw new ArgumentException($"User with id {participanteId} has not been found like someone who's willing take a part in the Activity with id {acticitiId}");
+                var participantTicket = activity.ParticipantsTickets.FirstOrDefault(pc => pc.UserId == participantId)
+                    ?? throw new ArgumentException($"User with id {participantId} has not been found like someone who's willing take a part in the Activity with id {acticitiId}");
 
-                if (!pc.IsParticipante)
+                if (!participantTicket.IsParticipant)
                 {
-                    pc.IsParticipante = true;
+                    participantTicket.IsParticipant = true;
                     db.SaveChanges();
                     return;
                 }
                 else
                 {
-                    throw new ArgumentException($"User with id {participanteId} has already been marked as participante");
+                    throw new ArgumentException($"User with id {participantId} has already been marked as participante");
                 }
             }
             else
             {
-                throw new ArgumentException($"User with id {idCreator} is not the creator of the activity {acticitiId}!");
+                throw new ArgumentException($"Sorry, but you are not a creator of the activity with id {creatorId}!");
             }
         }
 
-        public void Reject(int idCreator, int acticitiId, int participanteId)
+        public void RejectParticipation(int creatorId, int acticitiId, int participanteId)
         {
-            var activityCreator = db.Activities.Include(a => a.Participants)
+            var activity = db.Activities.Include(a => a.Participants)
                 .FirstOrDefault(a => a.Id == acticitiId)
                 ?? throw new ArgumentException($"Activity with id {acticitiId} has not been found");
 
-            if (activityCreator.CreatorId == idCreator)
+            if (activity.CreatorId == creatorId)
             {
-                var rejectingUser = activityCreator.Participants.FirstOrDefault(u => u.Id == participanteId)
+                var rejectingUser = activity.Participants.FirstOrDefault(u => u.Id == participanteId)
                     ?? throw new ArgumentException($"User with id {participanteId} has not been found");
 
-                activityCreator.Participants.Remove(rejectingUser);
+                activity.Participants.Remove(rejectingUser);
                 db.SaveChanges();
                 return;
             }
             else
             {
-                throw new ArgumentException($"User with id {idCreator} is not the creator of the activity {acticitiId}!");
+                throw new ArgumentException($"Sorry, but you are not a creator of the activity with id {creatorId}!");
             }
         }
 
-        public List<ParticipationResponseForCreator> GetAllParticipations(int idCreator)
+        public List<ParticipationResponseForCreator> GetAllParticipations(int creatorId)
         {
             var activitiesOfCreator = db.Activities.AsNoTracking()
                 .Include(a => a.ParticipantsTickets)
                 .ThenInclude(pc => pc.User)
-                .Where(a => a.CreatorId == idCreator).ToList();
+                .Where(a => a.CreatorId == creatorId).ToList();
 
             List<ParticipationResponseForCreator> result = new List<ParticipationResponseForCreator>();
 
@@ -87,7 +87,7 @@ namespace LetsDoStuff.WebApi.Services
                     ContactId = pc.User.Id,
                     Email = pc.User.Email,
                     ProfileLink = pc.User.ProfileLink,
-                    AcceptAsParticipant = pc.IsParticipante
+                    AcceptAsParticipant = pc.IsParticipant
                 }));
             }
 

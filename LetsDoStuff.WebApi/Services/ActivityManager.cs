@@ -65,9 +65,9 @@ namespace LetsDoStuff.WebApi.Services
             };
         }
 
-        public void CreateActivity(CreateActivityCommand newActivity, int idUser)
+        public void CreateActivity(CreateActivityCommand newActivity, int userId)
         {
-            var creator = db.Users.FirstOrDefault(u => u.Id == idUser);
+            var creator = db.Users.FirstOrDefault(u => u.Id == userId);
 
             var activity = new Activity
             {

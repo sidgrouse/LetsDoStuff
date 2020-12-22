@@ -45,7 +45,7 @@ namespace LetsDoStuff.Domain
                     .HasForeignKey(au => au.UserId),
                 j =>
                 {
-                    j.Property(au => au.IsParticipante).HasDefaultValue(false);
+                    j.Property(au => au.IsParticipant).HasDefaultValue(false);
                     j.HasKey(au => new { au.ActivityId, au.UserId });
                 });
         }

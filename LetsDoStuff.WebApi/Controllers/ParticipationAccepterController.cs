@@ -26,7 +26,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                var activities = _participationAccepter.GetAllParticipations(IdUser);
+                var activities = _participationAccepter.GetAllParticipations(UserId);
 
                 return activities;
             }
@@ -38,11 +38,11 @@ namespace LetsDoStuff.WebApi.Controllers
 
         [Authorize]
         [HttpPut]
-        public IActionResult Accept(int activityId, int participanteId)
+        public IActionResult AcceptParticipant(int activityId, int participanteId)
         {
             try
             {
-                _participationAccepter.Accept(IdUser, activityId, participanteId);
+                _participationAccepter.AcceptParticipation(UserId, activityId, participanteId);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -53,11 +53,11 @@ namespace LetsDoStuff.WebApi.Controllers
   
         [Authorize]
         [HttpDelete]
-        public IActionResult Reject(int activityId, int participanteId)
+        public IActionResult RejectParticipant(int activityId, int participanteId)
         {
             try
             {
-                _participationAccepter.Reject(IdUser, activityId, participanteId);
+                _participationAccepter.RejectParticipation(UserId, activityId, participanteId);
                 return Ok();
             }
            catch (ArgumentException ex)
@@ -66,7 +66,7 @@ namespace LetsDoStuff.WebApi.Controllers
             }
         }
 
-        private int IdUser => int.Parse(this.HttpContext.User.Claims
+        private int UserId => int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
     }

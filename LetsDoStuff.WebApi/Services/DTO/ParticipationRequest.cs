@@ -6,6 +6,6 @@ namespace LetsDoStuff.WebApi.Services.DTO
 {
     public class ParticipationRequest
     {
-        public int IdActivity { get; set; }
+        public int ActivityId { get; set; }
     }
 }

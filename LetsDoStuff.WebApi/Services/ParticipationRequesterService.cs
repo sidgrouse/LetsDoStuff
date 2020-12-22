@@ -19,16 +19,16 @@ namespace LetsDoStuff.WebApi.Services
             db = context;
         }
 
-        public void AddParticipation(int idUser, int idActivity)
+        public void AddParticipation(int userId, int activityId)
         {
-            User user = db.Users.Where(h => h.Id == idUser)
+            User user = db.Users.Where(h => h.Id == userId)
                 .Include(u => u.ParticipationActivities)
                 .FirstOrDefault()
-                 ?? throw new ArgumentException($"User with id {idUser} has not been found");
+                 ?? throw new ArgumentException($"User with id {userId} has not been found");
 
             Activity activity = db.Activities
-                .Find(idActivity)
-                ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
+                .Find(activityId)
+                ?? throw new ArgumentException($"Activity with id {activityId} has not been found");
 
             if (user.ParticipationActivities.Contains(activity))
             {
@@ -40,16 +40,16 @@ namespace LetsDoStuff.WebApi.Services
             db.SaveChanges();
         }
 
-        public void RemoveParticipation(int idUser, int idActivity)
+        public void RemoveParticipation(int userId, int activityId)
         {
-            User user = db.Users.Where(h => h.Id == idUser)
+            User user = db.Users.Where(h => h.Id == userId)
                 .Include(u => u.ParticipationActivities)
                 .FirstOrDefault()
-                ?? throw new ArgumentException($"User with id {idUser} has not been found");
+                ?? throw new ArgumentException($"User with id {userId} has not been found");
 
             Activity activity = db.Activities
-                .Find(idActivity)
-                ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
+                .Find(activityId)
+                ?? throw new ArgumentException($"Activity with id {activityId} has not been found");
 
             if (!user.ParticipationActivities.Contains(activity))
             {
@@ -78,7 +78,7 @@ namespace LetsDoStuff.WebApi.Services
                    Name = a.Name,
                    Description = a.Description,
                    Capacity = a.Capacity,
-                   AcceptAsParticipant = a.ParticipantsTickets.FirstOrDefault(pc => pc.UserId == userId).IsParticipante,
+                   AcceptAsParticipant = a.ParticipantsTickets.FirstOrDefault(pc => pc.UserId == userId).IsParticipant,
                    Creator = new ActivityCreatorResponse()
                    {
                        Name = a.Creator.FirstName,

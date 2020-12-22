@@ -17,6 +17,6 @@ namespace LetsDoStuff.Domain.Models
         public int ActivityId { get; set; }
 
         [Required]
-        public bool IsParticipante { get; set; }
+        public bool IsParticipant { get; set; }
     }
 }

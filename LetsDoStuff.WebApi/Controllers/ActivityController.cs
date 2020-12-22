@@ -63,11 +63,11 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                var idUser = int.Parse(this.HttpContext.User.Claims
+                var userId = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == AuthConstants.IdClaimType)
                     .First().Value);
 
-                _activityService.CreateActivity(newActivity, idUser);
+                _activityService.CreateActivity(newActivity, userId);
                 return Ok();
             }
             catch (ArgumentException ex)

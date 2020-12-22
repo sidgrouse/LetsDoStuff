@@ -7,9 +7,9 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 {
     public interface IParticipationRequesterService
     {
-        void AddParticipation(int idUser, int idActivity);
+        void AddParticipation(int userId, int activityId);
 
-        void RemoveParticipation(int idUser, int idActivity);
+        void RemoveParticipation(int userId, int activityId);
 
         List<ParticipationResponseForUser> GetUsersParticipations(int userId);
     }

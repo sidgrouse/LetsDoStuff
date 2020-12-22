@@ -30,10 +30,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == AuthConstants.IdClaimType)
-                    .First().Value);
-                _participationRequester.AddParticipation(idUser, request.IdActivity);
+                _participationRequester.AddParticipation(UserId, request.ActivityId);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -53,10 +50,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == AuthConstants.IdClaimType)
-                    .First().Value);
-                _participationRequester.RemoveParticipation(idUser, request.IdActivity);
+                _participationRequester.RemoveParticipation(UserId, request.ActivityId);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -79,10 +73,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == AuthConstants.IdClaimType)
-                    .First().Value);
-                var userinfo = _participationRequester.GetUsersParticipations(idUser);
+                var userinfo = _participationRequester.GetUsersParticipations(UserId);
                 return userinfo;
             }
             catch (Exception ex)
@@ -90,5 +81,9 @@ namespace LetsDoStuff.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        private int UserId => int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
+                    .First().Value);
     }
 }
