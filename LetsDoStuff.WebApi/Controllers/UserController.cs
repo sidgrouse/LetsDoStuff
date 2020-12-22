@@ -73,7 +73,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <returns>Result of edit settings attempt.</returns>
         [Authorize]
         [HttpPatch("edit")]
-        public ActionResult EditUserSettings(EditUserSettingsRequest newSettings)
+        public ActionResult EditUserSettings([FromBody]EditUserSettingsRequest newSettings)
         {
             var idUser = int.Parse(this.HttpContext.User.Claims
                     .Where(c => c.Type == AuthConstants.IdClaimType)
