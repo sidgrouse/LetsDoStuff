@@ -6,7 +6,7 @@ using System.Text;
 
 namespace LetsDoStuff.Domain.Models
 {
-    public class ActivityUser
+    public class ParticipantsTicket
     {
         public User User { get; set; }
 

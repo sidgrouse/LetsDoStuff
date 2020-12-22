@@ -43,6 +43,6 @@ namespace LetsDoStuff.Domain.Models
         /// </summary>
         public List<Tag> Tags { get; set; } = new List<Tag>();
 
-        public List<ActivityUser> ParticipantСertificates { get; set; } = new List<ActivityUser>();
+        public List<ParticipantsTicket> ParticipantsTickets { get; set; } = new List<ParticipantsTicket>();
     }
 }

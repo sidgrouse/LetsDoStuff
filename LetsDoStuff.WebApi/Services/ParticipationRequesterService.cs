@@ -69,7 +69,7 @@ namespace LetsDoStuff.WebApi.Services
                .Include(u => u.ParticipationActivities)
                .ThenInclude(a => a.Tags)
                .Include(a => a.ParticipationActivities)
-               .ThenInclude(pa => pa.ParticipantСertificates)
+               .ThenInclude(pa => pa.ParticipantsTickets)
                .FirstOrDefault()
                .ParticipationActivities
                .Select(a => new ParticipationResponseForUser()
@@ -78,7 +78,7 @@ namespace LetsDoStuff.WebApi.Services
                    Name = a.Name,
                    Description = a.Description,
                    Capacity = a.Capacity,
-                   AcceptAsParticipant = a.ParticipantСertificates.FirstOrDefault(pc => pc.UserId == userId).IsParticipante,
+                   AcceptAsParticipant = a.ParticipantsTickets.FirstOrDefault(pc => pc.UserId == userId).IsParticipante,
                    Creator = new ActivityCreatorResponse()
                    {
                        Name = a.Creator.FirstName,

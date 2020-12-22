@@ -34,14 +34,14 @@ namespace LetsDoStuff.Domain
                 .Entity<User>()
                 .HasMany(u => u.ParticipationActivities)
                 .WithMany(a => a.Participants)
-                .UsingEntity<ActivityUser>(
+                .UsingEntity<ParticipantsTicket>(
                 j => j
                     .HasOne(au => au.Activity)
-                    .WithMany(a => a.ParticipantСertificates)
+                    .WithMany(a => a.ParticipantsTickets)
                     .HasForeignKey(au => au.ActivityId),
                 j => j
                     .HasOne(au => au.User)
-                    .WithMany(u => u.ParticipantСertificates)
+                    .WithMany(u => u.ParticipantsTickets)
                     .HasForeignKey(au => au.UserId),
                 j =>
                 {

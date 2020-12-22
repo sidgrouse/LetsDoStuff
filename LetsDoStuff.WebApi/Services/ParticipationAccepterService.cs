@@ -21,13 +21,13 @@ namespace LetsDoStuff.WebApi.Services
 
         public void Accept(int idCreator, int acticitiId, int participanteId)
         {
-            var activityCreator = db.Activities.Include(a => a.ParticipantСertificates)
+            var activityCreator = db.Activities.Include(a => a.ParticipantsTickets)
                 .FirstOrDefault(a => a.Id == acticitiId)
                 ?? throw new ArgumentException($"Activity with id {acticitiId} has not been found");
 
             if (activityCreator.CreatorId == idCreator)
             {
-                var pc = activityCreator.ParticipantСertificates.FirstOrDefault(pc => pc.UserId == participanteId)
+                var pc = activityCreator.ParticipantsTickets.FirstOrDefault(pc => pc.UserId == participanteId)
                     ?? throw new ArgumentException($"User with id {participanteId} has not been found like someone who's willing take a part in the Activity with id {acticitiId}");
 
                 if (!pc.IsParticipante)
@@ -49,13 +49,13 @@ namespace LetsDoStuff.WebApi.Services
 
         public void Reject(int idCreator, int acticitiId, int participanteId)
         {
-            var activityCreator = db.Activities.Include(a => a.ParticipantСertificates)
+            var activityCreator = db.Activities.Include(a => a.ParticipantsTickets)
                 .FirstOrDefault(a => a.Id == acticitiId)
                 ?? throw new ArgumentException($"Activity with id {acticitiId} has not been found");
 
             if (activityCreator.CreatorId == idCreator)
             {
-                var pc = activityCreator.ParticipantСertificates.FirstOrDefault(pc => pc.UserId == participanteId)
+                var pc = activityCreator.ParticipantsTickets.FirstOrDefault(pc => pc.UserId == participanteId)
                     ?? throw new ArgumentException($"User with id {participanteId} has not been found like someone who's willing take a part in the Activity with id {acticitiId}");
 
                 if (pc.IsParticipante)
@@ -78,7 +78,7 @@ namespace LetsDoStuff.WebApi.Services
         public List<ParticipationResponseForCreator> GetAllParticipations(int idCreator)
         {
             var activitiesOfCreator = db.Activities.AsNoTracking()
-                .Include(a => a.ParticipantСertificates)
+                .Include(a => a.ParticipantsTickets)
                 .ThenInclude(pc => pc.User)
                 .Where(a => a.CreatorId == idCreator).ToList();
 
@@ -86,7 +86,7 @@ namespace LetsDoStuff.WebApi.Services
 
             foreach (var activity in activitiesOfCreator)
             {
-                result.AddRange(activity.ParticipantСertificates.Select(pc => new ParticipationResponseForCreator()
+                result.AddRange(activity.ParticipantsTickets.Select(pc => new ParticipationResponseForCreator()
                 {
                     ActivityName = activity.Name,
                     ActicityId = activity.Id,

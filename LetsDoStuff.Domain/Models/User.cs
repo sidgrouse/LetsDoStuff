@@ -75,7 +75,7 @@ namespace LetsDoStuff.Domain.Models
         /// </summary>
         public List<Activity> OwnActivities { get; set; } = new List<Activity>();
 
-        public List<ActivityUser> ParticipantСertificates { get; set; } = new List<ActivityUser>();
+        public List<ParticipantsTicket> ParticipantsTickets { get; set; } = new List<ParticipantsTicket>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="User"/> class.
