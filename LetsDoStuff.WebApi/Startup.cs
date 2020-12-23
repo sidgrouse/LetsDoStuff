@@ -85,8 +85,8 @@ namespace LetsDoStuff.WebApi
             services.AddOdataSwaggerSupport();
 
             services.AddTransient<IActivityService, ActivityManager>();
-            services.AddTransient<IParticipationAccepterService, ParticipationAccepterService>();
-            services.AddTransient<IParticipationRequesterService, ParticipationRequesterService>();
+            services.AddTransient<IParticipantAcceptorService, ParticipantAcceptorService>();
+            services.AddTransient<IParticipationRequesterService, ParticipationRequestorService>();
             services.AddTransient<IUserService, UserService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

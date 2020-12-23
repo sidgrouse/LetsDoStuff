@@ -10,16 +10,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
 {
-    public class ParticipationAccepterService : IParticipationAccepterService
+    public class ParticipantAcceptorService : IParticipantAcceptorService
     {
         private readonly LdsContext db;
 
-        public ParticipationAccepterService(LdsContext context)
+        public ParticipantAcceptorService(LdsContext context)
         {
             db = context;
         }
 
-        public void AcceptParticipation(int creatorId, int acticitiId, int participantId)
+        public void AcceptParticipant(int creatorId, int acticitiId, int participantId)
         {
             var activity = db.Activities.Include(a => a.ParticipantsTickets)
                 .FirstOrDefault(a => a.Id == acticitiId)
@@ -47,7 +47,7 @@ namespace LetsDoStuff.WebApi.Services
             }
         }
 
-        public void RejectParticipation(int creatorId, int acticitiId, int participanteId)
+        public void RejectParticipant(int creatorId, int acticitiId, int participanteId)
         {
             var activity = db.Activities.Include(a => a.Participants)
                 .FirstOrDefault(a => a.Id == acticitiId)
@@ -68,21 +68,21 @@ namespace LetsDoStuff.WebApi.Services
             }
         }
 
-        public List<ParticipationResponseForCreator> GetAllParticipations(int creatorId)
+        public List<ParticipationResponseForCreator> GetParticipationsInfo(int creatorId)
         {
-            var activitiesOfCreator = db.Activities.AsNoTracking()
+            var activities = db.Activities.AsNoTracking()
                 .Include(a => a.ParticipantsTickets)
                 .ThenInclude(pc => pc.User)
                 .Where(a => a.CreatorId == creatorId).ToList();
 
-            List<ParticipationResponseForCreator> result = new List<ParticipationResponseForCreator>();
+            List<ParticipationResponseForCreator> info = new List<ParticipationResponseForCreator>();
 
-            foreach (var activity in activitiesOfCreator)
+            foreach (var act in activities)
             {
-                result.AddRange(activity.ParticipantsTickets.Select(pc => new ParticipationResponseForCreator()
+                info.AddRange(act.ParticipantsTickets.Select(pc => new ParticipationResponseForCreator()
                 {
-                    ActivityName = activity.Name,
-                    ActicityId = activity.Id,
+                    ActivityName = act.Name,
+                    ActicityId = act.Id,
                     ContactName = pc.User.FirstName + " " + pc.User.LastName,
                     ContactId = pc.User.Id,
                     Email = pc.User.Email,
@@ -91,7 +91,7 @@ namespace LetsDoStuff.WebApi.Services
                 }));
             }
 
-            return result;
+            return info;
         }
     }
 }
