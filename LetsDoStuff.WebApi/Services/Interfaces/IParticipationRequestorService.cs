@@ -5,7 +5,7 @@ using LetsDoStuff.WebApi.Services.DTO;
 
 namespace LetsDoStuff.WebApi.Services.Interfaces
 {
-    public interface IParticipationRequesterService
+    public interface IParticipationRequestorService
     {
         void AddParticipation(int userId, int activityId);
 

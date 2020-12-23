@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
 {
-    public class ParticipationRequestorService : IParticipationRequesterService
+    public class ParticipationRequestorService : IParticipationRequestorService
     {
         private readonly LdsContext db;
         

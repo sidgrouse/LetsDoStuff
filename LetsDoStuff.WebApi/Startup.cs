@@ -86,7 +86,7 @@ namespace LetsDoStuff.WebApi
 
             services.AddTransient<IActivityService, ActivityManager>();
             services.AddTransient<IParticipantAcceptorService, ParticipantAcceptorService>();
-            services.AddTransient<IParticipationRequesterService, ParticipationRequestorService>();
+            services.AddTransient<IParticipationRequestorService, ParticipationRequestorService>();
             services.AddTransient<IUserService, UserService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

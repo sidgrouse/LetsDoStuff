@@ -12,9 +12,9 @@ namespace LetsDoStuff.WebApi.Controllers
     [Route("api/ParticipationRequestor")]
     public class ParticipationRequestorController : ControllerBase
     {
-        private readonly IParticipationRequesterService _participationRequester;
+        private readonly IParticipationRequestorService _participationRequester;
 
-        public ParticipationRequestorController(IParticipationRequesterService participationRequester)
+        public ParticipationRequestorController(IParticipationRequestorService participationRequester)
         {
             _participationRequester = participationRequester;
         }
