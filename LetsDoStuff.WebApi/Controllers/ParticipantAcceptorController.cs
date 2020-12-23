@@ -26,11 +26,11 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <returns>All info about participations that helps a creator to accept or reject users.</returns>
         [Authorize]
         [HttpGet]
-        public ActionResult<List<ParticipationResponseForCreator>> GetParticipantesInfo()
+        public ActionResult<List<ParticipantResponse>> GetParticipantesInfo()
         {
             try
             {
-                var info = _participationAccepter.GetParticipationsInfo(UserId);
+                var info = _participationAccepter.GetParticipantInfo(UserId);
 
                 return info;
             }

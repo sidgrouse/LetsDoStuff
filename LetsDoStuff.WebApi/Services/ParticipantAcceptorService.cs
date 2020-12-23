@@ -68,18 +68,18 @@ namespace LetsDoStuff.WebApi.Services
             }
         }
 
-        public List<ParticipationResponseForCreator> GetParticipationsInfo(int creatorId)
+        public List<ParticipantResponse> GetParticipantInfo(int creatorId)
         {
             var activities = db.Activities.AsNoTracking()
                 .Include(a => a.ParticipantsTickets)
                 .ThenInclude(pc => pc.User)
                 .Where(a => a.CreatorId == creatorId).ToList();
 
-            List<ParticipationResponseForCreator> info = new List<ParticipationResponseForCreator>();
+            List<ParticipantResponse> info = new List<ParticipantResponse>();
 
             foreach (var act in activities)
             {
-                info.AddRange(act.ParticipantsTickets.Select(pc => new ParticipationResponseForCreator()
+                info.AddRange(act.ParticipantsTickets.Select(pc => new ParticipantResponse()
                 {
                     ActivityName = act.Name,
                     ActicityId = act.Id,

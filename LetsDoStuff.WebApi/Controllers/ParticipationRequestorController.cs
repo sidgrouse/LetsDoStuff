@@ -25,11 +25,11 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <returns>All information about user's participations.</returns>
         [HttpGet]
         [Authorize]
-        public ActionResult<List<ParticipationResponseForUser>> GetParticipationInfo()
+        public ActionResult<List<ParticipationResponse>> GetParticipationInfo()
         {
             try
             {
-                var info = _participationRequester.GetUsersParticipations(UserId);
+                var info = _participationRequester.GetParticipationInfo(UserId);
                 return info;
             }
             catch (Exception ex)

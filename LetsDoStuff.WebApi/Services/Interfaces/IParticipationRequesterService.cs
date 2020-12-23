@@ -11,6 +11,6 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 
         void RemoveParticipation(int userId, int activityId);
 
-        List<ParticipationResponseForUser> GetUsersParticipations(int userId);
+        List<ParticipationResponse> GetParticipationInfo(int userId);
     }
 }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LetsDoStuff.WebApi.Services.DTO
 {
-    public class ParticipationResponseForCreator
+    public class ParticipantResponse
     {
         public string ContactName { get; set; }
 

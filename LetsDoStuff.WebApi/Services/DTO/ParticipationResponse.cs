@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LetsDoStuff.WebApi.Services.DTO
 {
-    public class ParticipationResponseForUser
+    public class ParticipationResponse
     {
         public int Id { get; set; }
 
@@ -20,7 +20,7 @@ namespace LetsDoStuff.WebApi.Services.DTO
 
         public bool AcceptAsParticipant { get; set; }
 
-        public ParticipationResponseForUser()
+        public ParticipationResponse()
         {
             Tags = new List<string>();
         }
