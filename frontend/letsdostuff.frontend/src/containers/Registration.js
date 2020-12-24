@@ -4,6 +4,7 @@ import { useAppContext } from "../libs/contextLib";
 import Button from "react-bootstrap/Button";
 import "./Registration.css";
 import axios from 'axios';
+import {notifyError, notifySuccess} from "./StatusNotification";
 
 export default function Registration() {
   const { setAuthToken } = useAppContext();
@@ -30,11 +31,16 @@ bio	string*/
   function handleSubmit(e) {
     e.preventDefault();
 
-    axios.post('https://localhost:8081/api/registration', { firstName, lastName, email, password, confirmPassword, bio })
+    axios.post('https://localhost:8081/api/users/registration', { firstName, lastName, email, password, confirmPassword, bio })
       .then(resp => {
         console.log("registered", resp);
+        notifySuccess();
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        console.log(err.response);
+        notifyError();
+      });
       
   }
 
@@ -72,7 +78,7 @@ bio	string*/
           />
         </Form.Group>
         <Button block size="lg" type="submit" disabled={!validateForm()}>
-          Login
+          Submit
         </Button>
       </Form>
     </div>
