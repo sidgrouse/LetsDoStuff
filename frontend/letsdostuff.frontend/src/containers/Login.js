@@ -20,7 +20,6 @@ export default function Login() {
 
     axios.post('https://localhost:8081/api/account/login', { login: email, password: password})
       .then(resp => {
-
         setAuthToken(resp.data.access_token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${resp.data.access_token}`;
         console.log("logged in");

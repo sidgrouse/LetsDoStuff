@@ -28,6 +28,7 @@ confirmPassword	string nullable: true
 dateOfBirth	string($date-time) nullable: true
 bio	string*/
 
+
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -74,7 +75,7 @@ bio	string*/
         </Form.Group>
         <Form.Group size="lg" controlId="bio">
           <Form.Label>Bio</Form.Label>
-          <Form.Control type="bio" value={bio} onChange={(e) => setBio(e.target.value)}
+          <Form.Control as="textarea" rows={4} type="bio" value={bio} onChange={(e) => setBio(e.target.value)}
           />
         </Form.Group>
         <Button block size="lg" type="submit" disabled={!validateForm()}>
