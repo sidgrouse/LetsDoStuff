@@ -4,10 +4,10 @@ using System.Text;
 
 namespace LetsDoStuff.WebApi.Services.DTO
 {
-    public class AcceptRejectRequest
+    public class ParticipationResolutionRequest
     {
         public int ActivityId { get; set; }
 
-        public int ParticipanteId { get; set; }
+        public int ParticipantId { get; set; }
     }
 }

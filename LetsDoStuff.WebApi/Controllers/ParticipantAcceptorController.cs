@@ -47,7 +47,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <returns>Action result.</returns>
         [Authorize]
         [HttpPut]
-        public IActionResult AcceptParticipant(AcceptRejectRequest acceptReject)
+        public IActionResult AcceptParticipant(ParticipationResolutionRequest acceptReject)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <returns>Action result.</returns>
         [Authorize]
         [HttpDelete]
-        public IActionResult RejectParticipant(AcceptRejectRequest rejectRequest)
+        public IActionResult RejectParticipant(ParticipationResolutionRequest rejectRequest)
         {
             try
             {
