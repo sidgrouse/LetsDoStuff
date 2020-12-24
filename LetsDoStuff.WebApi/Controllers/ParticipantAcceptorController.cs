@@ -13,11 +13,11 @@ namespace LetsDoStuff.WebApi.Controllers
     [Route("api/ParticipantAcceptor")]
     public class ParticipantAcceptorController : ControllerBase
     {
-        private readonly IParticipantAcceptorService _participationAccepter;
+        private readonly IParticipationService _participationService;
 
-        public ParticipantAcceptorController(IParticipantAcceptorService participationAccepter)
+        public ParticipantAcceptorController(IParticipationService participationService)
         {
-            _participationAccepter = participationAccepter;
+            _participationService = participationService;
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                var info = _participationAccepter.GetParticipantInfo(UserId);
+                var info = _participationService.GetParticipantInfo(UserId);
 
                 return info;
             }
@@ -51,7 +51,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                _participationAccepter.AcceptParticipant(UserId, acceptReject.ActivityId, acceptReject.ParticipanteId);
+                _participationService.AcceptParticipant(UserId, acceptReject.ActivityId, acceptReject.ParticipantId);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -71,7 +71,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                _participationAccepter.RejectParticipant(UserId, rejectRequest.ActivityId, rejectRequest.ParticipanteId);
+                _participationService.RejectParticipant(UserId, rejectRequest.ActivityId, rejectRequest.ParticipantId);
                 return Ok();
             }
            catch (ArgumentException ex)
