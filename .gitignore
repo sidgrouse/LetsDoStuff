@@ -360,4 +360,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-frontend/letsdostuff.frontend/*.eslintcache
+frontend/letsdostuff.frontend/.eslintcache*
