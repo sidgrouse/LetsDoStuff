@@ -90,16 +90,16 @@ namespace LetsDoStuff.WebApi.Services
             return response.ToList();
         }
 
-        public void AcceptParticipant(int creatorId, int acticitiId, int participantId)
+        public void AcceptParticipant(int creatorId, int acticityId, int participantId)
         {
             var activity = db.Activities.Include(a => a.ParticipantsTickets)
-                .FirstOrDefault(a => a.Id == acticitiId)
-                ?? throw new ArgumentException($"Activity with id {acticitiId} has not been found");
+                .FirstOrDefault(a => a.Id == acticityId)
+                ?? throw new ArgumentException($"Activity with id {acticityId} has not been found");
 
             if (activity.CreatorId == creatorId)
             {
                 var participantTicket = activity.ParticipantsTickets.FirstOrDefault(pc => pc.UserId == participantId)
-                    ?? throw new ArgumentException($"User with id {participantId} has not been found like someone who's willing take a part in the Activity with id {acticitiId}");
+                    ?? throw new ArgumentException($"User with id {participantId} has not been found like someone who's willing take a part in the Activity with id {acticityId}");
 
                 if (!participantTicket.IsParticipant)
                 {
@@ -109,7 +109,7 @@ namespace LetsDoStuff.WebApi.Services
                 }
                 else
                 {
-                    throw new ArgumentException($"User with id {participantId} has already been marked as participante");
+                    throw new ArgumentException($"User with id {participantId} has already been marked as participant");
                 }
             }
             else
@@ -118,16 +118,16 @@ namespace LetsDoStuff.WebApi.Services
             }
         }
 
-        public void RejectParticipant(int creatorId, int acticitiId, int participanteId)
+        public void RejectParticipant(int creatorId, int acticityId, int participantId)
         {
             var activity = db.Activities.Include(a => a.Participants)
-                .FirstOrDefault(a => a.Id == acticitiId)
-                ?? throw new ArgumentException($"Activity with id {acticitiId} has not been found");
+                .FirstOrDefault(a => a.Id == acticityId)
+                ?? throw new ArgumentException($"Activity with id {acticityId} has not been found");
 
             if (activity.CreatorId == creatorId)
             {
-                var rejectingUser = activity.Participants.FirstOrDefault(u => u.Id == participanteId)
-                    ?? throw new ArgumentException($"User with id {participanteId} has not been found");
+                var rejectingUser = activity.Participants.FirstOrDefault(u => u.Id == participantId)
+                    ?? throw new ArgumentException($"User with id {participantId} has not been found");
 
                 activity.Participants.Remove(rejectingUser);
                 db.SaveChanges();

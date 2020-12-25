@@ -13,9 +13,9 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 
         List<ParticipationResponse> GetParticipationInfo(int userId);
 
-        void AcceptParticipant(int creatorId, int acticitiId, int participanteId);
+        void AcceptParticipant(int creatorId, int acticityId, int participantId);
 
-        void RejectParticipant(int creatorId, int acticitiId, int participanteId);
+        void RejectParticipant(int creatorId, int acticityId, int participantId);
 
         List<ParticipantResponse> GetParticipantInfo(int creatorId);
     }
