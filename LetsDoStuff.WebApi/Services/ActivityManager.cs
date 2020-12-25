@@ -101,7 +101,7 @@ namespace LetsDoStuff.WebApi.Services
             db.SaveChanges();
         }
 
-        public void DeleteActivity(int userId, int activityId)
+        public void DeleteActivity(int activityId, int userId)
         {
             var activity = db.Activities
                 .FirstOrDefault(a => a.Id == activityId)

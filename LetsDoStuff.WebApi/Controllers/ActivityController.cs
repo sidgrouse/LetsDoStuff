@@ -77,11 +77,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == AuthConstants.IdClaimType)
-                    .First().Value);
-
-                _activityService.CreateActivity(newActivity, idUser);
+                _activityService.CreateActivity(newActivity, UserId);
                 return Ok(new { result = "Activity successfully created." });
             }
             catch (ArgumentException ex)
@@ -101,11 +97,7 @@ namespace LetsDoStuff.WebApi.Controllers
         {
             try
             {
-                var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == AuthConstants.IdClaimType)
-                    .First().Value);
-
-                _activityService.DeleteActivity(idUser, activityId);
+                _activityService.DeleteActivity(activityId, UserId);
                 return Ok(new { result = "Activity successfully deleted." });
             }
             catch (ArgumentException ex)
@@ -113,5 +105,9 @@ namespace LetsDoStuff.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        private int UserId => int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
+                    .First().Value);
     }
 }
