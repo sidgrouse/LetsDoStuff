@@ -26,7 +26,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <returns>All information about user's participations.</returns>
         [Authorize]
-        [HttpGet("activitiesInfo")]
+        [HttpGet("activitiesinfo")]
         public ActionResult<List<ParticipationResponse>> GetParticipationInfo()
         {
             try
@@ -46,7 +46,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <param name="request">The Id of an Activity.</param>
         /// <returns>Action result.</returns>
         [Authorize]
-        [HttpPost("Add")]
+        [HttpPost("add")]
         public IActionResult AddParticipation(ParticipationRequest request)
         {
             try
@@ -86,7 +86,7 @@ namespace LetsDoStuff.WebApi.Controllers
         }
 
         /// <summary>
-        /// Get info about all users who want to join to your Activitirs.
+        /// Get info about all users who want to join to your Activities.
         /// </summary>
         /// <returns>All info about participations that helps a creator to accept or reject users.</returns>
         [Authorize]
