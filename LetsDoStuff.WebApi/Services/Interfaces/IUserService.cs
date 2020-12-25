@@ -12,5 +12,7 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
         public List<UserSettingsResponse> GetAllUsers();
 
         public void RegisterUser(RegisterRequest userData);
+
+        public List<ActivitiesResponse> GetUserActivities(int userId);
     }
 }
