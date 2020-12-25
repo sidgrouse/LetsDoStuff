@@ -10,17 +10,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace LetsDoStuff.WebApi
 {
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class SampleHub : Hub
+    public class ParticipationHub : Hub
     {
-        public async Task Send(string message)
-        {
-            await this.Clients.All.SendAsync("Send", message);
-        }
-
-        public override async Task OnConnectedAsync()
-        {
-            await Clients.All.SendAsync("Notify", "Кто-то вошел в чат");
-            await base.OnConnectedAsync();
-        }
     }
 }

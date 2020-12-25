@@ -51,7 +51,7 @@ namespace LetsDoStuff.WebApi
                 endpoints =>
                 {
                     endpoints.MapControllers();
-                    endpoints.MapHub<SampleHub>("/SampleHub");
+                    endpoints.MapHub<ParticipationHub>("/ParticipationHub");
                 });
         }
 

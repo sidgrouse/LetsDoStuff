@@ -17,9 +17,9 @@ namespace LetsDoStuff.WebApi.Controllers
     public class AccountController : Controller
     {
         private readonly LdsContext context;
-        private readonly IHubContext<SampleHub> _hubContext;
+        private readonly IHubContext<ParticipationHub> _hubContext;
 
-        public AccountController(LdsContext context, IHubContext<SampleHub> hubContext)
+        public AccountController(LdsContext context, IHubContext<ParticipationHub> hubContext)
         {
             this.context = context;
             _hubContext = hubContext;

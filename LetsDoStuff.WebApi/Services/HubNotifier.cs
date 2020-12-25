@@ -9,10 +9,10 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 {
     public class HubNotifier : IHubNotifier
     {
-        private readonly IHubContext<SampleHub> _hubContext;
+        private readonly IHubContext<ParticipationHub> _hubContext;
         private readonly LdsContext db;
 
-        public HubNotifier(IHubContext<SampleHub> hubContext, LdsContext DBcontext)
+        public HubNotifier(IHubContext<ParticipationHub> hubContext, LdsContext DBcontext)
         {
             _hubContext = hubContext;
             db = DBcontext;
