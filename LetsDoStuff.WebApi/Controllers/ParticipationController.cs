@@ -23,8 +23,8 @@ namespace LetsDoStuff.WebApi.Controllers
         /// Get user's info about activities for participation.
         /// </summary>
         /// <returns>All information about user's participations.</returns>
-        [HttpGet("activitiesInfo")]
         [Authorize]
+        [HttpGet("activitiesInfo")]
         public ActionResult<List<ParticipationResponse>> GetParticipationInfo()
         {
             try
@@ -43,8 +43,8 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <param name="request">The Id of an Activity.</param>
         /// <returns>Action result.</returns>
-        [HttpPost("Add")]
         [Authorize]
+        [HttpPost("Add")]
         public IActionResult AddParticipation(ParticipationRequest request)
         {
             try
@@ -63,8 +63,8 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <param name="request">The Id of an Activity.</param>
         /// <returns>Action result.</returns>
-        [HttpDelete("remove")]
         [Authorize]
+        [HttpDelete("remove")]
         public IActionResult RemoveParticipation(ParticipationRequest request)
         {
             try
