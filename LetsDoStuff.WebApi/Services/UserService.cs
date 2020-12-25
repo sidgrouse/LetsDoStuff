@@ -74,7 +74,8 @@ namespace LetsDoStuff.WebApi.Services
 
         public List<ActivitiesResponse> GetUserActivities(int userId)
         {
-            var activities = _context.Activities.Where(a => a.CreatorId == userId)
+            var activities = _context.Activities.AsNoTracking().
+                Where(a => a.CreatorId == userId)
                 .Select(a => new ActivitiesResponse()
                 {
                     Id = a.Id,
