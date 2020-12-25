@@ -76,6 +76,11 @@ namespace LetsDoStuff.Domain.Models
         public List<Activity> OwnActivities { get; set; } = new List<Activity>();
 
         /// <summary>
+        /// Gets or sets ParticipantsTickets that were created for checking participations.
+        /// </summary>
+        public List<ParticipantsTicket> ParticipantsTickets { get; set; } = new List<ParticipantsTicket>();
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="User"/> class.
         /// </summary>
         /// <param name="profileLink">The user profile link.</param>

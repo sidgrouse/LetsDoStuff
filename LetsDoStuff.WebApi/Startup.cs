@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using LetsDoStuff.Domain;
 using LetsDoStuff.WebApi.Services;
 using LetsDoStuff.WebApi.Services.Interfaces;
 using LetsDoStuff.WebApi.SettingsForAuth;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -15,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using OData.Swagger.Services;
 
 namespace LetsDoStuff.WebApi
 {
@@ -51,6 +55,8 @@ namespace LetsDoStuff.WebApi
                 endpoints =>
                 {
                     endpoints.MapControllers();
+                    endpoints.EnableDependencyInjection();
+                    endpoints.Select().Filter().Expand().MaxTop(10);
                     endpoints.MapHub<ParticipationHub>("/ParticipationHub");
                 });
         }
@@ -73,14 +79,15 @@ namespace LetsDoStuff.WebApi
                         .AllowAnyHeader()
                         .AllowCredentials());
             });
-
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
+            services.AddOData();
             services.AddSwaggerGen(c =>
             {
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+            services.AddOdataSwaggerSupport();
 
             services.AddTransient<IActivityService, ActivityManager>();
             services.AddTransient<IParticipationService, ParticipationService>();
@@ -126,7 +133,7 @@ namespace LetsDoStuff.WebApi
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer",
                     In = ParameterLocation.Header,
-                    Description = $"Login with creds: dee@gmail.com/12test, then post the token here"
+                    Description = "Login with creds and then post the token here. User: dee@gmail.com / 12test , Admin: admin@gmail.com / 123"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement

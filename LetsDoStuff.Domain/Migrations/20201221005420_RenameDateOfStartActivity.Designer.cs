@@ -4,14 +4,16 @@ using LetsDoStuff.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LetsDoStuff.Domain.Migrations
 {
     [DbContext(typeof(LdsContext))]
-    partial class LdsContextModelSnapshot : ModelSnapshot
+    [Migration("20201221005420_RenameDateOfStartActivity")]
+    partial class RenameDateOfStartActivity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +34,21 @@ namespace LetsDoStuff.Domain.Migrations
                     b.HasIndex("TagsId");
 
                     b.ToTable("ActivityTag");
+                });
+
+            modelBuilder.Entity("ActivityUser", b =>
+                {
+                    b.Property<int>("ParticipantsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParticipationActivitiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ParticipantsId", "ParticipationActivitiesId");
+
+                    b.HasIndex("ParticipationActivitiesId");
+
+                    b.ToTable("ActivityUser");
                 });
 
             modelBuilder.Entity("LetsDoStuff.Domain.Models.Activity", b =>
@@ -63,26 +80,6 @@ namespace LetsDoStuff.Domain.Migrations
                     b.HasIndex("CreatorId");
 
                     b.ToTable("Activities");
-                });
-
-            modelBuilder.Entity("LetsDoStuff.Domain.Models.ParticipantsTicket", b =>
-                {
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsParticipant")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
-                    b.HasKey("ActivityId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ParticipantsTicket");
                 });
 
             modelBuilder.Entity("LetsDoStuff.Domain.Models.Tag", b =>
@@ -167,6 +164,21 @@ namespace LetsDoStuff.Domain.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ActivityUser", b =>
+                {
+                    b.HasOne("LetsDoStuff.Domain.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("ParticipantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LetsDoStuff.Domain.Models.Activity", null)
+                        .WithMany()
+                        .HasForeignKey("ParticipationActivitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("LetsDoStuff.Domain.Models.Activity", b =>
                 {
                     b.HasOne("LetsDoStuff.Domain.Models.User", "Creator")
@@ -178,35 +190,9 @@ namespace LetsDoStuff.Domain.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("LetsDoStuff.Domain.Models.ParticipantsTicket", b =>
-                {
-                    b.HasOne("LetsDoStuff.Domain.Models.Activity", "Activity")
-                        .WithMany("ParticipantsTickets")
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LetsDoStuff.Domain.Models.User", "User")
-                        .WithMany("ParticipantsTickets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("LetsDoStuff.Domain.Models.Activity", b =>
-                {
-                    b.Navigation("ParticipantsTickets");
-                });
-
             modelBuilder.Entity("LetsDoStuff.Domain.Models.User", b =>
                 {
                     b.Navigation("OwnActivities");
-
-                    b.Navigation("ParticipantsTickets");
                 });
 #pragma warning restore 612, 618
         }

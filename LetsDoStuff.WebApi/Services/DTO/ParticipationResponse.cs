@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace LetsDoStuff.WebApi.Services.DTO
 {
-    public sealed class ActivityResponse
+    public class ParticipationResponse
     {
         public int Id { get; set; }
 
@@ -15,11 +16,11 @@ namespace LetsDoStuff.WebApi.Services.DTO
 
         public ActivityCreatorResponse Creator { get; set; }
 
-        public string DateStart { get; set; }
-
         public List<string> Tags { get; set; }
 
-        public ActivityResponse()
+        public bool AcceptAsParticipant { get; set; }
+
+        public ParticipationResponse()
         {
             Tags = new List<string>();
         }

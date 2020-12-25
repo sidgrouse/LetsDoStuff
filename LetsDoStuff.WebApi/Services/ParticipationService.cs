@@ -20,17 +20,16 @@ namespace LetsDoStuff.WebApi.Services
             db = context;
         }
 
-        public void AddParticipation(int idUser, int idActivity)
+        public void AddParticipation(int userId, int activityId)
         {
-            User user = db.Users.Where(h => h.Id == idUser)
+            User user = db.Users.Where(h => h.Id == userId)
                 .Include(u => u.ParticipationActivities)
                 .FirstOrDefault()
-                 ?? throw new ArgumentException($"User with id {idUser} has not been found");
+                 ?? throw new ArgumentException($"User with id {userId} has not been found");
 
             Activity activity = db.Activities
-                .Include(a => a.Creator)
-                .FirstOrDefault(a => a.Id == idActivity)
-                ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
+                .Find(activityId)
+                ?? throw new ArgumentException($"Activity with id {activityId} has not been found");
 
             if (user.ParticipationActivities.Contains(activity))
             {
@@ -42,17 +41,16 @@ namespace LetsDoStuff.WebApi.Services
             db.SaveChanges();
         }
 
-        public void RemoveParticipation(int idUser, int idActivity)
+        public void RemoveParticipation(int userId, int activityId)
         {
-            User user = db.Users.Where(h => h.Id == idUser)
+            User user = db.Users.Where(h => h.Id == userId)
                 .Include(u => u.ParticipationActivities)
                 .FirstOrDefault()
-                ?? throw new ArgumentException($"User with id {idUser} has not been found");
+                ?? throw new ArgumentException($"User with id {userId} has not been found");
 
             Activity activity = db.Activities
-                .Include(a => a.Creator)
-                .FirstOrDefault(a => a.Id == idActivity)
-                ?? throw new ArgumentException($"Activity with id {idActivity} has not been found");
+                .Find(activityId)
+                ?? throw new ArgumentException($"Activity with id {activityId} has not been found");
 
             if (!user.ParticipationActivities.Contains(activity))
             {
@@ -63,7 +61,7 @@ namespace LetsDoStuff.WebApi.Services
             db.SaveChanges();
         }
 
-        public List<ActivityResponse> GetUsersParticipations(int userId)
+        public List<ParticipationResponse> GetParticipationInfo(int userId)
         {
             var response = db.Users.AsNoTracking()
                .Where(u => u.Id == userId)
@@ -71,14 +69,17 @@ namespace LetsDoStuff.WebApi.Services
                .ThenInclude(a => a.Creator)
                .Include(u => u.ParticipationActivities)
                .ThenInclude(a => a.Tags)
+               .Include(a => a.ParticipationActivities)
+               .ThenInclude(pa => pa.ParticipantsTickets)
                .FirstOrDefault()
                .ParticipationActivities
-               .Select(a => new ActivityResponse()
+               .Select(a => new ParticipationResponse()
                {
                    Id = a.Id,
                    Name = a.Name,
                    Description = a.Description,
                    Capacity = a.Capacity,
+                   AcceptAsParticipant = a.ParticipantsTickets.FirstOrDefault(pc => pc.UserId == userId).IsParticipant,
                    Creator = new ActivityCreatorResponse()
                    {
                        Name = a.Creator.FirstName,
@@ -88,6 +89,81 @@ namespace LetsDoStuff.WebApi.Services
                });
 
             return response.ToList();
+        }
+
+        public void AcceptParticipant(int creatorId, int acticitiId, int participantId)
+        {
+            var activity = db.Activities.Include(a => a.ParticipantsTickets)
+                .FirstOrDefault(a => a.Id == acticitiId)
+                ?? throw new ArgumentException($"Activity with id {acticitiId} has not been found");
+
+            if (activity.CreatorId == creatorId)
+            {
+                var participantTicket = activity.ParticipantsTickets.FirstOrDefault(pc => pc.UserId == participantId)
+                    ?? throw new ArgumentException($"User with id {participantId} has not been found like someone who's willing take a part in the Activity with id {acticitiId}");
+
+                if (!participantTicket.IsParticipant)
+                {
+                    participantTicket.IsParticipant = true;
+                    db.SaveChanges();
+                    return;
+                }
+                else
+                {
+                    throw new ArgumentException($"User with id {participantId} has already been marked as participante");
+                }
+            }
+            else
+            {
+                throw new ArgumentException($"Sorry, but you are not a creator of the activity with id {creatorId}!");
+            }
+        }
+
+        public void RejectParticipant(int creatorId, int acticitiId, int participanteId)
+        {
+            var activity = db.Activities.Include(a => a.Participants)
+                .FirstOrDefault(a => a.Id == acticitiId)
+                ?? throw new ArgumentException($"Activity with id {acticitiId} has not been found");
+
+            if (activity.CreatorId == creatorId)
+            {
+                var rejectingUser = activity.Participants.FirstOrDefault(u => u.Id == participanteId)
+                    ?? throw new ArgumentException($"User with id {participanteId} has not been found");
+
+                activity.Participants.Remove(rejectingUser);
+                db.SaveChanges();
+                return;
+            }
+            else
+            {
+                throw new ArgumentException($"Sorry, but you are not a creator of the activity with id {creatorId}!");
+            }
+        }
+
+        public List<ParticipantResponse> GetParticipantInfo(int creatorId)
+        {
+            var activities = db.Activities.AsNoTracking()
+                .Include(a => a.ParticipantsTickets)
+                .ThenInclude(pc => pc.User)
+                .Where(a => a.CreatorId == creatorId).ToList();
+
+            List<ParticipantResponse> info = new List<ParticipantResponse>();
+
+            foreach (var act in activities)
+            {
+                info.AddRange(act.ParticipantsTickets.Select(pc => new ParticipantResponse()
+                {
+                    ActivityName = act.Name,
+                    ActicityId = act.Id,
+                    ContactName = pc.User.FirstName + " " + pc.User.LastName,
+                    ContactId = pc.User.Id,
+                    Email = pc.User.Email,
+                    ProfileLink = pc.User.ProfileLink,
+                    AcceptAsParticipant = pc.IsParticipant
+                }));
+            }
+
+            return info;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
@@ -11,6 +11,8 @@ namespace LetsDoStuff.WebApi.SettingsForAuth
         public const string NameClaimType = "Name";
         public const string RoleClaimType = "Role";
         public const string IdClaimType = "Id";
+        public const string UserRoleName = "User";
+        public const string AdminRoleName = "Admin";
 
         public static TimeSpan TokenLifetime => TimeSpan.FromMinutes(20);
 

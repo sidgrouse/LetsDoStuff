@@ -4,8 +4,10 @@ using System.Text;
 
 namespace LetsDoStuff.WebApi.Services.DTO
 {
-    public class ParticipationRequest
+    public class TagResponse
     {
-        public int ActivityId { get; set; }
+        public int Id { get; set; }
+
+        public string Name { get; set; }
     }
 }
