@@ -29,6 +29,7 @@ function Activities() {
 }
 
 function ActivityCard({ activity }) {
+  const path = "/activities/" + activity.id;
     return (
       <div className="Activity" key={activity.id}>
           <Card>
@@ -37,7 +38,7 @@ function ActivityCard({ activity }) {
                 <Card.Text>
                 {activity.description}
                 </Card.Text>
-                <Button variant="primary">Details</Button>
+                <Button href = {path} variant="primary">Details</Button>
             </Card.Body>
             <Card.Footer>{activity.dateStart}</Card.Footer>
           </Card>

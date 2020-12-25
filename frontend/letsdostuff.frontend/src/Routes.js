@@ -4,6 +4,7 @@ import Home from "./containers/Home";
 import Login from "./containers/Login"
 import Registration from "./containers/Registration";
 import Activities from "./containers/Activities";
+import ActivityDetails from "./containers/ActivityDetails"
 
 export default function Routes() {
   return (
@@ -20,6 +21,8 @@ export default function Routes() {
       <Route exact path="/activities">
         <Activities />
       </Route>
+      <Route path="/activities/:id" children={<ActivityDetails />}>
+            </Route>
     </Switch>
   );
 }
