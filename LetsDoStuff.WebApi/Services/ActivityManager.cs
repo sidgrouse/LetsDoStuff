@@ -104,18 +104,17 @@ namespace LetsDoStuff.WebApi.Services
         public void DeleteActivity(int userId, int activityId)
         {
             var activity = db.Activities
-                .Include(a => a.Creator)
                 .FirstOrDefault(a => a.Id == activityId)
-                ?? throw new ArgumentException($"An Activity with id {activityId} does't exist!");
+                ?? throw new ArgumentException($"An Activity with id {activityId} doesn't exist!");
             
-            if (activity.Creator.Id == userId)
+            if (activity.CreatorId == userId)
             {
                 db.Remove(activity);
                 db.SaveChanges();
             }
             else
             {
-                throw new ArgumentException($"The activity with id {activityId} does't belong to this user");
+                throw new ArgumentException($"The activity with id {activityId} doesn't belong to this user");
             }
         }
     }
