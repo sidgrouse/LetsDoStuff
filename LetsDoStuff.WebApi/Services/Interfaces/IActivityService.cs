@@ -10,6 +10,8 @@ namespace LetsDoStuff.WebApi.Services.Interfaces
 
         void CreateActivity(CreateActivityCommand newActivity, int idUser);
 
+        void DeleteActivity(int userId, int activityId);
+
         List<TagResponse> GetAvailableTags();
 
         ActivityResponse GetActivityById(int activityId);

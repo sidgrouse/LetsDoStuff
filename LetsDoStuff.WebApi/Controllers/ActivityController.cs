@@ -89,5 +89,24 @@ namespace LetsDoStuff.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize]
+        [HttpDelete("delete")]
+        public IActionResult DeleteActivity(int activityId)
+        {
+            try
+            {
+                var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
+                    .First().Value);
+
+                _activityService.DeleteActivity(idUser, activityId);
+                return Ok(new { result = "Activity successfully deleted." });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
