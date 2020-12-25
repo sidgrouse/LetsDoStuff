@@ -32,6 +32,8 @@ namespace LetsDoStuff.Domain.Models
         [Required]
         public User Creator { get; set; }
 
+        public int CreatorId { get; set; }
+
         /// <summary>
         /// Gets or sets a date to start the activity.
         /// </summary>
@@ -47,5 +49,10 @@ namespace LetsDoStuff.Domain.Models
         /// Gets or sets the list of Tags.
         /// </summary>
         public List<Tag> Tags { get; set; } = new List<Tag>();
+
+        /// <summary>
+        /// Gets or sets ParticipantsTickets that were created for checking participations.
+        /// </summary>
+        public List<ParticipantsTicket> ParticipantsTickets { get; set; } = new List<ParticipantsTicket>();
     }
 }
