@@ -87,8 +87,8 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <returns>All info about participations that helps a creator to accept or reject users.</returns>
         [Authorize]
-        [HttpGet("usersinfo")]
-        public ActionResult<List<ParticipantResponse>> GetParticipantesInfo()
+        [HttpGet("participantsinfo")]
+        public ActionResult<List<ParticipantResponse>> GetParticipantsInfo()
         {
             try
             {
