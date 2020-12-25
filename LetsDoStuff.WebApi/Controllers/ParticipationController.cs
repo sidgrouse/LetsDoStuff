@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
 using LetsDoStuff.WebApi.SettingsForAuth;
@@ -10,14 +9,77 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LetsDoStuff.WebApi.Controllers
 {
-    [Route("api/ParticipantAcceptor")]
-    public class ParticipantAcceptorController : ControllerBase
+    [Route("api/participation")]
+    public class ParticipationController : ControllerBase
     {
         private readonly IParticipationService _participationService;
 
-        public ParticipantAcceptorController(IParticipationService participationService)
+        public ParticipationController(IParticipationService participationService)
         {
             _participationService = participationService;
+        }
+
+        /// <summary>
+        /// Get user's info about activities for participation.
+        /// </summary>
+        /// <returns>All information about user's participations.</returns>
+        [HttpGet("activitiesInfo")]
+        [Authorize]
+        public ActionResult<List<ParticipationResponse>> GetParticipationInfo()
+        {
+            try
+            {
+                var info = _participationService.GetParticipationInfo(UserId);
+                return info;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Add an Activity to User's Participations.
+        /// </summary>
+        /// <param name="request">The Id of an Activity.</param>
+        /// <returns>Action result.</returns>
+        [HttpPost("Add")]
+        [Authorize]
+        public IActionResult AddParticipation(ParticipationRequest request)
+        {
+            try
+            {
+                _participationService.AddParticipation(UserId, request.ActivityId);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Remove an Activity from User's Participations.
+        /// </summary>
+        /// <param name="request">The Id of an Activity.</param>
+        /// <returns>Action result.</returns>
+        [HttpDelete("remove")]
+        [Authorize]
+        public IActionResult RemoveParticipation(ParticipationRequest request)
+        {
+            try
+            {
+                _participationService.RemoveParticipation(UserId, request.ActivityId);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
@@ -25,7 +87,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// </summary>
         /// <returns>All info about participations that helps a creator to accept or reject users.</returns>
         [Authorize]
-        [HttpGet]
+        [HttpGet("usersinfo")]
         public ActionResult<List<ParticipantResponse>> GetParticipantesInfo()
         {
             try
@@ -46,7 +108,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <param name="acceptReject">The Id of a Activity and the Id of a participant.</param>
         /// <returns>Action result.</returns>
         [Authorize]
-        [HttpPut]
+        [HttpPut("accept")]
         public IActionResult AcceptParticipant(ParticipationResolutionRequest acceptReject)
         {
             try
@@ -66,7 +128,7 @@ namespace LetsDoStuff.WebApi.Controllers
         /// <param name="rejectRequest">The Id of a Activity and the Id of a participant.</param>
         /// <returns>Action result.</returns>
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("reject")]
         public IActionResult RejectParticipant(ParticipationResolutionRequest rejectRequest)
         {
             try
@@ -74,7 +136,7 @@ namespace LetsDoStuff.WebApi.Controllers
                 _participationService.RejectParticipant(UserId, rejectRequest.ActivityId, rejectRequest.ParticipantId);
                 return Ok();
             }
-           catch (ArgumentException ex)
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }
