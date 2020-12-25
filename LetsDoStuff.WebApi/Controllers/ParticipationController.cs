@@ -52,11 +52,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 _participationService.AddParticipation(UserId, request.ActivityId);
-                var idUser = int.Parse(this.HttpContext.User.Claims
-                    .Where(c => c.Type == AuthConstants.IdClaimType)
-                    .First().Value);
-                _participationService.AddParticipation(idUser, request.IdActivity);
-                _hubNotifier.NotifyAboutNewParticipationRequest(request.IdActivity, idUser);
+                _hubNotifier.NotifyAboutNewParticipationRequest(request.ActivityId, UserId);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -121,6 +117,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 _participationService.AcceptParticipant(UserId, acceptReject.ActivityId, acceptReject.ParticipantId);
+                _hubNotifier.NotifyAboutOwnerActivitiesAnswering(acceptReject.ActivityId, acceptReject.ParticipantId, true);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -141,6 +138,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 _participationService.RejectParticipant(UserId, rejectRequest.ActivityId, rejectRequest.ParticipantId);
+                _hubNotifier.NotifyAboutOwnerActivitiesAnswering(rejectRequest.ActivityId, rejectRequest.ParticipantId, false);
                 return Ok();
             }
             catch (ArgumentException ex)
