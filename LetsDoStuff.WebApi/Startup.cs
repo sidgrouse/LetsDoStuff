@@ -115,7 +115,7 @@ namespace LetsDoStuff.WebApi
                             var accessToken = contrxt.Request.Query["access_token"];
 
                             var path = contrxt.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(path) && path.StartsWithSegments("/chat"))
+                            if (!string.IsNullOrEmpty(path) && path.StartsWithSegments("/ParticipationHub"))
                             {
                                 contrxt.Token = accessToken;
                             }
