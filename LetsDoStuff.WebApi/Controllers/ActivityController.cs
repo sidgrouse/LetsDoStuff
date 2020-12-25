@@ -90,6 +90,11 @@ namespace LetsDoStuff.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete activity.
+        /// </summary>
+        /// <param name="activityId">ID of activity.</param>
+        /// <returns>Action result.</returns>
         [Authorize]
         [HttpDelete("delete")]
         public IActionResult DeleteActivity(int activityId)
