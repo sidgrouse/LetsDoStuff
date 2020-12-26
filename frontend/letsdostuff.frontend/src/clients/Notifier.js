@@ -7,8 +7,8 @@ class Notifier extends Component {
     super(props);
 
     this.state = {
-      nick: '',
-      message: '',
+      headMessage: '',
+      mainMessage: '',
       token: '',
       showA: false,
       hubConnection: null,
@@ -27,11 +27,24 @@ class Notifier extends Component {
         .then(() => console.log('Connection started!'))
         .catch(err => console.log('Error while establishing connection :('));
 
-      this.state.hubConnection.on('Notify', (userName, receivedMessage) => {
-        this.setState({nick: userName});
-        this.setState({message: receivedMessage});
+      this.state.hubConnection.on('NotifyAboutParticipation', (userName, receivedMessage) => {
+        this.setState({headMessage: "👋 Hello," +  userName});
+        this.setState({mainMessage: receivedMessage});
         this.setState({showA: true});
       });
+
+      this.state.hubConnection.on('NotifyAboutAcception', (userName, receivedMessage) => {
+        this.setState({headMessage: "🥳 Hello, " + userName});
+        this.setState({mainMessage: receivedMessage});
+        this.setState({showA: true});
+      });
+
+      this.state.hubConnection.on('NotifyAboutRejection', (userName, receivedMessage) => {
+        this.setState({headMessage: "😢 Hello, " + userName});
+        this.setState({mainMessage: receivedMessage});
+        this.setState({showA: true});
+      });
+
     });
   }
 
@@ -41,9 +54,9 @@ class Notifier extends Component {
         <Toast show={this.state.showA} onClose={() => this.setState({showA: false})} delay={10000} autohide>
           <Toast.Header>
             <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
-            <strong className="mr-auto">👋 Hello, {this.state.nick}</strong>
+            <strong className="mr-auto">{this.state.headMessage}</strong>
           </Toast.Header>
-          <Toast.Body> {this.state.message} </Toast.Body>
+          <Toast.Body> {this.state.mainMessage} </Toast.Body>
         </Toast>
       </div>
     );
