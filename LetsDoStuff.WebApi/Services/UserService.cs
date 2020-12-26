@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
@@ -37,11 +40,14 @@ namespace LetsDoStuff.WebApi.Services
             };
         }
 
-        public void EditUserSettings(EditUserSettingsRequest newSettings, int id)
+        public void EditUserSettings(UpdateUserCommand updateUser)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            var user = _context.Users.FirstOrDefault(u => u.Id == updateUser.IdUser);
 
-            if (newSettings.Password != _context.Users.FirstOrDefault(u => u.Id == id).Password)
+            var newSettings = new EditUserSettingsRequest();
+            updateUser.PatchDoc.ApplyTo(newSettings, updateUser.Controller.ModelState);
+
+            if (newSettings.Password != _context.Users.FirstOrDefault(u => u.Id == updateUser.IdUser).Password)
             {
                 throw new ArgumentException($"Incorrect password");
             }
