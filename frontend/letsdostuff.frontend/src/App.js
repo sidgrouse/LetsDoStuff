@@ -64,7 +64,11 @@ function App() {
       <AppContext.Provider value={{ authToken, setAuthToken }}>
         <Routes />
       </AppContext.Provider>
-      <Notifier token={authToken} />
+      {authToken ? (
+      <Notifier token={authToken} />)
+      :(
+        <></>
+      )}
     </div>
   );
 }

@@ -8,14 +8,17 @@ class Notifier extends Component {
 
     this.state = {
       message: '',
+      token: '',
       showA: false,
       hubConnection: null,
     };
   }
 
   componentDidMount = () =>{
+    
+    this.setState({token: this.props.token});
     let hubConnection = new signalR.HubConnectionBuilder()
-    .withUrl("https://localhost:8081/ParticipationHub", { accessTokenFactory: () => this.props.token})
+    .withUrl("https://localhost:8081/ParticipationHub", { accessTokenFactory: () => this.state.token})
     .build();
 
     this.setState({ hubConnection }, () => {
