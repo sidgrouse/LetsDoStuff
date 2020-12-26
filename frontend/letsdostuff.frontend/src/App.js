@@ -4,6 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { AppContext } from "./libs/contextLib";
 import { LinkContainer } from "react-router-bootstrap";
+import Notifier from './clients/Notifier'
 import "./App.css";
 
 function App() {
@@ -61,6 +62,7 @@ function App() {
       <AppContext.Provider value={{ authToken, setAuthToken }}>
         <Routes />
       </AppContext.Provider>
+      <Notifier token={authToken} />
     </div>
   );
 }
