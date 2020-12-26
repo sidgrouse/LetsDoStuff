@@ -7,6 +7,7 @@ class Notifier extends Component {
     super(props);
 
     this.state = {
+      nick: '',
       message: '',
       token: '',
       showA: false,
@@ -15,7 +16,6 @@ class Notifier extends Component {
   }
 
   componentDidMount = () =>{
-    
     this.setState({token: this.props.token});
     let hubConnection = new signalR.HubConnectionBuilder()
     .withUrl("https://localhost:8081/ParticipationHub", { accessTokenFactory: () => this.state.token})
@@ -27,7 +27,8 @@ class Notifier extends Component {
         .then(() => console.log('Connection started!'))
         .catch(err => console.log('Error while establishing connection :('));
 
-      this.state.hubConnection.on('Notify', (receivedMessage) => {
+      this.state.hubConnection.on('Notify', (userName, receivedMessage) => {
+        this.setState({nick: userName});
         this.setState({message: receivedMessage});
         this.setState({showA: true});
       });
@@ -37,11 +38,10 @@ class Notifier extends Component {
   render(){
     return(
       <div>
-        <Toast show={this.state.showA} onClose={() => this.setState({showA: false})} delay={3000} autohide>
+        <Toast show={this.state.showA} onClose={() => this.setState({showA: false})} delay={10000} autohide>
           <Toast.Header>
             <img src="holder.js/20x20?text=%20" className="rounded mr-2" alt="" />
-            <strong className="mr-auto">Bootstrap</strong>
-            <small>11 mins ago</small>
+            <strong className="mr-auto">👋 Hello, {this.state.nick}</strong>
           </Toast.Header>
           <Toast.Body> {this.state.message} </Toast.Body>
         </Toast>
