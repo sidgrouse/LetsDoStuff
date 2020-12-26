@@ -9,7 +9,7 @@ function Activities() {
 
   function filterActivities() {
       if(activities.length==0){
-            axios.get('https://localhost:8081/api/activity/all', )
+            axios.get('https://localhost:8081/api/activities', )
                 .then(resp => {
                     console.log("activities", resp.data);
                     setActivities(resp.data);
@@ -39,7 +39,7 @@ function ActivityCard({ activity }) {
                 </Card.Text>
                 <Button variant="primary">Details</Button>
             </Card.Body>
-            <Card.Footer>{activity.creator.name}</Card.Footer>
+            <Card.Footer>{activity.dateStart}</Card.Footer>
           </Card>
       </div>
     );

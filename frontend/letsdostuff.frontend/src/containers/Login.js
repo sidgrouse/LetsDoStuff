@@ -4,6 +4,7 @@ import { useAppContext } from "../libs/contextLib";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
 import axios from 'axios';
+import {notifyError, notifySuccess} from "./StatusNotification";
 
 export default function Login() {
   const { setAuthToken } = useAppContext();
@@ -19,12 +20,15 @@ export default function Login() {
 
     axios.post('https://localhost:8081/api/account/login', { login: email, password: password})
       .then(resp => {
-
         setAuthToken(resp.data.access_token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${resp.data.access_token}`;
         console.log("logged in");
+        notifySuccess()
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        console.log(err);
+        notifyError('Incorrect login or password.')
+      });
       
   }
 
