@@ -72,6 +72,22 @@ namespace LetsDoStuff.WebApi.Services
             return users;
         }
 
+        public List<ActivitiesResponse> GetUserActivities(int userId)
+        {
+            var activities = _context.Activities.AsNoTracking().
+                Where(a => a.CreatorId == userId)
+                .Select(a => new ActivitiesResponse()
+                {
+                    Id = a.Id,
+                    Name = a.Name,
+                    Description = a.Description,
+                    DateStart = a.DateStart.ToLongDateString(),
+                    Tags = a.Tags.Select(t => t.Name).ToList()
+                }).ToList();
+
+            return activities;
+        }
+
         public void RegisterUser(RegisterRequest userData)
         {
             UserValidation(userData);

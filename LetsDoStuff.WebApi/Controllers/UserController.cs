@@ -109,5 +109,21 @@ namespace LetsDoStuff.WebApi.Controllers
 
             return Ok(new { result = "Registration completed successfully." });
         }
+
+        /// <summary>
+        /// Get list of all activities of the user.
+        /// </summary>
+        /// <returns>All user's activities.</returns>
+        [Authorize]
+        [HttpGet("activities")]
+        public List<ActivitiesResponse> GetUserActivities()
+        {
+            var activities = _userService.GetUserActivities(UserId);
+            return activities;
+        }
+
+        private int UserId => int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
+                    .First().Value);
     }
 }
