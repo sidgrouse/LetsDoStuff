@@ -6,7 +6,7 @@ import axios from 'axios';
 import Jumbotron from 'react-bootstrap/Jumbotron'
 import "./CommonStyles.css";
 
-export default function Registration() {
+export default function CreateActivity() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

@@ -1,60 +1,109 @@
 import React, { useState } from "react";
-import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import "./ActivityDetails.css";
-import axios from 'axios';
-import { useParams } from "react-router-dom";
+import "./CommonStyles.css";
+import axios from "axios";
+import {useParams} from "react-router-dom";
+import Jumbotron from 'react-bootstrap/Jumbotron'
+import {ActivityCard} from "./ActivityCard";
 
 function ActivityDetails() {
   const [activity, setActivity] = useState([]);
+  const [participations, setParticipations] = useState([]);
   let { id } = useParams();
+  const [check, setCheck] = useState(false);
 
   function filterActivities() {
-    if(activity.length==0){
-        axios.get('https://localhost:8081/api/activities/' + id, )
-            .then(resp => {
-                console.log("activities", resp.data);
-                setActivity(resp.data);
-            })
-            .catch(err => console.log(err));
+    if (activity.length === 0) {
+      axios.get("https://localhost:8081/api/activities/" + id)
+      .then((resp) => {
+        setActivity(resp.data);
+      })
+      .catch((err) => console.log(err));
     }
   }
-  
+
+  function checkParticipation(){
+    if (!check){
+      axios.defaults.headers.common['Authorization'] = localStorage.getItem('authorization');
+      axios.get("https://localhost:8081/api/participation")
+      .then((resp) => {
+        setParticipations(resp.data);
+      })
+
+      setCheck(true);
+    }
+  }
+
   filterActivities();
-  return(
-    <div className="ActivityDetails">
-        <ActivityCard activity={activity} />
-    </div>
-  );
-}
-
-function ActivityCard({ activity }) {
-    const [creator, setCreator] = useState([]);
-    const [tags] = useState([]);
-    if(activity.creator !== undefined && creator.length === 0){
-        setCreator(activity.creator);
-    }
-
-    if(activity.tags !== undefined && tags.length === 0){
-        activity.tags.map(tag => tags.push(tag))
-    }
-
+  checkParticipation();
+  if (!participations.some((participation) => participation.id === activity.id)){
     return (
-      <div className="ActivityDetails" key={activity.id}>
-          <Card>
-            <Card.Body>
-                <Card.Title>{activity.name}</Card.Title>
-                <Card.Text>
-                {activity.description}
-                <br />
-                {tags.map(tag => tag + " ")}
-                </Card.Text>
-                <Button href = "/activities" variant="primary">Back</Button>
-            </Card.Body>
-            <Card.Footer>{activity.dateStart}{creator.name}</Card.Footer>
-          </Card>
+      <div className="ActivityDetails">
+        <Jumbotron className="JumbotronStyle">
+        {ActivityCard({activity}, ()=>(
+          <Button variant="outline-success" onClick={() => participate(activity.id)} className="Submit">Participate</Button>
+        ))}
+        </Jumbotron>
       </div>
     );
   }
+  else {
+    return (
+      <div className="ActivityDetails">
+        <Jumbotron className="JumbotronStyle">
+        {ActivityCard({activity}, ()=>(
+          <Button variant="outline-danger" onClick={() => notParticipate(activity.id)} className="Submit">Not participate</Button>
+        ))}
+        </Jumbotron>
+      </div>
+    );
+  }
+}
 
-  export default ActivityDetails;
+function participate(id) {
+  let params = new URLSearchParams();
+  params.append('IdActivity', id);
+  let errorStatus;
+
+  axios.defaults.headers.common['Authorization'] = localStorage.getItem('authorization');
+  axios.post('https://localhost:8081/api/participation', params)
+      .then(resp => {
+        window.location.reload();
+        console.log(resp.data);
+      })
+      .catch(err => {
+        console.log(err.response);
+        errorStatus = `${err.response.status}`;
+
+        if(errorStatus === '401'){
+          localStorage.setItem('authorization', '');
+          window.location.assign("/login");
+        }
+      });
+}
+
+function notParticipate(id) {
+  let params = new URLSearchParams();
+  params.append('IdActivity', id);
+  let errorStatus;
+  console.log(id)
+
+  axios.defaults.headers.common['Authorization'] = localStorage.getItem('authorization');
+  axios.delete('https://localhost:8081/api/participation', {data: params})
+      .then(resp => {
+        window.location.reload();
+        console.log(resp.data);
+      })
+      .catch(err => {
+        console.log(err.response);
+        errorStatus = `${err.response.status}`;
+
+        if(errorStatus === '401'){
+          localStorage.setItem('authorization', '');
+          window.location.assign("/login");
+        }
+      });
+}
+
+export default ActivityDetails;

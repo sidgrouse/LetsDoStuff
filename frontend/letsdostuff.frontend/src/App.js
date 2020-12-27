@@ -7,18 +7,19 @@ import { LinkContainer } from "react-router-bootstrap";
 import "./App.css";
 
 function App() {
-
-  const [authToken, setAuthToken] = useState('');
-
+  const [authToken, setAuthToken] = useState(localStorage.getItem('authorization'));
+  document.body.style.backgroundColor = '#B0E0E6';
+  
   function handleLogout() {
     setAuthToken('');
+    localStorage.setItem('authorization', '')
   }
 
   return (
     <div className="App container py-3">
       <Navbar collapseOnSelect bg="light" expand="md" className="mb-3">
         <LinkContainer to="/">
-          <Navbar.Brand className="font-weight-bold text-muted">
+          <Navbar.Brand className="font-weight-bold ">
             LetsDoStuff
           </Navbar.Brand>
         </LinkContainer>
@@ -44,7 +45,12 @@ function App() {
         <Navbar.Collapse className="justify-content-end">
           <Nav activeKey={window.location.pathname}>
             {authToken ? (
-              <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+              <>
+                <LinkContainer to="/settings">
+                  <Nav.Link>Settings</Nav.Link>
+                </LinkContainer>
+                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+              </>
             ) : (
               <>
                 <LinkContainer to="/signup">
@@ -58,6 +64,7 @@ function App() {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
+      
       <AppContext.Provider value={{ authToken, setAuthToken }}>
         <Routes />
       </AppContext.Provider>

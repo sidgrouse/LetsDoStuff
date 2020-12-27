@@ -4,6 +4,8 @@ import { useAppContext } from "../libs/contextLib";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
 import axios from 'axios';
+import Jumbotron from 'react-bootstrap/Jumbotron'
+import "./CommonStyles.css";
 
 export default function Login() {
   const { setAuthToken } = useAppContext();
@@ -22,14 +24,16 @@ export default function Login() {
 
         setAuthToken(resp.data.access_token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${resp.data.access_token}`;
+        localStorage.setItem('authorization', axios.defaults.headers.common['Authorization']);
         console.log("logged in");
       })
-      .catch(err => console.log(err));
-      
+      .catch(err => console.log(err))
+      .then(() => window.location.assign("/activities"));
   }
 
   return (
     <div className="Login">
+      <Jumbotron className="JumbotronStyle">
       <Form onSubmit={handleSubmit}>
         <Form.Group size="lg" controlId="email">
           <Form.Label>Email</Form.Label>
@@ -50,10 +54,11 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
-        <Button block size="lg" type="submit" disabled={!validateForm()}>
+        <Button block size="lg" type="submit" variant="info" className="Submit" disabled={!validateForm()}>
           Login
         </Button>
       </Form>
+      </Jumbotron>
     </div>
   );
 }

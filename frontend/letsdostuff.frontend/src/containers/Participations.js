@@ -1,22 +1,32 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
-import "./Activities.css";
+import "./Participations.css";
 import axios from "axios";
 import Jumbotron from 'react-bootstrap/Jumbotron'
 import "./CommonStyles.css";
 import {ActivityCard} from "./ActivityCard";
 import { Link } from "react-router-dom";
 
-function Activities() {
+function Participations() {
   const [activities, setActivities] = useState([]);
+  let errorStatus;
 
   function filterActivities() {
     if (activities.length === 0) {
-      axios.get("https://localhost:8081/api/activities")
+      axios.defaults.headers.common['Authorization'] = localStorage.getItem('authorization');
+      axios.get("https://localhost:8081/api/participation")
       .then((resp) => {
         setActivities(resp.data);
       })
-      .catch((err) => console.log(err));
+      .catch(err => {
+        console.log(err.response);
+        errorStatus = `${err.response.status}`;
+
+        if(errorStatus === '401'){
+          localStorage.setItem('authorization', '');
+          window.location.assign("/login");
+        }
+      });
     }
   }
 
@@ -24,11 +34,6 @@ function Activities() {
   return (
     <div className="Activities">
       <Jumbotron className="JumbotronStyle">
-      <>
-                <Link to={"/activities/create"}>
-                  <Button variant="primary">Create activity</Button>
-                </Link>
-              </>
         {activities.map((activity) => (
           <>
             {ActivityCard({activity}, ()=>(
@@ -45,4 +50,4 @@ function Activities() {
   );
 }
 
-export default Activities;
+export default Participations;

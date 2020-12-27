@@ -1,0 +1,10 @@
+.JumbotronStyle {
+    background-color: #c4e7ed;
+    box-shadow: 0 1px 0 rgba(9,30,66,.25);
+}
+.Submit:focus {
+    box-shadow: none;
+}
+.Card{
+    box-shadow: 0 1px 0 rgba(9,30,66,.25);
+}
