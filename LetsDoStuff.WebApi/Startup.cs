@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using LetsDoStuff.Domain;
 using LetsDoStuff.WebApi.Services;
 using LetsDoStuff.WebApi.Services.Interfaces;
@@ -11,6 +12,7 @@ using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,11 +57,14 @@ namespace LetsDoStuff.WebApi
                     endpoints.MapControllers();
                     endpoints.EnableDependencyInjection();
                     endpoints.Select().Filter().Expand().MaxTop(10);
+                    endpoints.MapHub<ParticipationHub>("/ParticipationHub");
                 });
         }
 
         public virtual void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+            services.AddSignalR();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<LdsContext>(options =>
                 options.UseSqlServer(connection));
@@ -87,6 +92,7 @@ namespace LetsDoStuff.WebApi
             services.AddTransient<IActivityService, ActivityManager>();
             services.AddTransient<IParticipationService, ParticipationService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IHubNotifier, HubNotifier>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -101,6 +107,21 @@ namespace LetsDoStuff.WebApi
                         ValidateLifetime = true,
                         IssuerSigningKey = AuthConstants.SymmetricSecurityKey,
                         ValidateIssuerSigningKey = true
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = contrxt =>
+                        {
+                            var accessToken = contrxt.Request.Query["access_token"];
+
+                            var path = contrxt.HttpContext.Request.Path;
+                            if (!string.IsNullOrEmpty(path) && path.StartsWithSegments("/ParticipationHub"))
+                            {
+                                contrxt.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 

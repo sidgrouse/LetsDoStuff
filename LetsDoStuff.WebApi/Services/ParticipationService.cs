@@ -6,6 +6,7 @@ using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
@@ -13,7 +14,7 @@ namespace LetsDoStuff.WebApi.Services
     public class ParticipationService : IParticipationService
     {
         private readonly LdsContext db;
-        
+
         public ParticipationService(LdsContext context)
         {
             db = context;

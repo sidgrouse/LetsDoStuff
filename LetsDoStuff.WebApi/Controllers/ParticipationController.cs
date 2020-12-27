@@ -13,10 +13,12 @@ namespace LetsDoStuff.WebApi.Controllers
     public class ParticipationController : ControllerBase
     {
         private readonly IParticipationService _participationService;
+        private readonly IHubNotifier _hubNotifier;
 
-        public ParticipationController(IParticipationService participationService)
+        public ParticipationController(IParticipationService participationService, IHubNotifier hubNotifier)
         {
             _participationService = participationService;
+            _hubNotifier = hubNotifier;
         }
 
         /// <summary>
@@ -50,6 +52,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 _participationService.AddParticipation(UserId, request.ActivityId);
+                _hubNotifier.NotifyAboutNewParticipationRequest(request.ActivityId, UserId);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -114,6 +117,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 _participationService.AcceptParticipant(UserId, acceptReject.ActivityId, acceptReject.ParticipantId);
+                _hubNotifier.NotifyAboutOwnerActivitiesAnswering(acceptReject.ActivityId, acceptReject.ParticipantId, true);
                 return Ok();
             }
             catch (ArgumentException ex)
@@ -134,6 +138,7 @@ namespace LetsDoStuff.WebApi.Controllers
             try
             {
                 _participationService.RejectParticipant(UserId, rejectRequest.ActivityId, rejectRequest.ParticipantId);
+                _hubNotifier.NotifyAboutOwnerActivitiesAnswering(rejectRequest.ActivityId, rejectRequest.ParticipantId, false);
                 return Ok();
             }
             catch (ArgumentException ex)
