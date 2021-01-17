@@ -5,6 +5,7 @@ using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
 using LetsDoStuff.WebApi.SettingsForAuth;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -64,6 +65,35 @@ namespace LetsDoStuff.WebApi.Controllers
             {
                 return NotFound(ae.Message);
             }
+        }
+
+        /// <summary>
+        /// Set a user settings.
+        /// </summary>
+        /// <param name="patchDoc">New user settings.</param>
+        /// <returns>Result of edit settings attempt.</returns>
+        [Authorize]
+        [HttpPatch("edit")]
+        public ActionResult EditUserSettings([FromBody]JsonPatchDocument<EditUserSettingsRequest> patchDoc)
+        {
+            var idUser = int.Parse(this.HttpContext.User.Claims
+                    .Where(c => c.Type == AuthConstants.IdClaimType)
+                    .First().Value);
+            try
+            {
+                var query = new UpdateUserCommand(idUser, patchDoc, this);
+                _userService.EditUserSettings(query);
+            }
+            catch (ArgumentException ae)
+            {
+                return BadRequest(ae.Message);
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { errorText = "Settings were not changed." });
+            }
+
+            return Ok(new { result = "Settings successfully changed." });
         }
 
         /// <summary>

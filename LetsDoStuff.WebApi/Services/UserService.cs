@@ -5,6 +5,8 @@ using LetsDoStuff.Domain;
 using LetsDoStuff.Domain.Models;
 using LetsDoStuff.WebApi.Services.DTO;
 using LetsDoStuff.WebApi.Services.Interfaces;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LetsDoStuff.WebApi.Services
@@ -35,6 +37,57 @@ namespace LetsDoStuff.WebApi.Services
                 DateOfRegistration = user.DateOfRegistration.Date.ToLongDateString(),
                 Role = user.Role,
             };
+        }
+
+        public void EditUserSettings(UpdateUserCommand updateUser)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == updateUser.IdUser);
+
+            var newSettings = new EditUserSettingsRequest();
+            updateUser.PatchDoc.ApplyTo(newSettings, updateUser.Controller.ModelState);
+
+            if (newSettings.Password != _context.Users.FirstOrDefault(u => u.Id == updateUser.IdUser).Password)
+            {
+                throw new ArgumentException($"Incorrect password");
+            }
+
+            if (newSettings.Email != string.Empty && newSettings.Email != null)
+            {
+                EmailValidation(newSettings.Email);
+                user.Email = newSettings.Email;
+            }
+
+            if (newSettings.ProfileLink != string.Empty && newSettings.ProfileLink != null)
+            {
+                user.ProfileLink = newSettings.ProfileLink;
+            }
+
+            if (newSettings.FirstName != string.Empty && newSettings.FirstName != null)
+            {
+                user.FirstName = newSettings.FirstName;
+            }
+
+            if (newSettings.LastName != string.Empty && newSettings.LastName != null)
+            {
+                user.LastName = newSettings.LastName;
+            }
+
+            if (newSettings.Bio != null)
+            {
+                user.Bio = newSettings.Bio;
+            }
+
+            if (newSettings.NewPassword != string.Empty && newSettings.NewPassword != null)
+            {
+                user.Password = newSettings.NewPassword;
+            }
+
+            if (newSettings.DateOfBirth != null)
+            {
+                user.DateOfBirth = newSettings.DateOfBirth;
+            }
+
+            _context.SaveChanges();
         }
 
         public UserResponse GetUserByProfileLink(string profileLink)
